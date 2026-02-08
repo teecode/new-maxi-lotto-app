@@ -11,6 +11,7 @@ interface PlaceBetProps {
   selectedGame: { gameID: number } | null
   resetAllGames: () => void
   syncUser: () => Promise<void>
+  ticketType?: number // Added
 }
 
 export const usePlaceBet = ({
@@ -18,7 +19,8 @@ export const usePlaceBet = ({
   betsList,
   selectedGame,
   resetAllGames,
-  syncUser
+  syncUser,
+  ticketType // Added
 }: PlaceBetProps) => {
 
   const [loading, setLoading] = useState(false)
@@ -45,6 +47,7 @@ export const usePlaceBet = ({
       const payload = {
         customerID: user.customerId || 0,
         dailyGameId: selectedGame?.gameID || 0,
+        ticketType: ticketType // Passed here
       }
 
       // ✅ 4. Map bets - THIS IS WHERE WE APPLY THE LOGIC

@@ -26,6 +26,7 @@ import { Route as LayoutHowToPlayRouteImport } from './routes/_layout/how-to-pla
 import { Route as LayoutGamesRouteImport } from './routes/_layout/games'
 import { Route as LayoutFaqRouteImport } from './routes/_layout/faq'
 import { Route as LayoutContactRouteImport } from './routes/_layout/contact'
+import { Route as LayoutAccumulatorRouteImport } from './routes/_layout/accumulator'
 import { Route as LayoutAboutRouteImport } from './routes/_layout/about'
 import { Route as AuthenticatedWithdrawalRouteImport } from './routes/_authenticated/withdrawal'
 import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
@@ -128,6 +129,11 @@ const LayoutContactRoute = LayoutContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => LayoutRoute,
 } as any)
+const LayoutAccumulatorRoute = LayoutAccumulatorRouteImport.update({
+  id: '/accumulator',
+  path: '/accumulator',
+  getParentRoute: () => LayoutRoute,
+} as any)
 const LayoutAboutRoute = LayoutAboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -228,6 +234,7 @@ const AuthenticatedDepositVerifyDepositIdRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof LayoutIndexRoute
   '/app': typeof AppRoute
   '/auth': typeof AuthRouteWithChildren
   '/favourite-balls': typeof AuthenticatedFavouriteBallsRoute
@@ -236,6 +243,7 @@ export interface FileRoutesByFullPath {
   '/wallet': typeof AuthenticatedWalletRoute
   '/withdrawal': typeof AuthenticatedWithdrawalRoute
   '/about': typeof LayoutAboutRoute
+  '/accumulator': typeof LayoutAccumulatorRoute
   '/contact': typeof LayoutContactRoute
   '/faq': typeof LayoutFaqRoute
   '/games': typeof LayoutGamesRoute
@@ -248,7 +256,6 @@ export interface FileRoutesByFullPath {
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
-  '/': typeof LayoutIndexRoute
   '/payouts/$payoutId': typeof AuthenticatedPayoutsPayoutIdRoute
   '/settings/bank': typeof AuthenticatedSettingsBankRoute
   '/settings/change-password': typeof AuthenticatedSettingsChangePasswordRoute
@@ -256,12 +263,13 @@ export interface FileRoutesByFullPath {
   '/settings/profile': typeof AuthenticatedSettingsProfileRoute
   '/settings/verify-email': typeof AuthenticatedSettingsVerifyEmailRoute
   '/tickets/$ticketId': typeof AuthenticatedTicketsTicketIdRoute
-  '/deposit': typeof AuthenticatedDepositIndexRoute
-  '/payouts': typeof AuthenticatedPayoutsIndexRoute
-  '/tickets': typeof AuthenticatedTicketsIndexRoute
+  '/deposit/': typeof AuthenticatedDepositIndexRoute
+  '/payouts/': typeof AuthenticatedPayoutsIndexRoute
+  '/tickets/': typeof AuthenticatedTicketsIndexRoute
   '/deposit/verify/$depositId': typeof AuthenticatedDepositVerifyDepositIdRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof LayoutIndexRoute
   '/app': typeof AppRoute
   '/auth': typeof AuthRouteWithChildren
   '/favourite-balls': typeof AuthenticatedFavouriteBallsRoute
@@ -270,6 +278,7 @@ export interface FileRoutesByTo {
   '/wallet': typeof AuthenticatedWalletRoute
   '/withdrawal': typeof AuthenticatedWithdrawalRoute
   '/about': typeof LayoutAboutRoute
+  '/accumulator': typeof LayoutAccumulatorRoute
   '/contact': typeof LayoutContactRoute
   '/faq': typeof LayoutFaqRoute
   '/games': typeof LayoutGamesRoute
@@ -282,7 +291,6 @@ export interface FileRoutesByTo {
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
-  '/': typeof LayoutIndexRoute
   '/payouts/$payoutId': typeof AuthenticatedPayoutsPayoutIdRoute
   '/settings/bank': typeof AuthenticatedSettingsBankRoute
   '/settings/change-password': typeof AuthenticatedSettingsChangePasswordRoute
@@ -307,6 +315,7 @@ export interface FileRoutesById {
   '/_authenticated/wallet': typeof AuthenticatedWalletRoute
   '/_authenticated/withdrawal': typeof AuthenticatedWithdrawalRoute
   '/_layout/about': typeof LayoutAboutRoute
+  '/_layout/accumulator': typeof LayoutAccumulatorRoute
   '/_layout/contact': typeof LayoutContactRoute
   '/_layout/faq': typeof LayoutFaqRoute
   '/_layout/games': typeof LayoutGamesRoute
@@ -335,6 +344,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/app'
     | '/auth'
     | '/favourite-balls'
@@ -343,6 +353,7 @@ export interface FileRouteTypes {
     | '/wallet'
     | '/withdrawal'
     | '/about'
+    | '/accumulator'
     | '/contact'
     | '/faq'
     | '/games'
@@ -355,7 +366,6 @@ export interface FileRouteTypes {
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/signup'
-    | '/'
     | '/payouts/$payoutId'
     | '/settings/bank'
     | '/settings/change-password'
@@ -363,12 +373,13 @@ export interface FileRouteTypes {
     | '/settings/profile'
     | '/settings/verify-email'
     | '/tickets/$ticketId'
-    | '/deposit'
-    | '/payouts'
-    | '/tickets'
+    | '/deposit/'
+    | '/payouts/'
+    | '/tickets/'
     | '/deposit/verify/$depositId'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/app'
     | '/auth'
     | '/favourite-balls'
@@ -377,6 +388,7 @@ export interface FileRouteTypes {
     | '/wallet'
     | '/withdrawal'
     | '/about'
+    | '/accumulator'
     | '/contact'
     | '/faq'
     | '/games'
@@ -389,7 +401,6 @@ export interface FileRouteTypes {
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/signup'
-    | '/'
     | '/payouts/$payoutId'
     | '/settings/bank'
     | '/settings/change-password'
@@ -413,6 +424,7 @@ export interface FileRouteTypes {
     | '/_authenticated/wallet'
     | '/_authenticated/withdrawal'
     | '/_layout/about'
+    | '/_layout/accumulator'
     | '/_layout/contact'
     | '/_layout/faq'
     | '/_layout/games'
@@ -465,14 +477,14 @@ declare module '@tanstack/react-router' {
     '/_layout': {
       id: '/_layout'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof LayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -567,6 +579,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutContactRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/accumulator': {
+      id: '/_layout/accumulator'
+      path: '/accumulator'
+      fullPath: '/accumulator'
+      preLoaderRoute: typeof LayoutAccumulatorRouteImport
+      parentRoute: typeof LayoutRoute
+    }
     '/_layout/about': {
       id: '/_layout/about'
       path: '/about'
@@ -612,21 +631,21 @@ declare module '@tanstack/react-router' {
     '/_authenticated/tickets/': {
       id: '/_authenticated/tickets/'
       path: '/tickets'
-      fullPath: '/tickets'
+      fullPath: '/tickets/'
       preLoaderRoute: typeof AuthenticatedTicketsIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/payouts/': {
       id: '/_authenticated/payouts/'
       path: '/payouts'
-      fullPath: '/payouts'
+      fullPath: '/payouts/'
       preLoaderRoute: typeof AuthenticatedPayoutsIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/deposit/': {
       id: '/_authenticated/deposit/'
       path: '/deposit'
-      fullPath: '/deposit'
+      fullPath: '/deposit/'
       preLoaderRoute: typeof AuthenticatedDepositIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
@@ -735,6 +754,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 
 interface LayoutRouteChildren {
   LayoutAboutRoute: typeof LayoutAboutRoute
+  LayoutAccumulatorRoute: typeof LayoutAccumulatorRoute
   LayoutContactRoute: typeof LayoutContactRoute
   LayoutFaqRoute: typeof LayoutFaqRoute
   LayoutGamesRoute: typeof LayoutGamesRoute
@@ -749,6 +769,7 @@ interface LayoutRouteChildren {
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutAboutRoute: LayoutAboutRoute,
+  LayoutAccumulatorRoute: LayoutAccumulatorRoute,
   LayoutContactRoute: LayoutContactRoute,
   LayoutFaqRoute: LayoutFaqRoute,
   LayoutGamesRoute: LayoutGamesRoute,

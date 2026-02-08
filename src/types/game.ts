@@ -1,7 +1,11 @@
 export type BetType = {
 	betTypeID: number;
 	nap: string;
+	napDescription: string; // Added
 	code: string;
+	description: string; // Added
+	groupCode: string; // Added
+	quickPlayCode: number; // Added
 	winFactor: number;
 	maximumNumberOfBalls: number;
 	minimumNumberOfBalls: number;

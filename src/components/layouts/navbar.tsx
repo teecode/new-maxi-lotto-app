@@ -37,6 +37,10 @@ const menu = [
     url: "/games"
   },
   {
+    title: "Accumulator",
+    url: "/accumulator"
+  },
+  {
     title: "How To Play",
     url: "/how-to-play"
   },

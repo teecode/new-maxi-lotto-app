@@ -8,10 +8,10 @@ import type { LatestDrawTicketResponse } from '@/types/api';
 import type { BetType, Game, WinnerTicket } from '@/types/game';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
-export const useGetBetTypes = () => {
+export const useGetBetTypes = (gameType?: number) => {
 	return useQuery<BetType[], Error>({
-		queryKey: ['earnings'], // include filters in queryKey
-		queryFn: () => fetchBetTypes(),
+		queryKey: ['earnings', gameType], // include filters in queryKey
+		queryFn: () => fetchBetTypes(gameType),
 		staleTime: 5 * 60 * 1000, // 5 minutes
 	});
 };

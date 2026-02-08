@@ -19,9 +19,11 @@ interface GameResultResponse extends dataApiResponse {
 }
 
 // {{base_url}}/api/user/my/earnings
-export const fetchBetTypes = async (): Promise<BetType[]> => {
+// {{base_url}}/api/user/my/earnings
+export const fetchBetTypes = async (gameType?: number): Promise<BetType[]> => {
 	try {
-		const response = await apiClient.get<BetType[]>('v1/betType');
+        const url = gameType ? `v1/betType/byGameType/${gameType}` : 'v1/betType';
+		const response = await apiClient.get<BetType[]>(url);
 		return response.data;
 	} catch (error: any) {
 		if (error.response && error.response.data) {
@@ -71,6 +73,7 @@ export const placeBet = async (
 	payload: {
 		customerID: number;
 		dailyGameId: number;
+        ticketType?: number; // Added ticketType
 	},
 	betSlips: any
 ) => {

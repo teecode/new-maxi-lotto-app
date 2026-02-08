@@ -1,7 +1,7 @@
 import axios from 'axios';
 import useAuthStore from '@/store/authStore';
 
-const apiURL = 'https://stagingapi.maxilotto.ng/api/';
+const apiURL = 'http://108.181.175.92:94/api/';
 
 const apiClient = axios.create({
 	baseURL: apiURL,

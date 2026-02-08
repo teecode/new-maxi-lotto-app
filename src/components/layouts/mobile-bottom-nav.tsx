@@ -22,6 +22,7 @@ const MobileBottomNav = () => {
     { label: "Home", route: "/", icon: HousePlusIcon },
     { label: "Results", route: "/results", icon: ChartBar },
     { label: "Play", route: "/play", icon: PlayIcon },
+    { label: "Accumulator", route: "/accumulator", icon: ChartBar }, // Using ChartBar as placeholder or import Layers
     { label: "Deposit", route: "/deposit", icon: CreditCard },
     authenticated
       ? { label: "Profile", route: "/profile", icon: UserCircle }
