@@ -59,6 +59,7 @@ export interface GameTicket {
 		id: number;
 		name: string;
 	};
+	ticketType: number; // Added
 	status: {
 		id: number;
 		name: string;
@@ -90,6 +91,7 @@ export interface BetSlip {
 		code: string;
 		id: number;
 		name: string;
+		winFactor: number; // Added
 	};
 	status: {
 		id: number;
