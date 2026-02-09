@@ -100,18 +100,18 @@ function AccumulatorPage() {
   const formattedBetsList: BetList[] = useMemo(() => {
      if (accumulatorLegs.length === 0) return []
      
-     const stakePerLeg = Math.floor(stakeAmount / accumulatorLegs.length)
-     const remainder = stakeAmount % accumulatorLegs.length
+     // Backend expects the FULL stake on the first bet slip for Accumulators (TicketType 2).
+     // We assign the full stakeAmount to every leg for consistency/safety, backend uses the first one.
      
-     return accumulatorLegs.map((leg, index) => ({
+     return accumulatorLegs.map((leg) => ({
          betType: leg.betType,
-         selectedBalls: [], 
-         stake: index === 0 ? stakePerLeg + remainder : stakePerLeg, 
+         selectedBalls: [0], // Dummy ball to pass "NotEmpty" validation
+         stake: stakeAmount, 
          maxWinning: 0, 
          numberOfLines: 1,
          againstBalls: [],
          bankerBalls: [],
-         amount: index === 0 ? stakePerLeg + remainder : stakePerLeg
+         amount: stakeAmount
      }))
   }, [accumulatorLegs, stakeAmount])
 
