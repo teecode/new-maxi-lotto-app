@@ -12,7 +12,7 @@ import {
 import {Image} from "@unpic/react";
 import {Link} from "@tanstack/react-router";
 
-const UserInfoCard = ({ name, balance, email, avatar }: UserInfoCardProps) => {
+const UserInfoCard = ({ name, balance, email, avatar, rank }: UserInfoCardProps) => {
   return (
 
     <div className="flex w-full max-w-lg flex-col gap-6">
@@ -29,6 +29,7 @@ const UserInfoCard = ({ name, balance, email, avatar }: UserInfoCardProps) => {
         <ItemContent>
           <ItemTitle className="text-lg sm:text-xl font-medium text-foreground">{name}</ItemTitle>
           <ItemDescription className="space-y-1">
+            <span className="text-muted-foreground block text-sm font-bold text-yellow-600">{rank}</span>
             <span className="text-muted-foreground block text-sm">{email}</span>
             <span className="text-muted-foreground block">{formatCurrency(balance)}</span>
           </ItemDescription>

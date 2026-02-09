@@ -27,6 +27,7 @@ function RouteComponent() {
                 email={user.email}
                 balance={user.walletBalance || 0}
                 avatar={"/avatar.jpg"}
+                rank={user.rank || "Newbie"}
               />
             </>
           )}

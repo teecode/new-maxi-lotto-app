@@ -38,6 +38,7 @@ export type User = {
 	accountNumber: string | null;
 	accountType: string | null;
 	bank: number | null;
+	rank: string;
 };
 
 export type MinimalUser = {

@@ -20,4 +20,5 @@ export interface UserInfoCardProps {
 	balance: number;
 	avatar: string;
 	email: string;
+	rank: string;
 }
