@@ -1,6 +1,6 @@
 import {createFileRoute, Link} from '@tanstack/react-router'
 import {fetchTicketById} from "@/services/GameService.ts";
-import {Card, CardContent, CardFooter, CardHeader, CardHeading, CardTitle} from "@/components/ui/card.tsx";
+import {Card, CardContent, CardFooter, CardHeader} from "@/components/ui/card.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {DownloadIcon, Share2} from "lucide-react";
 import {formatCurrency, fullDateTimeFormat} from "@/lib/utils.ts";
