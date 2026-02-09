@@ -23,6 +23,10 @@ function AccumulatorPage() {
   const [stakeAmount, setStakeAmount] = useState<number>(100)
   const [selectedGame, setSelectedGame] = useState<Game | null>(null)
   
+  const MIN_STAKE = 50
+  const MAX_STAKE = 10000
+  const MAX_POTENTIAL_WIN = 2500000
+  
   const [accumulatorLegs, setAccumulatorLegs] = useState<{
     betType: BetType,
     selectionName: string 
@@ -186,14 +190,22 @@ function AccumulatorPage() {
           <div className="lg:col-span-1">
             <div className="sticky top-4">
                 <div className="bg-white rounded-xl shadow-lg border border-[#0A4B7F]/20 overflow-hidden">
-                    <div className="bg-[#0A4B7F] text-white p-4 flex justify-between items-center">
-                        <span className="font-bold flex items-center gap-2">
-                            <ShoppingBasketIcon size={18} />
-                            Accumulator Slip
-                        </span>
-                        <Badge variant="secondary" className="bg-[#FFF100] text-[#0A4B7F] hover:bg-[#FFF100]">
-                            {accumulatorLegs.length} Legs
-                        </Badge>
+                    <div className="bg-[#0A4B7F] text-white p-4 flex flex-col gap-2">
+                        <div className="flex justify-between items-center">
+                            <span className="font-bold flex items-center gap-2">
+                                <ShoppingBasketIcon size={18} />
+                                Accumulator Slip
+                            </span>
+                            <Badge variant="secondary" className="bg-[#FFF100] text-[#0A4B7F] hover:bg-[#FFF100]">
+                                {accumulatorLegs.length} Legs
+                            </Badge>
+                        </div>
+                        {selectedGame && (
+                            <div className="text-xs bg-[#093e6b] p-2 rounded text-white/90 flex justify-between items-center">
+                                <span>Game:</span>
+                                <span className="font-semibold text-white">{selectedGame.gameName}</span>
+                            </div>
+                        )}
                     </div>
                     
                     <div className="p-4 space-y-4 max-h-[60vh] overflow-y-auto">
@@ -236,26 +248,45 @@ function AccumulatorPage() {
                                 type="number" 
                                 value={stakeAmount}
                                 onChange={(e) => setStakeAmount(Number(e.target.value))}
-                                className="w-full p-2 border border-gray-300 rounded focus:border-[#0A4B7F] focus:ring-1 focus:ring-[#0A4B7F] outline-none font-bold text-[#0A4B7F]"
-                                min={50}
+                                className={cn(
+                                    "w-full p-2 border rounded focus:ring-1 outline-none font-bold",
+                                    (stakeAmount < MIN_STAKE || stakeAmount > MAX_STAKE) 
+                                        ? "border-red-500 text-red-600 focus:border-red-500 focus:ring-red-500" 
+                                        : "border-gray-300 text-[#0A4B7F] focus:border-[#0A4B7F] focus:ring-[#0A4B7F]"
+                                )}
+                                min={MIN_STAKE}
+                                max={MAX_STAKE}
                             />
+                            {(stakeAmount < MIN_STAKE || stakeAmount > MAX_STAKE) && (
+                                <p className="text-xs text-red-500">
+                                    {stakeAmount < MIN_STAKE ? `Minimum stake is NGN ${MIN_STAKE}` : `Maximum stake is NGN ${MAX_STAKE.toLocaleString()}`}
+                                </p>
+                            )}
                          </div>
                          
                          <div className="flex justify-between items-center p-3 bg-green-50 rounded border border-green-100">
                             <span className="text-sm text-green-700">Potential Win:</span>
-                            <span className="font-bold text-lg text-green-700">
+                            <span className={cn("font-bold text-lg", potentialWin > MAX_POTENTIAL_WIN ? "text-red-600" : "text-green-700")}>
                                 NGN {potentialWin.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </span>
                          </div>
                          
-                         {accumulatorLegs.length > 0 && (stakeAmount / accumulatorLegs.length) < 50 && (
-                             <p className="text-center text-xs text-orange-500 bg-orange-50 p-1 rounded">
-                                 Minimum stake per leg is NGN 50. Decrease legs or increase stake.
+                         {potentialWin > MAX_POTENTIAL_WIN && (
+                             <p className="text-center text-xs text-red-500 bg-red-50 p-1 rounded">
+                                 Maximum potential winning cannot exceed NGN {MAX_POTENTIAL_WIN.toLocaleString()}
                              </p>
                          )}
+
                          <Button 
                             className="w-full bg-[#0A4B7F] hover:bg-[#093e6b] text-white py-6 text-lg rounded-xl shadow-lg shadow-[#0A4B7F]/20"
-                            disabled={accumulatorLegs.length < 2 || !selectedGame || loading || (stakeAmount / accumulatorLegs.length) < 50}
+                            disabled={
+                                accumulatorLegs.length < 2 || 
+                                !selectedGame || 
+                                loading || 
+                                stakeAmount < MIN_STAKE || 
+                                stakeAmount > MAX_STAKE || 
+                                potentialWin > MAX_POTENTIAL_WIN
+                            }
                             onClick={handlePlaceBet}
                          >
                             {loading ? "Processing..." : "Place Bet"}
