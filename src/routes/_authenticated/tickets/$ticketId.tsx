@@ -30,8 +30,8 @@ function RouteComponent() {
           
           <Card className="bg-white border-0 shadow-xl overflow-hidden rounded-2xl">
             {/* Header */}
-            <CardHeader className="p-0">
-              <div className="bg-[#0A4B7F] p-6 text-white text-center relative overflow-hidden">
+            <CardHeader className="p-0 border-b border-gray-100">
+              <div className="bg-[#0A4B7F] w-full p-6 text-white text-center relative overflow-hidden">
                 <div className="relative z-10 flex flex-col items-center gap-2">
                   <h1 className="text-2xl font-bold font-poppins">Ticket Details</h1>
                   <p className="text-blue-100 text-sm font-medium opacity-90">
@@ -111,18 +111,32 @@ function RouteComponent() {
                        <div className="space-y-3">
                          {/* Bet 1 / Selection */}
                          <div>
-                            <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1 block">
-                               {isAccumulator ? 'Selection' : 'Selected Numbers'}
-                            </span>
-                            <div className="flex flex-wrap gap-2">
-                              {betslip.bet1 && betslip.bet1.length > 0 ? (
-                                 betslip.bet1.map((ball) => (
-                                    isAccumulator && ball === 0 ? 
-                                    <span className="text-sm font-medium text-[#0A4B7F]"> Standard </span> :
-                                    <Ball key={ball} className="h-8 w-8 text-xs font-bold" value={ball}/> 
-                                 ))
-                              ) : (
-                                <span className="text-sm text-gray-400 italic">None</span>
+                            <div className="flex justify-between items-end">
+                              <div>
+                                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-1 block">
+                                  {isAccumulator ? 'Selection' : 'Selected Numbers'}
+                                </span>
+                                <div className="flex flex-wrap gap-2">
+                                  {betslip.bet1 && betslip.bet1.length > 0 ? (
+                                     betslip.bet1.map((ball) => (
+                                        isAccumulator && ball === 0 ? 
+                                        <span className="text-sm font-medium text-[#0A4B7F]"> Standard - {betslip.betType.description} </span> :
+                                        <Ball key={ball} className="h-8 w-8 text-xs font-bold" value={ball}/> 
+                                     ))
+                                  ) : (
+                                    <span className="text-sm text-gray-400 italic">None</span>
+                                  )}
+                                </div>
+                              </div>
+                              
+                              {/* Big Stake Display for Singles - ONLY for Singles */}
+                              {!isAccumulator && (
+                                <div className="text-right">
+                                  <span className="text-[10px] uppercase font-bold text-gray-400 block mb-0.5">Stake</span>
+                                  <span className="text-2xl font-bold font-mono text-green-600 bg-green-50 px-2 py-1 rounded border border-green-100 inline-block shadow-sm">
+                                    {betslip.stakePerLine}
+                                  </span>
+                                </div>
                               )}
                             </div>
                          </div>

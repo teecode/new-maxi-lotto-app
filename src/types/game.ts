@@ -88,10 +88,11 @@ export interface BetSlip {
 	amount: number;
 	wonAmount: number;
 	betType: {
-		code: string;
 		id: number;
 		name: string;
-		winFactor: number; // Added
+		code: string;
+		description: string; // Added
+		winFactor: number;
 	};
 	status: {
 		id: number;
