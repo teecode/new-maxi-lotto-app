@@ -28,11 +28,11 @@ const UserInfoCard = ({ name, balance, email, avatar, rank }: UserInfoCardProps)
         </ItemMedia>
         <ItemContent>
           <ItemTitle className="text-lg sm:text-xl font-medium text-foreground">{name}</ItemTitle>
-          <ItemDescription className="space-y-1">
-            <span className="text-muted-foreground block text-sm font-bold text-[#0A4B7F] flex gap-1 items-center">
+          <ItemDescription className="space-y-1 line-clamp-none">
+            <span className="text-muted-foreground block text-sm font-bold text-[#0A4B7F] flex gap-1 items-center flex-wrap">
               <span className="text-[#FFF100]">★</span> {rank}
             </span>
-            <span className="text-muted-foreground block text-sm">{email}</span>
+            <span className="text-muted-foreground block text-sm break-all">{email}</span>
             <span className="text-muted-foreground block">{formatCurrency(balance)}</span>
           </ItemDescription>
 
