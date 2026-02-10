@@ -2,13 +2,14 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { useFetchDailyGames, useGetBetTypes } from "@/hooks/useGames"
 import { usePlaceBet } from "@/hooks/usePlaceBet"
 import useAuthStore from "@/store/authStore"
 import { useBetStore } from "@/store/bet-store"
 import type { BetList, BetType, Game } from "@/types/game"
 import type { EmblaOptionsType } from 'embla-carousel'
-import { ShoppingBasketIcon, Trash2Icon } from "lucide-react"
+import { ShoppingBasketIcon, Trash2Icon, InfoIcon } from "lucide-react"
 import { useState, useMemo } from "react"
 import { toast } from "sonner"
 import GameCarousel from '@/components/play/game-carousel'
@@ -19,6 +20,15 @@ export const Route = createFileRoute('/_layout/accumulator')({
 })
 
 const OPTIONS: EmblaOptionsType = { loop: true }
+
+// Market group descriptions for the info tooltips
+const MARKET_DESCRIPTIONS: Record<string, string> = {
+  "HI_LO": "Predict whether a drawn ball will be higher or lower than a specific number. For example, 'First Ball > 50' wins if the first drawn ball is greater than 50.",
+  "COMP": "Compare the values of specific drawn balls against each other. For example, predict whether the 1st ball will be greater than the 2nd ball.",
+  "SUM": "Predict the total sum of all drawn balls. You bet on whether the combined total will fall above or below a certain threshold.",
+  "OE": "Predict whether a specific drawn ball (or combination) will be an Odd or Even number. Simple 50/50 style market with varying odds.",
+  "DEC": "Predict the decade range that a specific ball will fall into. For example, whether a ball will be in the 1-10, 11-20, 21-30 range, etc.",
+}
 
 function AccumulatorPage() {
   const [stakeAmount, setStakeAmount] = useState<number>(100)
@@ -156,8 +166,34 @@ function AccumulatorPage() {
 
             {selectedGame && groupedMarkets.map(group => (
               <div key={group.title} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <div className="bg-[#0A4B7F] px-4 py-3">
+                <div className="bg-[#0A4B7F] px-4 py-3 flex items-center justify-between">
                   <h3 className="text-white font-semibold">{group.title}</h3>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <button
+                        type="button"
+                        className="text-white/70 hover:text-white hover:bg-white/10 rounded-full p-1 transition-colors"
+                        aria-label={`Info about ${group.title}`}
+                      >
+                        <InfoIcon size={16} />
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      side="top"
+                      align="end"
+                      className="w-72 text-sm bg-white shadow-xl border border-gray-200 rounded-xl p-4"
+                    >
+                      <div className="space-y-2">
+                        <h4 className="font-bold text-[#0A4B7F] flex items-center gap-1.5">
+                          <InfoIcon size={14} className="text-[#0A4B7F]" />
+                          {group.title}
+                        </h4>
+                        <p className="text-gray-600 leading-relaxed">
+                          {MARKET_DESCRIPTIONS[group.items[0]?.groupCode] || "Select options from this market to add them as legs to your accumulator bet."}
+                        </p>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </div>
                 <div className="p-4">
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">

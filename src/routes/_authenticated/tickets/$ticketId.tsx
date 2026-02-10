@@ -102,7 +102,8 @@ function RouteComponent() {
       <section className="py-8 sm:py-12 bg-gray-50 min-h-screen">
         <div className="container mx-auto px-4 max-w-3xl">
           
-          <Card ref={ticketCardRef} className="bg-white border-0 shadow-xl overflow-hidden rounded-2xl">
+          <div ref={ticketCardRef}>
+          <Card className="bg-white border-0 shadow-xl overflow-hidden rounded-2xl">
             {/* Header */}
             <CardHeader className="p-0 border-b border-gray-100">
               <div className="bg-[#0A4B7F] w-full p-6 text-white text-center relative overflow-hidden">
@@ -265,6 +266,7 @@ function RouteComponent() {
               </Button>
             </CardFooter>
           </Card>
+          </div>
         </div>
       </section>
     </>
