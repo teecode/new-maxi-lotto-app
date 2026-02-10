@@ -99,32 +99,45 @@ export const columns: ColumnDef<GameTicket>[] = [
     id: 'status',
     header: ({ column }) => <DataGridColumnHeader title="Status" visibility={true} column={column} />,
     cell: ({ row }) => {
-      const status = row.original.status.name;
+      const status = row.original.status?.name;
 
-      if (status == 'Active') {
-        return (
-          <Badge variant="primary" appearance="outline">
-            Approved
-          </Badge>
-        );
-      } else if (status == 'Undecided') {
-        return (
-          <Badge variant="warning" appearance="outline">
-            Undecided
-          </Badge>
-        );
-      } else if (status == 'Inactive') {
-        return (
-          <Badge variant="secondary" appearance="outline">
-            Inactive
-          </Badge>
-        );
-      } else {
-        return (
-          <Badge variant="secondary" appearance="outline">
-            Pending
-          </Badge>
-        );
+      switch (status) {
+        case 'Won':
+          return (
+            <Badge variant="success" appearance="outline">
+              Won
+            </Badge>
+          );
+        case 'Lost':
+          return (
+            <Badge variant="destructive" appearance="outline">
+              Lost
+            </Badge>
+          );
+        case 'Undecided':
+          return (
+            <Badge variant="warning" appearance="outline">
+              Undecided
+            </Badge>
+          );
+        case 'Active':
+          return (
+            <Badge variant="primary" appearance="outline">
+              Active
+            </Badge>
+          );
+        case 'Inactive':
+          return (
+            <Badge variant="secondary" appearance="outline">
+              Inactive
+            </Badge>
+          );
+        default:
+          return (
+            <Badge variant="secondary" appearance="outline">
+              {status || 'Pending'}
+            </Badge>
+          );
       }
     },
     size: 100,
