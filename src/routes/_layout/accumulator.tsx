@@ -23,11 +23,11 @@ const OPTIONS: EmblaOptionsType = { loop: true }
 
 // Market group descriptions for the info tooltips
 const MARKET_DESCRIPTIONS: Record<string, string> = {
-  "HI_LO": "Predict whether a drawn ball will be higher or lower than a specific number. For example, 'First Ball > 50' wins if the first drawn ball is greater than 50.",
-  "COMP": "Compare the values of specific drawn balls against each other. For example, predict whether the 1st ball will be greater than the 2nd ball.",
+  "HI_LO": "Predict whether a drawn ball will be higher or lower than a specific number. For example, 'First Ball > 50' wins if the number of the first drawn ball is greater than 50.",
+  "COMP": "Compare the values of specific drawn balls against each other. For example, predict whether the number of the 1st ball will be greater than the number of the 2nd ball.",
   "SUM": "Predict the total sum of all drawn balls. You bet on whether the combined total will fall above or below a certain threshold.",
   "OE": "Predict whether a specific drawn ball (or combination) will be an Odd or Even number. Simple 50/50 style market with varying odds.",
-  "DEC": "Predict the decade range that a specific ball will fall into. For example, whether a ball will be in the 1-10, 11-20, 21-30 range, etc.",
+  "DEC": "Predict the decade range that a specific ball will fall into. For example, whether the number of the first drawn ball will be in the 1-10, 11-20, 21-30 range, etc.",
 }
 
 function AccumulatorPage() {
