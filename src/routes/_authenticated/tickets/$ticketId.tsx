@@ -32,17 +32,16 @@ function RouteComponent() {
     setDownloading(true);
 
     try {
-      const { default: html2canvas } = await import('html2canvas');
-      const canvas = await html2canvas(ticketCardRef.current, {
+      const { toPng } = await import('html-to-image');
+      const dataUrl = await toPng(ticketCardRef.current, {
         backgroundColor: '#f9fafb',
-        scale: 2,
-        useCORS: true,
-        logging: false,
+        pixelRatio: 2,
+        quality: 1,
       });
 
       const link = document.createElement('a');
       link.download = `ticket-${ticket.id}.png`;
-      link.href = canvas.toDataURL('image/png');
+      link.href = dataUrl;
       link.click();
       toast.success("Ticket downloaded successfully!");
     } catch (error) {
