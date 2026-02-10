@@ -203,6 +203,21 @@ function AccumulatorPage() {
                                 {accumulatorLegs.length} Legs
                             </Badge>
                         </div>
+                        {accumulatorLegs.length > 0 && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {
+                                setAccumulatorLegs([])
+                                setStakeAmount(100)
+                                toast.success("All selections cleared!")
+                              }}
+                              className="text-white/80 hover:text-white hover:bg-white/20 h-7 text-xs font-semibold flex items-center gap-1"
+                            >
+                              <Trash2Icon size={12} /> Clear All
+                            </Button>
+                        )}
                         {selectedGame && (
                             <div className="text-xs bg-[#093e6b] p-2 rounded text-white/90 flex justify-between items-center">
                                 <span>Game:</span>

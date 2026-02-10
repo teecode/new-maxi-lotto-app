@@ -2,10 +2,12 @@ import {createFileRoute, Link} from '@tanstack/react-router'
 import {fetchTicketById} from "@/services/GameService.ts";
 import {Card, CardContent, CardFooter, CardHeader} from "@/components/ui/card.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {DownloadIcon, Share2} from "lucide-react";
+import {DownloadIcon, Share2, Loader2} from "lucide-react";
 import {formatCurrency, fullDateTimeFormat} from "@/lib/utils.ts";
 import Ball from "@/components/ball.tsx";
 import {Badge} from "@/components/ui/badge.tsx";
+import {useRef, useCallback, useState} from "react";
+import {toast} from "sonner";
 
 export const Route = createFileRoute('/_authenticated/tickets/$ticketId')({
   loader: async ({params}) => {
@@ -17,18 +19,90 @@ export const Route = createFileRoute('/_authenticated/tickets/$ticketId')({
 
 function RouteComponent() {
   const ticket = Route.useLoaderData();
+  const ticketCardRef = useRef<HTMLDivElement>(null);
+  const [downloading, setDownloading] = useState(false);
 
   const isAccumulator = ticket.ticketType === 2;
   const totalOdds = isAccumulator 
     ? ticket.betslips.reduce((acc, slip) => acc * (slip.betType.winFactor || 1), 1)
     : 0;
 
+  const handleDownload = useCallback(async () => {
+    if (!ticketCardRef.current) return;
+    setDownloading(true);
+
+    try {
+      const { default: html2canvas } = await import('html2canvas');
+      const canvas = await html2canvas(ticketCardRef.current, {
+        backgroundColor: '#f9fafb',
+        scale: 2,
+        useCORS: true,
+        logging: false,
+      });
+
+      const link = document.createElement('a');
+      link.download = `ticket-${ticket.id}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      toast.success("Ticket downloaded successfully!");
+    } catch (error) {
+      console.error('Download failed:', error);
+      toast.error("Failed to download ticket. Please try again.");
+    } finally {
+      setDownloading(false);
+    }
+  }, [ticket.id]);
+
+  const handleShare = useCallback(async () => {
+    const statusEmoji = ticket.status.name === 'Won' ? '🏆' : ticket.status.name === 'Lost' ? '❌' : '⏳';
+    const shareText = [
+      `${statusEmoji} MaxiLotto Ticket #${ticket.id}`,
+      `🎮 Game: ${ticket.game.name}`,
+      `💰 Stake: ${formatCurrency(ticket.amount)}`,
+      ticket.status.name === 'Won' 
+        ? `🏆 Won: ${formatCurrency(ticket.wonAmount)}` 
+        : `🎯 Potential Win: ${formatCurrency(ticket.possibleWin)}`,
+      `📊 Status: ${ticket.status.name}`,
+      `📅 Date: ${fullDateTimeFormat(ticket.dateRegistered).split(',')[0]}`,
+      '',
+      `Bet Slips:`,
+      ...ticket.betslips.map((slip, i) => 
+        `  ${i + 1}. ${slip.betType.code} - Numbers: [${slip.bet1.join(', ')}] - ${slip.status.name}`
+      ),
+    ].join('\n');
+
+    const shareUrl = window.location.href;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `MaxiLotto Ticket #${ticket.id}`,
+          text: shareText,
+          url: shareUrl,
+        });
+      } catch (error) {
+        // User cancelled share — not an error
+        if ((error as Error).name !== 'AbortError') {
+          console.error('Share failed:', error);
+        }
+      }
+    } else {
+      // Fallback: copy to clipboard
+      try {
+        await navigator.clipboard.writeText(`${shareText}\n\n${shareUrl}`);
+        toast.success("Ticket details copied to clipboard!");
+      } catch {
+        toast.error("Failed to copy ticket details.");
+      }
+    }
+  }, [ticket]);
+
   return (
     <>
       <section className="py-8 sm:py-12 bg-gray-50 min-h-screen">
         <div className="container mx-auto px-4 max-w-3xl">
           
-          <Card className="bg-white border-0 shadow-xl overflow-hidden rounded-2xl">
+          <Card ref={ticketCardRef} className="bg-white border-0 shadow-xl overflow-hidden rounded-2xl">
             {/* Header */}
             <CardHeader className="p-0 border-b border-gray-100">
               <div className="bg-[#0A4B7F] w-full p-6 text-white text-center relative overflow-hidden">
@@ -164,10 +238,24 @@ function RouteComponent() {
 
             <CardFooter className="bg-gray-50 p-6 flex flex-col gap-4 border-t border-gray-100">
               <div className="flex justify-between gap-4 w-full">
-                <Button variant="outline" className="flex-1 border-[#0A4B7F]/20 text-[#0A4B7F] hover:bg-[#0A4B7F]/5">
-                  <DownloadIcon className="mr-2 h-4 w-4" /> Download
+                <Button 
+                  variant="outline" 
+                  className="flex-1 border-[#0A4B7F]/20 text-[#0A4B7F] hover:bg-[#0A4B7F]/5"
+                  onClick={handleDownload}
+                  disabled={downloading}
+                >
+                  {downloading ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <DownloadIcon className="mr-2 h-4 w-4" />
+                  )}
+                  {downloading ? 'Saving...' : 'Download'}
                 </Button>
-                <Button variant="outline" className="flex-1 border-[#0A4B7F]/20 text-[#0A4B7F] hover:bg-[#0A4B7F]/5">
+                <Button 
+                  variant="outline" 
+                  className="flex-1 border-[#0A4B7F]/20 text-[#0A4B7F] hover:bg-[#0A4B7F]/5"
+                  onClick={handleShare}
+                >
                   <Share2 className="mr-2 h-4 w-4" /> Share
                 </Button>
               </div>
@@ -182,3 +270,4 @@ function RouteComponent() {
     </>
   )
 }
+
