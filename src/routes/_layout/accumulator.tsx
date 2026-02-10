@@ -5,6 +5,7 @@ import { Separator } from "@/components/ui/separator"
 import { useFetchDailyGames, useGetBetTypes } from "@/hooks/useGames"
 import { usePlaceBet } from "@/hooks/usePlaceBet"
 import useAuthStore from "@/store/authStore"
+import { useBetStore } from "@/store/bet-store"
 import type { BetList, BetType, Game } from "@/types/game"
 import type { EmblaOptionsType } from 'embla-carousel'
 import { ShoppingBasketIcon, Trash2Icon } from "lucide-react"
@@ -21,7 +22,9 @@ const OPTIONS: EmblaOptionsType = { loop: true }
 
 function AccumulatorPage() {
   const [stakeAmount, setStakeAmount] = useState<number>(100)
-  const [selectedGame, setSelectedGame] = useState<Game | null>(null)
+  
+  // Use bet store for selected game to ensure carousel highlighting works
+  const { selectedGame, setSelectedGame } = useBetStore()
   
   const MIN_STAKE = 50
   const MAX_STAKE = 10000
@@ -247,14 +250,22 @@ function AccumulatorPage() {
                             <input 
                                 type="number" 
                                 value={stakeAmount}
-                                onChange={(e) => setStakeAmount(Number(e.target.value))}
+                                onChange={(e) => {
+                                  const value = Number(e.target.value)
+                                  // Prevent negative values
+                                  if (value < 0) {
+                                    setStakeAmount(0)
+                                  } else {
+                                    setStakeAmount(value)
+                                  }
+                                }}
                                 className={cn(
                                     "w-full p-2 border rounded focus:ring-1 outline-none font-bold",
                                     (stakeAmount < MIN_STAKE || stakeAmount > MAX_STAKE) 
                                         ? "border-red-500 text-red-600 focus:border-red-500 focus:ring-red-500" 
                                         : "border-gray-300 text-[#0A4B7F] focus:border-[#0A4B7F] focus:ring-[#0A4B7F]"
                                 )}
-                                min={MIN_STAKE}
+                                min={0}
                                 max={MAX_STAKE}
                             />
                             {(stakeAmount < MIN_STAKE || stakeAmount > MAX_STAKE) && (

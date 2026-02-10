@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ChevronRight, Menu } from "lucide-react";
 import { Button } from "../ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet";
 import { Link, useLocation } from "@tanstack/react-router";
 import { Image } from "@unpic/react";
 
@@ -30,6 +30,9 @@ const MobileNav = ({ menu }: MobileNavProps) => {
       </SheetTrigger>
 
       <SheetContent className="p-4" side="left">
+        <SheetHeader>
+          <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+        </SheetHeader>
         <div className="flex items-center justify-between">
           <Link to="/app">
             <Image

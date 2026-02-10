@@ -95,6 +95,14 @@ const BetSlip = ({
 
   const handleStakeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value)
+    
+    // Prevent negative values
+    if (value < 0) {
+      toast.error('Stake cannot be negative')
+      setStake(0)
+      return
+    }
+    
     if (value > selectedBetType.maximumStake) {
       toast.error(`Maximum stake is ₦${selectedBetType.maximumStake}`)
       setStake(selectedBetType.maximumStake)
@@ -193,95 +201,114 @@ const BetSlip = ({
   }
 
   return (
-    <div className={cn("bg-background rounded-2xl shadow-md w-full max-w-sm py-6 px-4 space-y-8")}>
-
-    {/* Header */}
-      <div className="flex justify-center">
-        <h4 className="bg-[#0185B6] text-background font-bold px-8 py-3 rounded-full text-lg">
-          Bet Slip
-        </h4>
+    <div className={cn("bg-white rounded-2xl shadow-lg w-full overflow-hidden border border-gray-100")}>
+      
+      {/* Modern Header with Gradient */}
+      <div className="relative bg-gradient-to-r from-[#0185B6] to-[#01B1A8] px-4 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-[#FFF100] rounded-full animate-pulse"></div>
+            <h3 className="text-white font-bold text-lg tracking-wide">Bet Slip</h3>
+          </div>
+          <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full">
+            <span className="text-white text-xs font-semibold">Quick Add</span>
+          </div>
+        </div>
       </div>
 
       {/* Content */}
-      <div className="text-base space-y-4 font-poppins">
-        <div className="flex justify-between border-b border-dashed border-gray-300 pb-1">
-          <span className="font-bold">Game:</span>
-          <span className="text-foreground-muted">{selectedGame?.gameName || "N/A"}</span>
+      <div className="p-4 space-y-4">
+        {/* Game and Bet Type - Compact Header */}
+        <div className="text-center pb-3 border-b-2 border-dashed border-gray-200">
+          <div className="text-base font-bold text-[#0A4B7F]">
+            {selectedGame?.gameName || "Select Game"} : {selectedBetType?.code || "N/A"}
+          </div>
         </div>
 
-        <div className="flex justify-between border-b border-dashed border-gray-300 pb-1">
-          <span className="font-bold">Type:</span>
-          <span className="text-foreground-muted">{selectedBetType?.code || "N/A"}</span>
-        </div>
-
-        {/* BET NUMBERS DISPLAY (Following Vue logic) */}
+        {/* Bet Numbers Display - Aesthetically Pleasing */}
         {selectedBetType && (
-          <>
-            <div className="flex flex-col border-b border-dashed border-gray-300 pb-1">
-              <div className="flex justify-between mb-1">
-                <span className="font-bold text-sm">My Bets:</span>
-              </div>
-              <div className="text-xs text-foreground-muted break-words">
+          <div className="space-y-3">
+            {/* Main Bets */}
+            <div className="bg-gradient-to-r from-[#1FEFBC]/10 to-[#0185B6]/10 rounded-xl p-3 border border-[#0185B6]/20">
+              <div className="text-xs font-semibold text-gray-600 mb-2">Selected Numbers</div>
+              <div className="flex flex-wrap gap-2">
                 {selectedBalls.length > 0 ? (
-                  <>
-                    {selectedBalls.join('-')}
-                    {selectedBetType.code === 'BANKER' && (
-                      <span className="ml-2 font-bold">AG 1-90</span>
-                    )}
-                  </>
-                ) : '—'}
+                  selectedBalls.map((ball, index) => (
+                    <span 
+                      key={index}
+                      className="bg-[#0185B6] text-white px-3 py-1 rounded-full text-sm font-bold shadow-md"
+                    >
+                      {ball}
+                    </span>
+                  ))
+                ) : (
+                  <span className="text-gray-400 text-sm italic">No balls selected</span>
+                )}
+                {selectedBetType.code === 'BANKER' && selectedBalls.length > 0 && (
+                  <span className="bg-[#FFF100] text-[#0A4B7F] px-3 py-1 rounded-full text-sm font-bold">
+                    AG 1-90
+                  </span>
+                )}
               </div>
+            </div>
 
-              {/* Show Against Balls for AGS */}
-              {selectedBetType.nap === 'AGS' && againstBalls.length > 0 && (
-                <div className="text-xs text-foreground-muted mt-1">
-                  <span className="font-bold">AG </span>
-                  {againstBalls.join('-')}
+            {/* Against Balls for AGS */}
+            {selectedBetType.nap === 'AGS' && againstBalls.length > 0 && (
+              <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-xl p-3 border border-red-200">
+                <div className="text-xs font-semibold text-gray-600 mb-2">Against Numbers</div>
+                <div className="flex flex-wrap gap-2">
+                  {againstBalls.map((ball, index) => (
+                    <span 
+                      key={index}
+                      className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-md"
+                    >
+                      {ball}
+                    </span>
+                  ))}
                 </div>
-              )}
-            </div>
+              </div>
+            )}
 
-            <div className="flex justify-between border-b border-dashed border-gray-300 pb-1">
-              <span className="font-bold">Max. Win per Balls:</span>
-              <span className="text-foreground-muted">₦{maxWinning.toLocaleString()}</span>
+            {/* Calculation Summary */}
+            <div className="bg-gray-50 rounded-xl p-3 space-y-2 text-sm">
+              <div className="flex justify-between items-center font-semibold text-gray-700">
+                <span>{numberOfLines} lines × ₦{stake || 0}</span>
+                <span className="text-[#0A4B7F]">= ₦{(numberOfLines * stake).toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between items-center pt-2 border-t border-gray-200">
+                <span className="text-green-700 font-bold">Possible Winning:</span>
+                <span className="text-green-600 font-bold text-lg">₦{maxWinning.toLocaleString()}</span>
+              </div>
             </div>
-
-            <div className="flex justify-between border-b border-dashed border-gray-300 pb-1">
-              <span className="font-bold">Number of lines:</span>
-              <span className="text-foreground-muted">{numberOfLines}</span>
-            </div>
-
-            <div className="flex justify-between border-b border-dashed border-gray-300 pb-1">
-              <span className="font-bold">Total Stake:</span>
-              <span className="text-foreground-muted">₦{(numberOfLines * stake).toLocaleString()}</span>
-            </div>
-          </>
+          </div>
         )}
-      </div>
 
-      {/* Input Field for Stake */}
-      <div className="space-y-1">
-        <Input
-          id="stake"
-          placeholder="Enter stake amount"
-          type="number"
-          value={stake === 0 ? '' : stake}
-          onChange={handleStakeChange}
-          className="border border-gray-300 rounded-3xl px-4 py-3"
-        />
-        <span className="mt-1 text-sm opacity-80">
-          Min: ₦{selectedBetType?.minimumStake} | Max: ₦{selectedBetType?.maximumStake}
-        </span>
-      </div>
+        {/* Input Field for Stake */}
+        <div className="space-y-2">
+          <label className="text-xs font-semibold text-gray-600">Stake Per Line</label>
+          <Input
+            id="stake"
+            placeholder="Enter amount"
+            type="number"
+            value={stake === 0 ? '' : stake}
+            onChange={handleStakeChange}
+            className="border-2 border-[#0185B6]/30 focus:border-[#0185B6] rounded-xl px-4 py-3 text-center font-bold text-lg"
+          />
+          <div className="flex justify-between text-xs text-gray-500">
+            <span>Min: ₦{selectedBetType?.minimumStake}</span>
+            <span>Max: ₦{selectedBetType?.maximumStake}</span>
+          </div>
+        </div>
 
-      {/* Place Bet Button */}
-      <Button
-        onClick={handleAddToBets}
-        size={"lg"}
-        className="w-full bg-[#0185B6] text-yellow-400 rounded-full hover:opacity-80"
-      >
-        Add Game
-      </Button>
+        {/* Add Game Button */}
+        <Button
+          onClick={handleAddToBets}
+          size={"lg"}
+          className="w-full bg-gradient-to-r from-[#0185B6] to-[#01B1A8] text-[#FFF100] rounded-xl py-6 text-base font-bold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02]"
+        >
+          Add to My Games
+        </Button>
+      </div>
     </div>
   )
 }
