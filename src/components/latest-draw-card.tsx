@@ -1,7 +1,5 @@
 import type { LatestDrawTicketResponse } from '@/types/api';
 import { formattedDate } from '@/lib/utils';
-import { Image } from '@unpic/react';
-import Ball from './ball';
 
 interface LotteryTicketProps {
   item: LatestDrawTicketResponse
@@ -11,6 +9,16 @@ interface LotteryTicketProps {
 type Result = {
   [key: string]: number;
 };
+
+// Snooker-inspired ball colors
+const ballColors = [
+  "linear-gradient(145deg, #E53935 60%, #B71C1C 100%)",   // Red
+  "linear-gradient(145deg, #1E88E5 60%, #0D47A1 100%)",   // Blue
+  "linear-gradient(145deg, #43A047 60%, #1B5E20 100%)",   // Green
+  "linear-gradient(145deg, #FFB300 60%, #E65100 100%)",   // Gold/Orange
+  "linear-gradient(145deg, #8E24AA 60%, #4A148C 100%)",   // Purple
+  "linear-gradient(145deg, #00897B 60%, #004D40 100%)",   // Teal
+];
 
 const LatestDrawCard = ({
   className, item
@@ -22,65 +30,56 @@ const LatestDrawCard = ({
     .filter((key) => key.startsWith("winningBall"))
     .map((key) => result[key]);
 
-  const bgColors = [
-    'bg-accent-1-900',
-    'bg-background',
-  ]
-
-  const bgColor = bgColors[Math.floor(Math.random() * bgColors.length)];
-
-
   return (
-    <div className={`relative grid grid-cols-2 gap-4 rounded-xl p-6 shadow-lg max-w-md mx-auto ${bgColor} ${className}`}>
+    <div className={`relative rounded-2xl p-6 shadow-xl border border-white/10 overflow-hidden ${className}`}
+      style={{
+        background: "linear-gradient(135deg, #0A1628 0%, #1A2A4A 50%, #0D1F3C 100%)"
+      }}
+    >
+      {/* Subtle glow accent */}
+      <div className="absolute -top-20 -right-20 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl" />
+      <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/8 rounded-full blur-2xl" />
 
       {/* Header section */}
-      <div className="flex flex-col gap-4 items-start justify-start">
-        <div className="flex items-start space-x-2">
-          {/* background: radial-gradient(50% 50% at 50% 50%, #00D49C 38.46%, #006E51 100%); */}
-          <div className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold font-poppins" style={
-            {
-              background: "radial-gradient(50% 50% at 50% 50%, #00D49C 38.46%, #006E51 100%)"
-            }
-          }>
-            {item.gameCode}
-          </div>
-          <div className="flex flex-col gap-1">
-            <h3 className="font-bold text-lg text-primary-900 truncate">{item.gameName}</h3>
-            <div className="flex flex-col">
-              <div className="text-foreground font-bold text-sm truncate">
-                Draw Taken on
-              </div>
-              <div className="text-foreground truncate font-medium text-xs">
-                {formattedDate(item.endDateTime)}
-              </div>
+      <div className="relative z-10 flex items-center gap-3 mb-5">
+        <div className="w-11 h-11 rounded-full flex items-center justify-center text-white text-xs font-bold tracking-tight shrink-0"
+          style={{
+            background: "radial-gradient(50% 50% at 50% 50%, #00D49C 38.46%, #006E51 100%)"
+          }}
+        >
+          {item.gameCode}
+        </div>
+        <div className="flex flex-col min-w-0">
+          <h3 className="font-bold text-base text-white truncate">{item.gameName}</h3>
+          <span className="text-cyan-300/70 text-xs font-medium">
+            {formattedDate(item.endDateTime)}
+          </span>
+        </div>
+      </div>
+
+      {/* Winning Numbers */}
+      <div className="relative z-10 space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="w-1 h-4 rounded-full bg-gradient-to-b from-cyan-400 to-blue-500" />
+          <h4 className="text-cyan-300/90 font-semibold text-sm uppercase tracking-wider">Winning Numbers</h4>
+        </div>
+
+        <div className="flex gap-2.5 flex-wrap">
+          {winningBalls.map((ball, idx) => (
+            <div
+              key={`winning-${idx}`}
+              className="relative flex items-center justify-center size-10 rounded-full text-white font-bold text-sm shadow-lg"
+              style={{
+                background: ballColors[idx % ballColors.length],
+              }}
+            >
+              {/* Glossy shine - snooker ball effect */}
+              <div className="absolute top-1 left-1.5 w-3 h-3 bg-white/40 rounded-full blur-[2px]" />
+              <span className="relative z-10">{ball}</span>
             </div>
-          </div>
-
-        </div>
-
-        {/* Winning Numbers section */}
-        <div className="space-y-3">
-          <h3 className="text-primary-900 font-semibold text-lg">Winning Numbers</h3>
-
-          <div className="flex space-x-3">
-
-            {winningBalls.map((ball, idx) => (
-              <Ball
-                key={`winning-${idx}`}
-                value={ball}
-                isSelected
-                className="bg-primary-900 rounded-full"
-              />)
-            )}
-
-          </div>
+          ))}
         </div>
       </div>
-
-      <div className="flex items-center absolute right-4 top-7">
-        <Image src={"/dollar-bag-1.png"} alt="Dollar Bag" width={148} height={93} className="rounded object-contain" />
-      </div>
-
     </div>
   );
 };

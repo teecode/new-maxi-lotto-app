@@ -22,11 +22,11 @@ const LatestDrawTicket = (props: PropType) => {
   } = usePrevNextButtons(emblaApi)
 
   return (
-    <section className="embla">
+    <section className="embla !max-w-full">
       <div className="embla__viewport" ref={emblaRef}>
         <div className="embla__container">
           {slides.map((slide, index) => (
-            <div className="embla__slide"  style={{ "--slide-size": "100%" } as React.CSSProperties} key={index}>
+            <div className="embla__slide" style={{ "--slide-size": "100%", "--slide-size-sm": "50%", "--slide-size-lg": "33.333%" } as React.CSSProperties} key={index}>
               <LatestDrawCard item={slide} />
             </div>
           ))}
@@ -35,12 +35,18 @@ const LatestDrawTicket = (props: PropType) => {
 
       <div className="embla__controls">
         <div className="embla__buttons">
-          <PrevButton className='text-primary-900' onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
-          <NextButton className='text-primary-900' onClick={onNextButtonClick} disabled={nextBtnDisabled} />
+          <PrevButton
+            className='!bg-white/20 !backdrop-blur-sm !border !border-white/30 text-white hover:!bg-white/35 transition-all duration-200 !shadow-md'
+            onClick={onPrevButtonClick}
+            disabled={prevBtnDisabled}
+          />
+          <NextButton
+            className='!bg-white/20 !backdrop-blur-sm !border !border-white/30 text-white hover:!bg-white/35 transition-all duration-200 !shadow-md'
+            onClick={onNextButtonClick}
+            disabled={nextBtnDisabled}
+          />
         </div>
-
       </div>
-
     </section>
   )
 }

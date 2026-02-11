@@ -142,4 +142,5 @@ export interface WinnerTicket {
 	wonAmount: number;
 	winPercentage: number;
 	ticketId: number;
+	rank?: string;
 }
