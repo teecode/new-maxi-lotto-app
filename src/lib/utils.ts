@@ -105,7 +105,7 @@ export const fullDateFormat = (date: string) => {
 };
 
 export const fullDateTimeFormat = (date: string) => {
-	return moment(date, 'YYYY-MM-DD h:mm:ss A').format('YYYY-MM-DD h:mm:ss A');
+	return moment(date, 'YYYY-MM-DD h:mm:ss A').format('YYYY-MM-DD HH:mm:ss');
 };
 
 export const timeFormat = (gameTime: string) => {
