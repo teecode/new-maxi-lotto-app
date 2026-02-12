@@ -326,9 +326,9 @@ function AccumulatorPage() {
                             )}
                          </div>
                          
-                         <div className="flex justify-between items-center p-3 bg-green-50 rounded border border-green-100">
-                            <span className="text-sm text-green-700">Potential Win:</span>
-                            <span className={cn("font-bold text-lg", potentialWin > MAX_POTENTIAL_WIN ? "text-red-600" : "text-green-700")}>
+                         <div className="flex justify-between items-center p-3 bg-teal-50 rounded border border-teal-100">
+                            <span className="text-sm text-teal-700">Potential Win:</span>
+                            <span className={cn("font-bold text-lg", potentialWin > MAX_POTENTIAL_WIN ? "text-red-600" : "text-teal-700")}>
                                 NGN {potentialWin.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </span>
                          </div>

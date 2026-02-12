@@ -37,7 +37,7 @@ const whyChooseUs: WhyChooseUsItem[] = [
     title: "Join Us",
     description: "Create your account and join thousands of winners",
     icon: UserPlus,
-    gradient: "from-emerald-500 to-teal-600",
+    gradient: "from-teal-500 to-cyan-600",
   },
   {
     id: 3,
@@ -84,7 +84,7 @@ function App() {
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
               Big Wins <span className="font-light">Start with</span>
               <br />
-              <span className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">One Game</span>
+              <span className="bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">One Game</span>
             </h1>
 
             <p className="text-white/70 text-lg max-w-sm">
@@ -255,7 +255,7 @@ function App() {
 
                 {/* Amount */}
                 <div className="text-right shrink-0">
-                  <p className="font-bold text-base text-emerald-600">
+                  <p className="font-bold text-base text-teal-600">
                     {formatCurrency(winner.wonAmount)}
                   </p>
                   <p className="text-xs text-slate-400">Won</p>

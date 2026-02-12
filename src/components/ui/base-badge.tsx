@@ -24,7 +24,7 @@ const badgeVariants = cva(
         primary: 'bg-primary text-primary-foreground',
         secondary: 'bg-secondary text-secondary-foreground',
         success:
-          'bg-[var(--color-success-accent,var(--color-green-500))] text-[var(--color-success-foreground,var(--color-white))]',
+          'bg-[var(--color-success-accent,var(--color-teal-500))] text-[var(--color-success-foreground,var(--color-white))]',
         warning:
           'bg-[var(--color-warning-accent,var(--color-yellow-500))] text-[var(--color-warning-foreground,var(--color-white))]',
         info: 'bg-[var(--color-info-accent,var(--color-violet-500))] text-[var(--color-info-foreground,var(--color-white))]',
@@ -68,7 +68,7 @@ const badgeVariants = cva(
         variant: 'success',
         appearance: 'light',
         className:
-          'text-[var(--color-success-accent,var(--color-green-800))] bg-[var(--color-success-soft,var(--color-green-100))] dark:bg-[var(--color-success-soft,var(--color-green-950))] dark:text-[var(--color-success-soft,var(--color-green-600))]',
+          'text-[var(--color-success-accent,var(--color-teal-800))] bg-[var(--color-success-soft,var(--color-teal-100))] dark:bg-[var(--color-success-soft,var(--color-teal-950))] dark:text-[var(--color-success-soft,var(--color-teal-600))]',
       },
       {
         variant: 'warning',
@@ -99,7 +99,7 @@ const badgeVariants = cva(
         variant: 'success',
         appearance: 'outline',
         className:
-          'text-[var(--color-success-accent,var(--color-green-700))] border-[var(--color-success-soft,var(--color-green-200))] bg-[var(--color-success-soft,var(--color-green-50))] dark:bg-[var(--color-success-soft,var(--color-green-950))] dark:border-[var(--color-success-soft,var(--color-green-900))] dark:text-[var(--color-success-soft,var(--color-green-600))]',
+          'text-[var(--color-success-accent,var(--color-teal-700))] border-[var(--color-success-soft,var(--color-teal-200))] bg-[var(--color-success-soft,var(--color-teal-50))] dark:bg-[var(--color-success-soft,var(--color-teal-950))] dark:border-[var(--color-success-soft,var(--color-teal-900))] dark:text-[var(--color-success-soft,var(--color-teal-600))]',
       },
       {
         variant: 'warning',
@@ -133,7 +133,7 @@ const badgeVariants = cva(
       {
         variant: 'success',
         appearance: 'ghost',
-        className: 'text-[var(--color-success-accent,var(--color-green-500))]',
+        className: 'text-[var(--color-success-accent,var(--color-teal-500))]',
       },
       {
         variant: 'warning',

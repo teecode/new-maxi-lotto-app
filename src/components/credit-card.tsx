@@ -14,7 +14,7 @@ const CreditCard = ({
   className = ""
 }: BankCardProps) => {
   return (
-    <div className={`relative w-80 h-48 rounded-2xl bg-gradient-to-br from-green-400 via-green-500 to-teal-500 p-6 text-white shadow-xl ${className}`}>
+    <div className={`relative w-80 h-48 rounded-2xl bg-gradient-to-br from-teal-400 via-teal-500 to-cyan-500 p-6 text-white shadow-xl ${className}`}>
       {/* Card chip */}
       <div className="w-10 h-8 bg-gradient-to-br from-gray-200 to-gray-300 rounded-md mb-4 relative">
         <div className="absolute inset-1 bg-gradient-to-br from-gray-100 to-gray-200 rounded-sm"></div>

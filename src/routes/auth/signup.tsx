@@ -8,16 +8,22 @@ export const Route = createFileRoute('/auth/signup')({
 
 function RouteComponent() {
   return (
-    <section className="bg-background flex flex-col items-center pt-8 space-y-5">
-      <h1 className="text-base font-extrabold">Sign Up</h1>
+    <div className="w-full">
+      {/* Header */}
+      <div className="flex flex-col items-center mb-6">
+          {/* Logo - Mobile Only */}
+          <div className="mb-5 lg:hidden">
+            <Image src="/maxilotto.png" alt="Maxi Lotto" width={160} height={50} className="h-9 w-auto object-contain brightness-0 invert" />
+          </div>
 
-      <div className="logo">
-        <Image src="/auth/signup.png" alt="logo" width={193} height={84} />
+          <h2 className="text-2xl font-bold text-white tracking-tight text-center">
+            Create Account
+          </h2>
+          <p className="text-sm text-slate-400 mt-1.5 font-medium text-center">Join the winners today</p>
       </div>
 
-      <div className="w-full sm:max-w-md px-4 py-6 bg-background rounded-lg">
-        <SignUpForm />
-      </div>
-    </section>
+      <SignUpForm />
+    </div>
   )
 }
+

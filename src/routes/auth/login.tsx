@@ -69,85 +69,100 @@ function RouteComponent() {
 
 
   return (
-    <section className="bg-background flex relative flex-col items-center pt-8 space-y-5">
+    <div className="w-full">
+      {/* Header */}
+      <div className="flex flex-col items-center mb-8">
+          {/* Logo - Mobile Only (Desktop has it in AuthLayout) */}
+          <div className="mb-5 lg:hidden">
+            <Image src="/maxilotto.png" alt="Maxi Lotto" width={160} height={50} className="h-9 w-auto object-contain brightness-0 invert" />
+          </div>
 
-      <h1 className="text-base font-extrabold">Sign In</h1>
-
-      <div className="logo flex w-full py-5 left-0">
-        <Image src="/auth/login.png" priority className="" alt="logo" width={342} height={92} />
+          <h2 className="text-2xl font-bold text-white tracking-tight text-center">
+            Welcome Back
+          </h2>
+          <p className="text-sm text-slate-400 mt-1.5 font-medium text-center">Sign in to your account</p>
       </div>
 
-      {/* Form */}
-      <div className="w-full sm:max-w-md px-4 py-6 bg-background rounded-lg">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} method="post">
-            {/* username */}
-            <div className="mb-4">
-              <FormField
-                control={form.control}
-                name="username"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input placeholder="Username" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <div className="relative group">
+                    <Input 
+                      placeholder="Username" 
+                      className="pl-11 h-12 bg-white/[0.08] border-white/[0.12] text-white placeholder:text-slate-500 rounded-xl focus:bg-white/[0.12] focus:border-pink-500/50 focus:ring-2 focus:ring-pink-500/20 transition-all duration-300"
+                      {...field} 
+                    />
+                    <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-pink-400 transition-colors">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </div>
+                  </div>
+                </FormControl>
+                <FormMessage className="text-red-400 text-xs font-medium ml-1" />
+              </FormItem>
+            )}
+          />
 
-            <div className="mb-2">
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <div className="relative flex items-center">
-                        <Input type={showPassword ? "text" : "password"}
-                          placeholder="Enter password" {...field} />
-                        <div onClick={toggleShowPassword}
-                          className="absolute right-2 cursor-pointer text-primary">
-                          {showPassword ? (
-                            <EyeOffIcon size={20} color="#CACACA" />
-                          ) : (
-                            <EyeIcon size={20} color="#CACACA" />
-                          )}
-                        </div>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <div className="relative group">
+                    <Input 
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Password" 
+                      className="pl-11 pr-11 h-12 bg-white/[0.08] border-white/[0.12] text-white placeholder:text-slate-500 rounded-xl focus:bg-white/[0.12] focus:border-pink-500/50 focus:ring-2 focus:ring-pink-500/20 transition-all duration-300"
+                      {...field} 
+                    />
+                    <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-pink-400 transition-colors">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </div>
+                    <div onClick={toggleShowPassword}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 cursor-pointer text-slate-500 hover:text-white transition-colors">
+                      {showPassword ? (
+                        <EyeOffIcon size={18} />
+                      ) : (
+                        <EyeIcon size={18} />
+                      )}
+                    </div>
+                  </div>
+                </FormControl>
+                <FormMessage className="text-red-400 text-xs font-medium ml-1" />
+              </FormItem>
+            )}
+          />
 
-            {/* Forgot Password */}
-            <div className="flex mb-6 justify-end w-full text-sm text-accent-3-100 hover:underline cursor-pointer">
-              <Link to="/auth/forgot-password">
-                Forgot your password ?
-              </Link>
-            </div>
+          <div className="flex items-center justify-end px-1">
+            <Link to="/auth/forgot-password" className="text-xs font-semibold text-slate-400 hover:text-pink-400 transition-colors">
+              Forgot password?
+            </Link>
+          </div>
 
-            <Button type="submit" disabled={loading}
-              className="w-full mb-4 bg-accent-2-900 text-white text-sm rounded-2xl uppercase hover:opacity-70 hover:bg-primary">
-              {loading && <Spinner/>}
-              {loading ? 'Signing In...' : 'Sign In'}
-            </Button>
+          <Button 
+            type="submit" 
+            disabled={loading}
+            className="w-full h-12 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold text-base rounded-xl shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 hover:scale-[1.01] active:scale-[0.99] transition-all duration-300"
+          >
+            {loading && <Spinner className="mr-2 h-5 w-5 border-white" />}
+            {loading ? 'Signing In...' : 'Sign In'}
+          </Button>
 
-            {/* sign up */}
-            <div className="flex justify-center text-sm font-poppins gap-6">
-              <p className="text[#343434]">Don&apos;t have an account? </p>
-              <Link to="/auth/signup" className="text-secondary-900 font-semibold ml-1 hover:underline">
-                Sign Up
-              </Link>
-            </div>
+          <div className="flex justify-center text-sm font-medium gap-1 text-slate-500 pt-4">
+            <span>Don&apos;t have an account?</span>
+            <Link to="/auth/signup" className="text-pink-400 hover:text-pink-300 font-bold hover:underline decoration-2 underline-offset-2">
+              Create Account
+            </Link>
+          </div>
 
-          </form>
-        </Form>
-      </div>
-
-    </section>
+        </form>
+      </Form>
+    </div>
   )
 }

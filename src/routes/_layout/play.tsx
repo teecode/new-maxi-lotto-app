@@ -668,8 +668,8 @@ function RouteComponent() {
                                 <span className="text-[#0A4B7F]">= ₦{bet.stake.toLocaleString()}</span>
                               </div>
                               <div className="flex justify-between items-center pt-1.5 border-t border-gray-100">
-                                <span className="text-green-700 font-bold">Win:</span>
-                                <span className="text-green-600 font-bold">₦{bet.maxWinning.toLocaleString()}</span>
+                                <span className="text-teal-700 font-bold">Win:</span>
+                                <span className="text-teal-600 font-bold">₦{bet.maxWinning.toLocaleString()}</span>
                               </div>
                             </div>
                           </div>

@@ -113,7 +113,7 @@ function RouteComponent() {
                   </p>
                   <Badge 
                     className={`mt-2 px-4 py-1 text-xs font-bold uppercase tracking-wider ${
-                      ticket.status.name === 'Won' ? 'bg-green-500 hover:bg-green-600' :
+                      ticket.status.name === 'Won' ? 'bg-teal-500 hover:bg-teal-600' :
                       ticket.status.name === 'Lost' ? 'bg-red-500 hover:bg-red-600' :
                       'bg-gray-500 hover:bg-gray-600'
                     }`}
@@ -142,7 +142,7 @@ function RouteComponent() {
                   <p className="text-xs text-gray-500 uppercase font-semibold">
                     {ticket.status.name === 'Won' ? 'Won Amount' : 'Potential Win'}
                   </p>
-                  <p className={`text-sm font-bold ${ticket.status.name === 'Won' ? 'text-green-600' : 'text-[#0A4B7F]'}`}>
+                  <p className={`text-sm font-bold ${ticket.status.name === 'Won' ? 'text-teal-600' : 'text-[#0A4B7F]'}`}>
                     {ticket.status.name === 'Won' ? formatCurrency(ticket.wonAmount) : formatCurrency(ticket.possibleWin)}
                   </p>
                </div>
@@ -169,7 +169,7 @@ function RouteComponent() {
                         <span className="font-bold text-[#0A4B7F] text-sm">{betslip.betType.code}</span>
                         {isAccumulator && <Badge variant="outline" className="text-xs bg-white text-gray-600 border-gray-200">Odds: {(betslip.betType.winFactor || 1).toFixed(2)}</Badge>}
                       </div>
-                      <Badge variant={betslip.status.name === 'Won' ? 'default' : 'secondary'} className={betslip.status.name === 'Won' ? 'bg-green-100 text-green-700 hover:bg-green-100' : 'bg-gray-100 text-gray-600 hover:bg-gray-100'}>
+                      <Badge variant={betslip.status.name === 'Won' ? 'default' : 'secondary'} className={betslip.status.name === 'Won' ? 'bg-teal-100 text-teal-700 hover:bg-teal-100' : 'bg-gray-100 text-gray-600 hover:bg-gray-100'}>
                          {betslip.status.name}
                       </Badge>
                     </div>
@@ -207,7 +207,7 @@ function RouteComponent() {
                               {!isAccumulator && (
                                 <div className="text-right">
                                   <span className="text-[10px] uppercase font-bold text-gray-400 block mb-0.5">Stake</span>
-                                  <span className="text-2xl font-bold font-mono text-green-600 bg-green-50 px-2 py-1 rounded border border-green-100 inline-block shadow-sm">
+                                  <span className="text-2xl font-bold font-mono text-teal-600 bg-teal-50 px-2 py-1 rounded border border-teal-100 inline-block shadow-sm">
                                     {betslip.stakePerLine}
                                   </span>
                                 </div>

@@ -66,7 +66,7 @@ const GameCarousel: React.FC<PropType> = (props) => {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 
     if (diffDays === 0) {
-      return { label: 'Today', variant: 'outline' as const, className: 'bg-green-500/50 text-green-500 hover:bg-green-600' }
+      return { label: 'Today', variant: 'outline' as const, className: 'bg-teal-500/50 text-teal-800 hover:bg-teal-600' }
     } else if (diffDays === 1) {
       return { label: 'Tomorrow', variant: 'outline' as const, className: 'bg-blue-500/50 hover:bg-blue-600 text-white' }
     } else if (diffDays === 2) {

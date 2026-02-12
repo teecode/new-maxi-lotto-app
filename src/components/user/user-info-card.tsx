@@ -56,7 +56,7 @@ const UserInfoCard = ({ name, balance, email, avatar, rank }: UserInfoCardProps)
             </Button>
             <Button
               asChild
-              className="flex-1 bg-green-400 text-white py-3 px-6 rounded-full font-semibold hover:bg-green-500 transition-colors"
+              className="flex-1 bg-teal-400 text-white py-3 px-6 rounded-full font-semibold hover:bg-teal-500 transition-colors"
             >
               <Link to="/withdrawal">Withdraw</Link>
             </Button>
