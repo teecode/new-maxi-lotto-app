@@ -10,6 +10,7 @@ import TodayGameSlider from "@/components/today-games-slider.tsx";
 import type {EmblaOptionsType} from "embla-carousel";
 import {ChevronRight, Gamepad2, UserPlus, Wallet, Trophy, Star} from "lucide-react";
 import {Image} from "@unpic/react"
+import { getRankColor } from "@/lib/ranks"
 
 export const Route = createFileRoute('/_layout/')({
   component: App,
@@ -238,8 +239,11 @@ function App() {
                     </h4>
                     {/* Rank star */}
                     {winner.rank && (
-                      <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
-                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                      <span 
+                        className="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full"
+                        style={{ color: getRankColor(winner.rank), backgroundColor: `${getRankColor(winner.rank)}1A` }} // 1A = 10% opacity
+                      >
+                        <Star className="w-3 h-3" style={{ fill: getRankColor(winner.rank), color: getRankColor(winner.rank) }} />
                         {winner.rank}
                       </span>
                     )}

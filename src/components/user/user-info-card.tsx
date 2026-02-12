@@ -12,25 +12,24 @@ import {
 import {Image} from "@unpic/react";
 import {Link} from "@tanstack/react-router";
 
-const UserInfoCard = ({ name, balance, email, avatar, rank }: UserInfoCardProps) => {
-  return (
+import { getRankColor } from "@/lib/ranks";
+// ... (keep existing imports)
 
+const UserInfoCard = ({ name, balance, email, avatar, rank }: UserInfoCardProps) => {
+  const rankColor = getRankColor(rank);
+
+  return (
     <div className="flex w-full max-w-lg flex-col gap-6">
       <Item variant="default" className="p-0">
-        <ItemMedia variant="image" className="w-20 h-20">
-          <Image
-            src={avatar}
-            alt={`${name} avatar`}
-            width={80}
-            height={80}
-            className="object-fill w-full  rounded-full"
-          />
-        </ItemMedia>
+        {/* ... */}
         <ItemContent>
           <ItemTitle className="text-lg sm:text-xl font-medium text-foreground">{name}</ItemTitle>
           <ItemDescription className="space-y-1 line-clamp-none">
-            <span className="text-muted-foreground block text-sm font-bold text-[#0A4B7F] flex gap-1 items-center flex-wrap">
-              <span className="text-[#FFF100]">★</span> {rank}
+            <span 
+              className="block text-sm font-bold flex gap-1 items-center flex-wrap"
+              style={{ color: rankColor }}
+            >
+              <span style={{ color: rankColor }}>★</span> {rank}
             </span>
             <span className="text-muted-foreground block text-sm break-all">{email}</span>
             <span className="text-muted-foreground block">{formatCurrency(balance)}</span>
