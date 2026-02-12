@@ -21,7 +21,15 @@ const UserInfoCard = ({ name, balance, email, avatar, rank }: UserInfoCardProps)
   return (
     <div className="flex w-full max-w-lg flex-col gap-6">
       <Item variant="default" className="p-0">
-        {/* ... */}
+        <ItemMedia variant="image" className="w-20 h-20">
+          <Image
+            src={avatar}
+            alt={`${name} avatar`}
+            width={80}
+            height={80}
+            className="object-fill w-full  rounded-full"
+          />
+        </ItemMedia>
         <ItemContent>
           <ItemTitle className="text-lg sm:text-xl font-medium text-foreground">{name}</ItemTitle>
           <ItemDescription className="space-y-1 line-clamp-none">
