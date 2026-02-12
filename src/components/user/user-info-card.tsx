@@ -34,8 +34,12 @@ const UserInfoCard = ({ name, balance, email, avatar, rank }: UserInfoCardProps)
           <ItemTitle className="text-lg sm:text-xl font-medium text-foreground">{name}</ItemTitle>
           <ItemDescription className="space-y-1 line-clamp-none">
             <span 
-              className="block text-sm font-bold flex gap-1 items-center flex-wrap"
-              style={{ color: rankColor }}
+              className="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full mt-1"
+              style={{ 
+                color: rankColor, 
+                backgroundColor: `${rankColor}1A`,
+                width: 'fit-content'
+              }}
             >
               <span style={{ color: rankColor }}>★</span> {rank}
             </span>
