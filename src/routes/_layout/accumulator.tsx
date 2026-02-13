@@ -3,14 +3,14 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { useFetchDailyGames, useGetBetTypes } from "@/hooks/useGames"
+import { useFetchDailyGames, useGetBetTypes, useGetBlockingRules } from "@/hooks/useGames"
 import { usePlaceBet } from "@/hooks/usePlaceBet"
 import useAuthStore from "@/store/authStore"
 import { useBetStore } from "@/store/bet-store"
 import type { BetList, BetType, Game } from "@/types/game"
 import type { EmblaOptionsType } from 'embla-carousel'
 import { ShoppingBasketIcon, Trash2Icon, InfoIcon } from "lucide-react"
-import { useState, useMemo } from "react"
+import { useState, useMemo, useCallback } from "react"
 import { toast } from "sonner"
 import GameCarousel from '@/components/play/game-carousel'
 import { cn } from "@/lib/utils"
@@ -46,6 +46,7 @@ function AccumulatorPage() {
   }[]>([])
 
   const { data: betTypes } = useGetBetTypes(2) // Fetch Accumulator BetTypes (GameType 2)
+  const { data: blockingRules } = useGetBlockingRules()
   const { minimalUser: user, syncUser } = useAuthStore(state => state)
   const { data: games } = useFetchDailyGames()
 
@@ -99,6 +100,30 @@ function AccumulatorPage() {
       setAccumulatorLegs(prev => [...prev, { betType, selectionName: betType.description || betType.code }])
     }
   }
+
+  const isBetDisabled = useCallback((betType: BetType) => {
+      if (!blockingRules || !blockingRules.groups) return false;
+
+      // Group iteration
+      for (const group of blockingRules.groups) {
+          if (group.codes.includes(betType.quickPlayCode)) {
+              // Count how many selected bets are in this group
+              const selectionsInGroup = accumulatorLegs.filter(leg => 
+                  group.codes.includes(leg.betType.quickPlayCode)
+              ).length;
+
+              // If limit reached/exceeded
+              if (group.maxSelections !== -1 && selectionsInGroup >= group.maxSelections) {
+                  // Allow already selected items to remain explicitly enabled (so they can be toggled off)
+                  const isAlreadySelected = accumulatorLegs.some(l => l.betType.betTypeID === betType.betTypeID);
+                  if (!isAlreadySelected) {
+                      return true;
+                  }
+              }
+          }
+      }
+      return false;
+  }, [blockingRules, accumulatorLegs]);
   
   const totalOdds = useMemo(() => {
     if (accumulatorLegs.length === 0) return 0
@@ -199,14 +224,17 @@ function AccumulatorPage() {
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                           {group.items.map(bt => {
                             const isSelected = accumulatorLegs.some(l => l.betType.betTypeID === bt.betTypeID)
+                            const isDisabled = isBetDisabled(bt);
                             return (
                               <Button
                                 key={bt.betTypeID}
+                                disabled={isDisabled}
                                 variant={isSelected ? "primary" : "outline"} // Changed default back to primary
                                 className={cn(
                                   "h-auto py-2 px-3 text-xs sm:text-sm whitespace-normal text-center min-h-[3rem]",
                                   isSelected ? "bg-[#FFF100] text-[#0A4B7F] hover:bg-[#FFF100]/90 font-bold border-[#FFF100]" : 
-                                  "hover:bg-[#0A4B7F]/5 border-gray-200 text-gray-700"
+                                  "hover:bg-[#0A4B7F]/5 border-gray-200 text-gray-700",
+                                  isDisabled && "opacity-50 cursor-not-allowed bg-gray-100 text-gray-400 hover:bg-gray-100 border-gray-100"
                                 )}
                                 onClick={() => toggleLeg(bt)}
                               >

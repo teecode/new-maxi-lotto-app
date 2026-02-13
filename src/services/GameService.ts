@@ -204,3 +204,17 @@ export const fetchTicketById = async (id: number): Promise<GameTicket> => {
 		throw new Error('Network error, please try again.');
 	}
 };
+
+export const fetchBlockingRules = async (): Promise<
+	import('@/types/game').BettingRulesConfig
+> => {
+	try {
+		const response = await apiClient.get<
+			import('@/types/game').BettingRulesConfig
+		>('v1/betType/blocking-rules');
+		return response.data;
+	} catch (error: any) {
+		console.error('Failed to fetch blocking rules', error);
+		return { groups: [] };
+	}
+};

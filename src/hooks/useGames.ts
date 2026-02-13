@@ -3,6 +3,7 @@ import {
 	fetchDailyGames,
 	fetchLastFourWinner,
 	fetchLatestDraw,
+    fetchBlockingRules,
 } from '@/services/GameService';
 import type { LatestDrawTicketResponse } from '@/types/api';
 import type { BetType, Game, WinnerTicket } from '@/types/game';
@@ -34,5 +35,13 @@ export const useFetchTopWinner = () => {
 	return useSuspenseQuery<WinnerTicket[], Error>({
 		queryKey: ['topWinners'], // include filters in queryKey
 		queryFn: fetchLastFourWinner,
+	});
+};
+
+export const useGetBlockingRules = () => {
+	return useQuery<import('@/types/game').BettingRulesConfig, Error>({
+		queryKey: ['blockingRules'],
+		queryFn: fetchBlockingRules,
+		staleTime: 60 * 60 * 1000, // 1 hour
 	});
 };

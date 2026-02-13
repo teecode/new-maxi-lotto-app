@@ -144,3 +144,14 @@ export interface WinnerTicket {
 	ticketId: number;
 	rank?: string;
 }
+
+export type BettingGroupRule = {
+    groupId: string;
+    maxSelections: number;
+    codes: number[];
+}
+
+export type BettingRulesConfig = {
+    groups: BettingGroupRule[];
+}
+
