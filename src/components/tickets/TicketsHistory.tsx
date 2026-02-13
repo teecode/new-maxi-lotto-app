@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardFooter, CardHeader, CardTable } from '@/components/ui/card';
 import { DataGrid } from '@/components/ui/data-grid';
@@ -19,10 +19,13 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 
-import { columns } from './column';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { fetchUserTickets } from '@/services/GameService';
 import { DatePicker } from '@/components/ui/date-picker';
+import { ticketStatus } from '@/configs/app';
+import type { GameTicket } from '@/types/game';
+import { getColumns } from './column';
+import { TicketPreview } from './ticketPreview';
 
 // interface TicketHistoryProps {
 //   tickets: GameTicket[];
@@ -38,6 +41,7 @@ interface PageProps {
   pageSize: number;
   startDate?: string;
   endDate?: string;
+  ticketStatusId?: number;
 }
 
 export const TicketsHistory = () => {
@@ -47,7 +51,11 @@ export const TicketsHistory = () => {
     pageSize: 10,
     startDate: '',
     endDate: '',
+    ticketStatusId: 0
   });
+
+  const [selectedTicket, setSelectedTicket] = useState<GameTicket | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data: tickets, isFetching } = useQuery({
     queryKey: ['tickets', pagination],
@@ -59,10 +67,19 @@ export const TicketsHistory = () => {
 
   const [sorting, setSorting] = useState<SortingState>([{ id: 'name', desc: true }]);
 
-  const [columnOrder, setColumnOrder] = useState<string[]>(columns.map((column) => column.id as string));
+  const handleSelectedTicket = useCallback((ticket: GameTicket) => {
+    setSelectedTicket(ticket);
+    setIsModalOpen(true);
+  }, []);
 
-  console.log("columnOrder", columnOrder);
 
+  const columns = useMemo(
+    () => getColumns(handleSelectedTicket),
+    [handleSelectedTicket]
+  );
+
+
+  const [, setColumnOrder] = useState<string[]>(columns.map((column) => column.id as string));
 
   const table = useReactTable({
     columns,
@@ -105,6 +122,23 @@ export const TicketsHistory = () => {
     >
       <Card className="border-none shadow-none">
         <CardHeader className="flex flex-row border-b-0 flex-nowrap gap-4 px-0 pb-4">
+          {/* ticket status */}
+          <Select
+            value={String(pagination.ticketStatusId ?? 0)}
+            onValueChange={(statusId) =>
+              setPagination((prev) => ({ ...prev, ticketStatusId: Number(statusId) }))
+            }
+          >
+            <SelectTrigger className="w-full h-11">
+              <SelectValue placeholder="Select Status" />
+            </SelectTrigger>
+            <SelectContent>
+              {ticketStatus.map((status) => (
+                <SelectItem value={String(status.id)} key={status.id}>{status.name}</SelectItem>
+              ))}
+
+            </SelectContent>
+          </Select>
           {/* start date */}
           <DatePicker
             value={pagination.startDate ? new Date(pagination.startDate) : undefined}
@@ -201,6 +235,8 @@ export const TicketsHistory = () => {
             </SelectContent>
           </Select>
         </CardFooter>
+        {selectedTicket && <TicketPreview open={isModalOpen} setOpen={setIsModalOpen} ticket={selectedTicket} />
+        }
       </Card>
     </DataGrid>
   );

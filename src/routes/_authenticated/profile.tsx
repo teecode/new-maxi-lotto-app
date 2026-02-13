@@ -37,7 +37,6 @@ function RouteComponent() {
         {/* profile settings menu */}
         <div className="p-4 rounded space-y-4 bg-neutral-100">
           <ProfileNavigation />
-
           <ProfileSettingsMenu />
         </div>
       </div>

@@ -117,8 +117,8 @@ export const fetchUserTickets = async (pagination: {
 	pageIndex: number;
 	startDate?: string;
 	endDate?: string;
+	ticketStatusId?: number;
 }): Promise<GameTicketsResponse> => {
-	console.log('pagination', pagination);
 
 	try {
 		const response = await apiClient.get<GameTicketsResponse>('Ticket', {
@@ -128,6 +128,7 @@ export const fetchUserTickets = async (pagination: {
 				// don't add start and end date if null
 				startDate: pagination.startDate ? pagination.startDate : undefined,
 				endDate: pagination.endDate ? pagination.endDate : undefined,
+				TicketStatusId: pagination.ticketStatusId ? pagination.ticketStatusId : undefined,
 			},
 		});
 		return response.data;
