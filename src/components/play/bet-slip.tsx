@@ -290,6 +290,8 @@ const BetSlip = ({
             id="stake"
             placeholder="Enter amount"
             type="number"
+            inputMode="numeric"
+            pattern="[0-9]*"
             value={stake === 0 ? '' : stake}
             onChange={handleStakeChange}
             className="border-2 border-[#0185B6]/30 focus:border-[#0185B6] rounded-xl px-4 py-3 text-center font-bold text-lg"

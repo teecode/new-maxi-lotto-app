@@ -328,6 +328,8 @@ function AccumulatorPage() {
                             <label className="text-xs font-medium text-gray-500">Stake Amount (NGN)</label>
                             <input 
                                 type="number" 
+                                inputMode="numeric"
+                                pattern="[0-9]*"
                                 value={stakeAmount}
                                 onChange={(e) => {
                                   const value = Number(e.target.value)
