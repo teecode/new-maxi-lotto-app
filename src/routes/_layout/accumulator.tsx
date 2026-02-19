@@ -28,6 +28,13 @@ const MARKET_DESCRIPTIONS: Record<string, string> = {
   "SUM": "Predict the total sum of all drawn balls. You bet on whether the combined total will fall above or below a certain threshold.",
   "OE": "Predict whether a specific drawn ball (or combination) will be an Odd or Even number. Simple 50/50 style market with varying odds.",
   "DEC": "Predict the decade range that a specific ball will fall into. For example, whether the number of the first drawn ball will be in the 1-10, 11-20, 21-30 range, etc.",
+  "PRIME_F": "Predict if the First Ball drawn will be a Prime Number (divisible only by 1 and itself).",
+  "PRIME_L": "Predict if the Last Ball drawn will be a Prime Number.",
+  "SQR_F": "Predict if the First Ball drawn will be a Perfect Square (e.g. 1, 4, 9, 16, 25...).",
+  "SQR_L": "Predict if the Last Ball drawn will be a Perfect Square.",
+  "SEQ": "Predict if the 5 winning numbers will follow a specific sequence pattern (Strictly Increasing or Decreasing).",
+  "SUM_OE": "Predict whether the sum of all 5 balls will be Odd or Even.",
+  "MOD3_F": "Predict the remainder when the First Ball is divided by 3.",
 }
 
 function AccumulatorPage() {
@@ -60,7 +67,14 @@ function AccumulatorPage() {
         bt.groupCode === "COMP" || 
         bt.groupCode === "SUM" || 
         bt.groupCode === "OE" ||
-        bt.groupCode === "DEC"
+        bt.groupCode === "DEC" ||
+        bt.groupCode === "PRIME_F" ||
+        bt.groupCode === "PRIME_L" ||
+        bt.groupCode === "SQR_F" ||
+        bt.groupCode === "SQR_L" ||
+        bt.groupCode === "SEQ" ||
+        bt.groupCode === "SUM_OE" ||
+        bt.groupCode === "MOD3_F"
     );
 
     // Group by NAP or NapDescription

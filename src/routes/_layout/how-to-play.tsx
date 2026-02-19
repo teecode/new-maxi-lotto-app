@@ -174,6 +174,31 @@ function RouteComponent() {
                 </ul>
               </div>
 
+              {/* Primes & Squares */}
+              <div className="space-y-3">
+                <h3 className="font-bold text-lg text-[#01B1A8] flex items-center gap-2">
+                  <span>🔢</span> Specialized Math
+                </h3>
+                <p className="text-sm text-gray-600">Bet on mathematical properties of the numbers.</p>
+                <ul className="space-y-2 text-sm text-gray-700 bg-gray-50 p-3 rounded-xl">
+                  <li><strong>Primes:</strong> Is the First or Last ball a Prime Number? (e.g. 2, 3, 5, 7, 11...)</li>
+                  <li><strong>Perfect Squares:</strong> Is the First or Last ball a Perfect Square? (e.g. 1, 4, 9, 16...)</li>
+                  <li><strong>Modulo 3:</strong> Bet on the remainder when the First Ball is divided by 3.</li>
+                </ul>
+              </div>
+
+               {/* Sequences */}
+               <div className="space-y-3">
+                <h3 className="font-bold text-lg text-[#01B1A8] flex items-center gap-2">
+                  <span>📉</span> Sequences
+                </h3>
+                <p className="text-sm text-gray-600">Predict the order of the drawn balls.</p>
+                <ul className="space-y-2 text-sm text-gray-700 bg-gray-50 p-3 rounded-xl">
+                  <li><strong>Increasing:</strong> Are the 5 balls strictly increasing? (e.g. 5, 12, 34, 55, 89)</li>
+                  <li><strong>Decreasing:</strong> Are the 5 balls strictly decreasing? (e.g. 89, 55, 34, 12, 5)</li>
+                </ul>
+              </div>
+
             </div>
           </div>
 
