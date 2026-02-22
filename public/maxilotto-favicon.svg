@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#0A4B7F" rx="0"/>
+  <!-- Gold accent stripe at top -->
+  <rect y="0" width="512" height="8" fill="#F6C000"/>
+  <!-- Gold accent stripe at bottom -->
+  <rect y="504" width="512" height="8" fill="#F6C000"/>
+
+  <!-- "ML" text -->
+  <text
+    x="256"
+    y="290"
+    font-family="Arial Black, Arial, sans-serif"
+    font-weight="900"
+    font-size="220"
+    fill="#F6C000"
+    text-anchor="middle"
+    dominant-baseline="middle"
+    letter-spacing="-10"
+  >ML</text>
+
+  <!-- Small lottery ball accent (bottom right) -->
+  <circle cx="400" cy="390" r="52" fill="#F6C000" opacity="0.15"/>
+  <circle cx="400" cy="390" r="38" fill="none" stroke="#F6C000" stroke-width="3" opacity="0.4"/>
+  <text x="400" y="400" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#F6C000" text-anchor="middle" dominant-baseline="middle" opacity="0.6">90</text>
+</svg>
