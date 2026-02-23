@@ -5,7 +5,7 @@ import PageLoader from "@/components/page-loader.tsx";
 
 const MainLayout = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-[#f8fffe]">
       <Navbar />
       <main className="flex-1">
         <PageLoader />

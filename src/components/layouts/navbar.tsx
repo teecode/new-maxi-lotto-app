@@ -1,6 +1,6 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
 
-import { Button } from '@/components/ui/button';
+import {Button} from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,57 +10,61 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { makeFirstLetterUppercase } from '@/lib/utils'
-import { logout } from '@/services/AuthService'
+import {makeFirstLetterUppercase} from '@/lib/utils'
+import {logout} from '@/services/AuthService'
 import useAuthStore from '@/store/authStore'
-import { Link } from '@tanstack/react-router';
-import { Image } from '@unpic/react';
-import { Lock, LogOut, User } from 'lucide-react'
-import { useEffect } from 'react'
+import {Link} from '@tanstack/react-router';
+import {Image} from '@unpic/react';
+import {ChevronDown, Lock, LogOut, User} from 'lucide-react'
+import {useEffect} from 'react'
 import MobileNav from './mobile-nav-drawer';
+import type {navGroupProps} from "@/types";
 
-const menu = [
+const navGroups: Array<navGroupProps> = [
+  // {
+  //   title: "Home",
+  //   url: "/",
+  //   single: true,
+  // },
   {
-    title: "Home",
-    url: "/"
-  },
-  {
-    title: "About Us",
-    url: "/about"
+    title: "Info",
+    single: false,
+    children: [
+      {title: "About Us", url: "/about"},
+      {title: "How To Play", url: "/how-to-play"},
+    ],
   },
   {
     title: "Play Now",
-    url: "/play"
-  },
-  {
-    title: "Games",
-    url: "/games"
+    url: "/play",
+    single: true
   },
   {
     title: "Accumulator",
-    url: "/accumulator"
+    url: "/accumulator",
+    single: true
   },
   {
-    title: "How To Play",
-    url: "/how-to-play"
+    title: "Game Center",
+    single: false,
+    children: [
+      {title: "Games", url: "/games"},
+      {title: "Results", url: "/results"},
+    ],
   },
   {
-    title: "Results",
-    url: "/results"
+    title: "Support",
+    single: false,
+    children: [
+      {title: "FAQ", url: "/faq"},
+      {title: "Contact Us", url: "/contact"},
+    ],
   },
-  {
-    title: "Faq",
-    url: "/faq"
-  },
-  {
-    title: "contact Us",
-    url: "/contact"
-  }
 ];
 
 const Navbar = () => {
 
-  const { isAuthenticated, minimalUser: user, syncUser } = useAuthStore();
+  const {isAuthenticated, minimalUser: user, syncUser} = useAuthStore();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -81,27 +85,55 @@ const Navbar = () => {
   }
 
   return (
-    <header>
+    <header className="absolute w-full">
 
       <nav
-        className="h-[70px] relative w-full px-6 md:px-16 lg:px-24 xl:px-32 flex items-center justify-between z-20 bg-white text-gray-700 shadow-[0px_4px_25px_0px_#0000000D] transition-all">
+        className="h-[70px] relative w-full px-6 md:px-16 lg:px-24 xl:px-32 flex items-center justify-between z-20  text-gray-700 shadow-[0px_4px_25px_0px_#0000000D] transition-all">
         <div className="flex items-center space-x-3">
           {/* Hamburger Icon (Mobile) */}
           <div className="md:hidden">
-            <MobileNav menu={menu} />
+            <MobileNav navGroups={navGroups}/>
           </div>
           <Link to="/" className="flex items-center">
-            <Image src="/maxilotto.png" alt="MaxiLotto Logo"
-              className="aspect-auto object-contain" width={125} height={25} />
+            <Image src="/maxilotto.png" alt="Maxi Lotto" width={126} height={26} className="h-7 w-auto object-contain brightness-0 invert drop-shadow-md" />
           </Link>
         </div>
 
-        <ul className="md:flex hidden items-center gap-10">
-          {menu.map(({ title, url }, index) => (
-            <li key={index}>
-              <Link to={url} className="font-normal hover:text-primary-600">{title}</Link>
-            </li>
-          ))}
+        <ul className="hidden md:flex items-center gap-1">
+          {navGroups.map((group) =>
+            group.single ? (
+              <li key={group.title}>
+                <Link
+                  to={group.url}
+                  className="px-3 py-2 font-semibold tracking-[-2%] text-sm uppercase text-white hover:text-primary transition-colors"
+                >
+                  {group.title}
+                </Link>
+              </li>
+            ) : (
+              <li key={group.title}>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="flex items-center text-white gap-1 px-3 py-2 text-sm uppercase font-semibold tracking-[-2%] hover:text-primary transition-colors outline-none">
+                      {group.title}
+                      <ChevronDown className="h-4 w-4 opacity-60" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-44">
+                    <DropdownMenuGroup>
+                      {group.children && group.children.map(({ title, url }) => (
+                        <DropdownMenuItem key={url} asChild>
+                          <Link to={url} className="w-full cursor-pointer py-2 text-xs uppercase font-semibold ">
+                            {title}
+                          </Link>
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </li>
+            )
+          )}
         </ul>
 
         <div className="flex items-center space-x-1">
@@ -116,7 +148,7 @@ const Navbar = () => {
                     <div className="flex -space-x-1">
                       <Avatar className="size-7">
                         <AvatarImage src="/avatars.png" alt="@reui"
-                          className="border-2 border-background hover:z-10" />
+                                     className="border-2 border-background hover:z-10"/>
                         <AvatarFallback>{makeFirstLetterUppercase(user?.username)}</AvatarFallback>
                       </Avatar>
                     </div>
@@ -132,18 +164,18 @@ const Navbar = () => {
                 <DropdownMenuContent className="w-48 font-poppins" align="end" forceMount>
                   {/* Account Section */}
                   <DropdownMenuLabel className="font-medium">My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
+                  <DropdownMenuSeparator/>
                   <DropdownMenuGroup>
                     <DropdownMenuItem asChild>
                       <Link to="/profile">
-                        <User />
+                        <User/>
                         <span>Profile</span>
                       </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuSeparator />
+                    <DropdownMenuSeparator/>
                     <DropdownMenuItem asChild>
                       <Link to="/settings/change-password">
-                        <Lock />
+                        <Lock/>
                         <span>Change Password</span>
                       </Link>
                     </DropdownMenuItem>
@@ -181,9 +213,9 @@ const Navbar = () => {
                    </DropdownMenuSub>
                    </DropdownMenuGroup> */}
                   {/* Logout */}
-                  <DropdownMenuSeparator />
+                  <DropdownMenuSeparator/>
                   <DropdownMenuItem onClick={handleLogout}>
-                    <LogOut />
+                    <LogOut/>
                     <span>Log Out</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -194,11 +226,11 @@ const Navbar = () => {
           ) : (
             <div className="flex items-center gap-2">
               <Button asChild
-                className="bg-tertiary-900 px-6 h-8 rounded-full text-background hover:bg-primary-600">
+                      className="bg-tertiary-900 px-6 h-8 text-sm uppercase font-semibold  rounded-full text-background hover:bg-primary-600">
                 <Link to="/auth/signup">Register</Link>
               </Button>
               <Button asChild variant={"ghost"}
-                className="text-foreground hover:bg-primary-950 px-2 h-8 hover:text-primary-600">
+                      className="text-white hover:bg-primary-950 px-2 h-8 text-sm uppercase font-semibold hover:text-primary-600">
                 <Link to="/auth/login">Login</Link>
               </Button>
             </div>

@@ -1,8 +1,8 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { Alert, AlertContent, AlertDescription, AlertIcon } from '@/components/ui/alert'
-import { AlertCircle, Loader2 } from 'lucide-react'; // Added Loader2
-import { useGetBetTypes, useGetBlockingRules } from '@/hooks/useGames'; // Added hooks
-import { useMemo } from 'react';
+import {createFileRoute} from '@tanstack/react-router'
+import {Alert, AlertContent, AlertDescription, AlertIcon} from '@/components/ui/alert'
+import {AlertCircle, Loader2} from 'lucide-react'; // Added Loader2
+import {useGetBetTypes, useGetBlockingRules} from '@/hooks/useGames'; // Added hooks
+import {useMemo} from 'react';
 
 const HOW_TO_PLAY_STEPS: string[] = [
   'Create an account and complete quick KYC when required for withdrawals.',
@@ -20,35 +20,35 @@ export const Route = createFileRoute('/_layout/how-to-play')({
 })
 
 function RouteComponent() {
-  const { data: blockingRules, isLoading: isLoadingRules } = useGetBlockingRules();
-  const { data: betTypes, isLoading: isLoadingBetTypes } = useGetBetTypes(2); // GameType 2 = Accumulator
+  const {data: blockingRules, isLoading: isLoadingRules} = useGetBlockingRules();
+  const {data: betTypes, isLoading: isLoadingBetTypes} = useGetBetTypes(2); // GameType 2 = Accumulator
 
   const rulesList = useMemo(() => {
     if (!blockingRules || !blockingRules.groups || !betTypes) return [];
 
     return blockingRules.groups.map(group => {
-        // Find the bet types that belong to this group
-        const groupBetTypes = betTypes.filter(bt => group.codes.includes(bt.quickPlayCode));
-        
-        // Create a human readable list of what is in this group
-        // If they share a common prefix description, use that.
-        // Or just list a few examples.
-        
-        // Group by common description if possible?
-        // Let's just take the first one's description or NAP description as the Title?
-        const firstBet = groupBetTypes[0];
-        const title = firstBet?.napDescription || firstBet?.nap || group.groupId;
-        
-        // Summary of codes? e.g. "First Ball High 10, 20..."
-        // Actually, better to say "You can only pick X outcome from: ..."
-        
-        return {
-            id: group.groupId,
-            title: title,
-            maxSelections: group.maxSelections,
-            description: `Restricted to ${group.maxSelections === -1 ? "Unlimited" : group.maxSelections} selection${group.maxSelections !== 1 ? 's' : ''} from this group.`,
-            examples: groupBetTypes.map(bt => bt.description || bt.code).slice(0, 3).join(", ") + (groupBetTypes.length > 3 ? ", ..." : "")
-        };
+      // Find the bet types that belong to this group
+      const groupBetTypes = betTypes.filter(bt => group.codes.includes(bt.quickPlayCode));
+
+      // Create a human readable list of what is in this group
+      // If they share a common prefix description, use that.
+      // Or just list a few examples.
+
+      // Group by common description if possible?
+      // Let's just take the first one's description or NAP description as the Title?
+      const firstBet = groupBetTypes[0];
+      const title = firstBet?.napDescription || firstBet?.nap || group.groupId;
+
+      // Summary of codes? e.g. "First Ball High 10, 20..."
+      // Actually, better to say "You can only pick X outcome from: ..."
+
+      return {
+        id: group.groupId,
+        title: title,
+        maxSelections: group.maxSelections,
+        description: `Restricted to ${group.maxSelections === -1 ? "Unlimited" : group.maxSelections} selection${group.maxSelections !== 1 ? 's' : ''} from this group.`,
+        examples: groupBetTypes.map(bt => bt.description || bt.code).slice(0, 3).join(", ") + (groupBetTypes.length > 3 ? ", ..." : "")
+      };
     });
   }, [blockingRules, betTypes]);
 
@@ -56,10 +56,11 @@ function RouteComponent() {
 
   return (
     <>
-      <section
-        className="py-10 sm:py-24 flex justify-center items-center relative bg-gradient-to-b from-[#01B1A8] to-[#0185B6] overflow-hidden">
-        <h3 className="font-montserrat text-lg text-white font-bold">Learn the Basics in
-          Minutes</h3>
+      <section className="bg-gradient-to-br from-slate-900 via-[#0f2d37] to-[#042f2e] pt-32 sm:pt-36 pb-16 sm:pb-20">
+        <div className="container text-center">
+          <h3 className="font-montserrat text-lg text-white font-bold">Learn the Basics in
+            Minutes</h3>
+        </div>
       </section>
 
       <section className="py-8 sm:py-12">
@@ -77,7 +78,7 @@ function RouteComponent() {
           </ul>
           <Alert variant="info" appearance="light">
             <AlertIcon>
-              <AlertCircle />
+              <AlertCircle/>
             </AlertIcon>
             <AlertContent>
               <AlertDescription>
@@ -90,26 +91,32 @@ function RouteComponent() {
           {/* Accumulator Bets Explanation */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mt-8">
             <h2 className="text-xl md:text-2xl font-bold text-[#0A4B7F] mb-4 flex items-center gap-2">
-              <span className="text-2xl">🚀</span> 
+              <span className="text-2xl">🚀</span>
               What is an Accumulator Bet?
             </h2>
             <div className="space-y-4 text-gray-700 leading-relaxed">
               <p>
-                Imagine you want to bet on a football match, but instead of just betting on <strong>one team</strong> to win, 
+                Imagine you want to bet on a football match, but instead of just betting on <strong>one team</strong> to
+                win,
                 you bet on <strong>3 or 4 teams</strong> all at once in a single ticket.
               </p>
-              
+
               <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100">
                 <h3 className="font-bold text-[#0A4B7F] mb-2">Here is how it works:</h3>
                 <ul className="list-disc list-inside space-y-2 ml-2">
                   <li>You pick multiple games (like a "combo").</li>
-                  <li><strong>The Good News:</strong> If they all win, you win a <strong>HUGE</strong> amount of money because the winnings multiply each other! 💰</li>
-                  <li><strong>The Catch:</strong> All your picks must be correct. If even one game loses, the whole ticket loses.</li>
+                  <li><strong>The Good News:</strong> If they all win, you win a <strong>HUGE</strong> amount of money
+                    because the winnings multiply each other! 💰
+                  </li>
+                  <li><strong>The Catch:</strong> All your picks must be correct. If even one game loses, the whole
+                    ticket loses.
+                  </li>
                 </ul>
               </div>
 
               <p className="font-medium">
-                It is high risk, but <strong>very high reward</strong>. Perfect if you have a few lucky numbers across different games!
+                It is high risk, but <strong>very high reward</strong>. Perfect if you have a few lucky numbers across
+                different games!
               </p>
             </div>
           </div>
@@ -117,12 +124,12 @@ function RouteComponent() {
           {/* Bet Types Explanation - Simple Terms */}
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mt-6">
             <h2 className="text-xl md:text-2xl font-bold text-[#0A4B7F] mb-6 flex items-center gap-2">
-              <span className="text-2xl">🎲</span> 
+              <span className="text-2xl">🎲</span>
               Fun Ways to Bet
             </h2>
-            
+
             <div className="grid md:grid-cols-2 gap-6">
-              
+
               {/* High / Low */}
               <div className="space-y-3">
                 <h3 className="font-bold text-lg text-[#01B1A8] flex items-center gap-2">
@@ -132,7 +139,8 @@ function RouteComponent() {
                 <ul className="space-y-2 text-sm text-gray-700 bg-gray-50 p-3 rounded-xl">
                   <li><strong>First Ball High/Low:</strong> Will the 1st ball be &gt; 40? or &lt; 40?</li>
                   <li><strong>Last Ball High/Low:</strong> Will the 5th ball be &gt; 80?</li>
-                  <li className="text-xs text-gray-500 italic">Example: "FB_HI_50" means "First Ball Higher than 50"</li>
+                  <li className="text-xs text-gray-500 italic">Example: "FB_HI_50" means "First Ball Higher than 50"
+                  </li>
                 </ul>
               </div>
 
@@ -182,13 +190,15 @@ function RouteComponent() {
                 <p className="text-sm text-gray-600">Bet on mathematical properties of the numbers.</p>
                 <ul className="space-y-2 text-sm text-gray-700 bg-gray-50 p-3 rounded-xl">
                   <li><strong>Primes:</strong> Is the First or Last ball a Prime Number? (e.g. 2, 3, 5, 7, 11...)</li>
-                  <li><strong>Perfect Squares:</strong> Is the First or Last ball a Perfect Square? (e.g. 1, 4, 9, 16...)</li>
+                  <li><strong>Perfect Squares:</strong> Is the First or Last ball a Perfect Square? (e.g. 1, 4, 9,
+                    16...)
+                  </li>
                   <li><strong>Modulo 3:</strong> Bet on the remainder when the First Ball is divided by 3.</li>
                 </ul>
               </div>
 
-               {/* Sequences */}
-               <div className="space-y-3">
+              {/* Sequences */}
+              <div className="space-y-3">
                 <h3 className="font-bold text-lg text-[#01B1A8] flex items-center gap-2">
                   <span>📉</span> Sequences
                 </h3>
@@ -205,39 +215,42 @@ function RouteComponent() {
           {/* Accumulator Rules Section */}
           <div className="bg-red-50/50 rounded-2xl p-6 shadow-sm border border-red-100 mt-6">
             <h2 className="text-xl md:text-2xl font-bold text-red-800 mb-4 flex items-center gap-2">
-              <span className="text-2xl">⚠️</span> 
+              <span className="text-2xl">⚠️</span>
               Accumulator Rules & Restrictions
             </h2>
             <div className="space-y-4">
-                <p className="text-gray-700">
-                    To keep the game fair and manageable, some combinations of bets are restricted within the same ticket.
-                    Specifically, you cannot stack too many similar or correlated outcomes (like multiple "First Ball High" bets) in one accumulator.
-                </p>
+              <p className="text-gray-700">
+                To keep the game fair and manageable, some combinations of bets are restricted within the same ticket.
+                Specifically, you cannot stack too many similar or correlated outcomes (like multiple "First Ball High"
+                bets) in one accumulator.
+              </p>
 
-                {isLoading ? (
-                    <div className="flex justify-center items-center py-8 text-gray-500">
-                        <Loader2 className="animate-spin mr-2" /> Loading rules...
-                    </div>
-                ) : (
-                    <div className="grid md:grid-cols-2 gap-4 mt-4">
-                        {rulesList.map(rule => (
-                            <div key={rule.id} className="bg-white p-4 rounded-xl border border-red-100 shadow-sm">
-                                <h4 className="font-bold text-[#0A4B7F]">{rule.title}</h4>
-                                <div className="flex items-center gap-2 mt-1 mb-2">
-                                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${rule.maxSelections === 1 ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}`}>
+              {isLoading ? (
+                <div className="flex justify-center items-center py-8 text-gray-500">
+                  <Loader2 className="animate-spin mr-2"/> Loading rules...
+                </div>
+              ) : (
+                <div className="grid md:grid-cols-2 gap-4 mt-4">
+                  {rulesList.map(rule => (
+                    <div key={rule.id} className="bg-white p-4 rounded-xl border border-red-100 shadow-sm">
+                      <h4 className="font-bold text-[#0A4B7F]">{rule.title}</h4>
+                      <div className="flex items-center gap-2 mt-1 mb-2">
+                                    <span
+                                      className={`text-xs font-bold px-2 py-0.5 rounded-full ${rule.maxSelections === 1 ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}`}>
                                         Max {rule.maxSelections} Selection{rule.maxSelections !== 1 ? 's' : ''}
                                     </span>
-                                </div>
-                                <p className="text-sm text-gray-500 italic">
-                                    Examples: {rule.examples}
-                                </p>
-                            </div>
-                        ))}
-                        {rulesList.length === 0 && (
-                            <p className="text-gray-500 italic col-span-2 text-center">No specific restrictions currently active.</p>
-                        )}
+                      </div>
+                      <p className="text-sm text-gray-500 italic">
+                        Examples: {rule.examples}
+                      </p>
                     </div>
-                )}
+                  ))}
+                  {rulesList.length === 0 && (
+                    <p className="text-gray-500 italic col-span-2 text-center">No specific restrictions currently
+                      active.</p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 

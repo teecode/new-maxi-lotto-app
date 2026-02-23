@@ -25,7 +25,7 @@ const LatestDrawCard = ({ game, isEven
   }
 
   return (
-    <div className={cn("relative grid grid-cols-1 overflow-hidden gap-4 rounded-[20px] p-6 shadow-2xl max-w-md mx-auto", isEven ? "bg-primary-900 " : "bg-[#FFE84A]")}>
+    <div  className={cn("relative grid grid-cols-1 overflow-hidden gap-4 rounded-[20px] p-6 shadow-2xl max-w-md mx-auto", isEven ? "bg-teal-900/40 border border-teal-500/20 " : "bg-cyan-900/40 border border-cyan-500/20")}>
 
       {/* Header section */}
       <div className="flex flex-col gap-4 items-center justify-start">

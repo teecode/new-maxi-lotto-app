@@ -17,6 +17,7 @@ import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
+import { Route as LayoutWithdrawalPolicyRouteImport } from './routes/_layout/withdrawal-policy'
 import { Route as LayoutTermsAndConditionRouteImport } from './routes/_layout/terms-and-condition'
 import { Route as LayoutResultsRouteImport } from './routes/_layout/results'
 import { Route as LayoutResponsibleGamblingRouteImport } from './routes/_layout/responsible-gambling'
@@ -82,6 +83,11 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
   getParentRoute: () => AuthRoute,
+} as any)
+const LayoutWithdrawalPolicyRoute = LayoutWithdrawalPolicyRouteImport.update({
+  id: '/withdrawal-policy',
+  path: '/withdrawal-policy',
+  getParentRoute: () => LayoutRoute,
 } as any)
 const LayoutTermsAndConditionRoute = LayoutTermsAndConditionRouteImport.update({
   id: '/terms-and-condition',
@@ -234,6 +240,7 @@ const AuthenticatedDepositVerifyDepositIdRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof LayoutIndexRoute
   '/app': typeof AppRoute
   '/auth': typeof AuthRouteWithChildren
   '/favourite-balls': typeof AuthenticatedFavouriteBallsRoute
@@ -252,10 +259,10 @@ export interface FileRoutesByFullPath {
   '/responsible-gambling': typeof LayoutResponsibleGamblingRoute
   '/results': typeof LayoutResultsRoute
   '/terms-and-condition': typeof LayoutTermsAndConditionRoute
+  '/withdrawal-policy': typeof LayoutWithdrawalPolicyRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
-  '/': typeof LayoutIndexRoute
   '/payouts/$payoutId': typeof AuthenticatedPayoutsPayoutIdRoute
   '/settings/bank': typeof AuthenticatedSettingsBankRoute
   '/settings/change-password': typeof AuthenticatedSettingsChangePasswordRoute
@@ -263,12 +270,13 @@ export interface FileRoutesByFullPath {
   '/settings/profile': typeof AuthenticatedSettingsProfileRoute
   '/settings/verify-email': typeof AuthenticatedSettingsVerifyEmailRoute
   '/tickets/$ticketId': typeof AuthenticatedTicketsTicketIdRoute
-  '/deposit': typeof AuthenticatedDepositIndexRoute
-  '/payouts': typeof AuthenticatedPayoutsIndexRoute
-  '/tickets': typeof AuthenticatedTicketsIndexRoute
+  '/deposit/': typeof AuthenticatedDepositIndexRoute
+  '/payouts/': typeof AuthenticatedPayoutsIndexRoute
+  '/tickets/': typeof AuthenticatedTicketsIndexRoute
   '/deposit/verify/$depositId': typeof AuthenticatedDepositVerifyDepositIdRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof LayoutIndexRoute
   '/app': typeof AppRoute
   '/auth': typeof AuthRouteWithChildren
   '/favourite-balls': typeof AuthenticatedFavouriteBallsRoute
@@ -287,10 +295,10 @@ export interface FileRoutesByTo {
   '/responsible-gambling': typeof LayoutResponsibleGamblingRoute
   '/results': typeof LayoutResultsRoute
   '/terms-and-condition': typeof LayoutTermsAndConditionRoute
+  '/withdrawal-policy': typeof LayoutWithdrawalPolicyRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
-  '/': typeof LayoutIndexRoute
   '/payouts/$payoutId': typeof AuthenticatedPayoutsPayoutIdRoute
   '/settings/bank': typeof AuthenticatedSettingsBankRoute
   '/settings/change-password': typeof AuthenticatedSettingsChangePasswordRoute
@@ -325,6 +333,7 @@ export interface FileRoutesById {
   '/_layout/responsible-gambling': typeof LayoutResponsibleGamblingRoute
   '/_layout/results': typeof LayoutResultsRoute
   '/_layout/terms-and-condition': typeof LayoutTermsAndConditionRoute
+  '/_layout/withdrawal-policy': typeof LayoutWithdrawalPolicyRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
@@ -344,6 +353,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/app'
     | '/auth'
     | '/favourite-balls'
@@ -362,10 +372,10 @@ export interface FileRouteTypes {
     | '/responsible-gambling'
     | '/results'
     | '/terms-and-condition'
+    | '/withdrawal-policy'
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/signup'
-    | '/'
     | '/payouts/$payoutId'
     | '/settings/bank'
     | '/settings/change-password'
@@ -373,12 +383,13 @@ export interface FileRouteTypes {
     | '/settings/profile'
     | '/settings/verify-email'
     | '/tickets/$ticketId'
-    | '/deposit'
-    | '/payouts'
-    | '/tickets'
+    | '/deposit/'
+    | '/payouts/'
+    | '/tickets/'
     | '/deposit/verify/$depositId'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/app'
     | '/auth'
     | '/favourite-balls'
@@ -397,10 +408,10 @@ export interface FileRouteTypes {
     | '/responsible-gambling'
     | '/results'
     | '/terms-and-condition'
+    | '/withdrawal-policy'
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/signup'
-    | '/'
     | '/payouts/$payoutId'
     | '/settings/bank'
     | '/settings/change-password'
@@ -434,6 +445,7 @@ export interface FileRouteTypes {
     | '/_layout/responsible-gambling'
     | '/_layout/results'
     | '/_layout/terms-and-condition'
+    | '/_layout/withdrawal-policy'
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/signup'
@@ -477,14 +489,14 @@ declare module '@tanstack/react-router' {
     '/_layout': {
       id: '/_layout'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof LayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -515,6 +527,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/forgot-password'
       preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof AuthRoute
+    }
+    '/_layout/withdrawal-policy': {
+      id: '/_layout/withdrawal-policy'
+      path: '/withdrawal-policy'
+      fullPath: '/withdrawal-policy'
+      preLoaderRoute: typeof LayoutWithdrawalPolicyRouteImport
+      parentRoute: typeof LayoutRoute
     }
     '/_layout/terms-and-condition': {
       id: '/_layout/terms-and-condition'
@@ -631,21 +650,21 @@ declare module '@tanstack/react-router' {
     '/_authenticated/tickets/': {
       id: '/_authenticated/tickets/'
       path: '/tickets'
-      fullPath: '/tickets'
+      fullPath: '/tickets/'
       preLoaderRoute: typeof AuthenticatedTicketsIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/payouts/': {
       id: '/_authenticated/payouts/'
       path: '/payouts'
-      fullPath: '/payouts'
+      fullPath: '/payouts/'
       preLoaderRoute: typeof AuthenticatedPayoutsIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/deposit/': {
       id: '/_authenticated/deposit/'
       path: '/deposit'
-      fullPath: '/deposit'
+      fullPath: '/deposit/'
       preLoaderRoute: typeof AuthenticatedDepositIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
@@ -764,6 +783,7 @@ interface LayoutRouteChildren {
   LayoutResponsibleGamblingRoute: typeof LayoutResponsibleGamblingRoute
   LayoutResultsRoute: typeof LayoutResultsRoute
   LayoutTermsAndConditionRoute: typeof LayoutTermsAndConditionRoute
+  LayoutWithdrawalPolicyRoute: typeof LayoutWithdrawalPolicyRoute
   LayoutIndexRoute: typeof LayoutIndexRoute
 }
 
@@ -779,6 +799,7 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutResponsibleGamblingRoute: LayoutResponsibleGamblingRoute,
   LayoutResultsRoute: LayoutResultsRoute,
   LayoutTermsAndConditionRoute: LayoutTermsAndConditionRoute,
+  LayoutWithdrawalPolicyRoute: LayoutWithdrawalPolicyRoute,
   LayoutIndexRoute: LayoutIndexRoute,
 }
 

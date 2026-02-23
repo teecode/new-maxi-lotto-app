@@ -1,5 +1,5 @@
 import {createFileRoute, Link} from '@tanstack/react-router'
-import {useFetchDailyGames, useFetchLatestDraw, useFetchTopWinner } from '@/hooks/useGames'
+import {useFetchDailyGames, useFetchLatestDraw, useFetchTopWinner} from '@/hooks/useGames'
 import {Button} from '@/components/ui/button'
 import {Marquee} from '@/components/ui/marquee'
 import GameCard from '@/components/game-card'
@@ -8,9 +8,10 @@ import LatestDrawTicket from '@/components/latest-draw-ticket'
 import {cn, formatCurrency} from '@/lib/utils'
 import TodayGameSlider from "@/components/today-games-slider.tsx";
 import type {EmblaOptionsType} from "embla-carousel";
-import {ChevronRight, Gamepad2, UserPlus, Wallet, Trophy, Star} from "lucide-react";
+import {ChevronRight, Gamepad2, Star, Trophy, UserPlus, Wallet} from "lucide-react";
 import {Image} from "@unpic/react"
-import { getRankColor } from "@/lib/ranks"
+import {getRankColor} from "@/lib/ranks"
+import {motion} from "framer-motion";
 
 export const Route = createFileRoute('/_layout/')({
   component: App,
@@ -75,25 +76,33 @@ function App() {
   return (
     <>
       {/* === Hero Section === */}
-      <section className="relative flex min-h-[420px] bg-[url('/new-bg.png')] bg-cover bg-center py-20 overflow-hidden">
-        {/* Black overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent"></div>
+      <section
+        className="relative flex min-h-screen items-center bg-[url('/new-bg.jpg')] bg-cover bg-center py-20 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0f172a]/80 via-[#0f172a]/60 to-transparent"/>
 
         <div className="container relative z-10">
-          <div className="flex flex-col space-y-6 max-w-md">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
-              Big Wins <span className="font-light">Start with</span>
-              <br />
+          <div className="flex flex-col gap-4 sm:gap-6 max-w-3xl">
+            <motion.h1
+              className="text-4xl sm:text-[4.2rem] font-semibold text-background tracking-[-1.92px] decoration-skip-ink"
+              initial={{opacity: 0, y: -30}}
+              animate={{opacity: 1, y: 0}}
+              transition={{duration: 1, ease: "easeInOut"}}
+            > Big Wins Start with
+              <br/>
               <span className="bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">One Game</span>
-            </h1>
+            </motion.h1>
 
-            <p className="text-white/70 text-lg max-w-sm">
+            <motion.p
+              className="text-xl text-background font-medium leading-relaxed max-w-lg"
+              initial={{opacity: 0, y: 20}}
+              animate={{opacity: 1, y: 0}}
+              transition={{duration: 1, ease: "easeInOut", delay: 0.3}}
+            >
               Play your favorite lottery games and win big prizes every day.
-            </p>
-
+            </motion.p>
             <Button
               asChild
-              className="bg-gradient-to-r from-rose-500 to-pink-600 w-fit px-10 hover:from-rose-600 hover:to-pink-700 text-base font-bold rounded-full sm:text-xl shadow-lg shadow-rose-500/25 transition-all duration-300 hover:shadow-xl hover:shadow-rose-500/30 hover:scale-105"
+              className="w-fit px-8 h-12 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold text-base rounded-3xl shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 hover:scale-[1.01] active:scale-[0.99] transition-all duration-300"
               size={"lg"}
             >
               <Link to="/play" className="text-background">
@@ -105,7 +114,8 @@ function App() {
       </section>
 
       {/*=== Games Marquee === */}
-      <section className="pb-8 relative bg-primary-900">
+      <section
+        className="py-8 relative bg-[conic-gradient(at_top_right,_var(--tw-gradient-stops))] from-slate-900 via-[#0f2d37] to-[#042f2e]">
         <div className="relative flex w-full flex-col overflow-x-hidden items-center justify-center gap-1">
           {games && (
             <>
@@ -120,39 +130,47 @@ function App() {
       </section>
 
       {/* === Latest Draw === */}
-      <section className="py-12 sm:py-16 bg-[url('/latest-draw-bg.png')] bg-cover bg-center">
-        <div className={cn("container mx-auto px-4")}>
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-1.5 h-8 rounded-full bg-gradient-to-b from-cyan-400 to-blue-600" />
-            <h2 className="text-2xl sm:text-3xl font-bold text-white">Latest Draw</h2>
-          </div>
+      <section className="py-12 sm:py-16 bg-[url('/winner-2.jpg')] bg-cover bg-center relative">
+        <div className="absolute inset-0 bg-[#0f172a]/70"></div>
+        {/* darker overlay for contrast */}
+          <div className={cn("container mx-auto px-4 relative z-10")}>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-1.5 h-8 rounded-full bg-gradient-to-b from-cyan-400 to-blue-600"/>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white">Latest Draw</h2>
+            </div>
 
-          {latestDrawsLoading && (
-            <Spinner/>
-          )}
+            {latestDrawsLoading && (
+              <Spinner/>
+            )}
 
-          {latestDraws && (
-            <LatestDrawTicket slides={latestDraws}
-                              options={{slidesToScroll: 1, containScroll: 'trimSnaps', align: 'start'}}/>
-          )}
-
+            {latestDraws && (
+              <LatestDrawTicket slides={latestDraws}
+                                options={{slidesToScroll: 1, containScroll: 'trimSnaps', align: 'start'}}/>
+            )}
         </div>
       </section>
 
 
       {/*=== Today's Game ===*/}
-      <section className="py-12 sm:py-16">
-        <div className="container">
-          <div className="space-y-2 mb-8 text-center">
-            <h2 className="text-2xl sm:text-3xl font-bold text-bgColor">Today's Games</h2>
-            <p className="text-sm text-slate-500 leading-relaxed">You could be our next winner</p>
-          </div>
+      <section className="py-16 sm:py-20 relative overflow-hidden bg-white">
+        {/* For Today's Games section heading, add a teal accent like your Latest Draw */}
+        <div className="flex items-center justify-center gap-3 mb-6">
+          <div className="w-8 h-1 rounded-full bg-gradient-to-r from-cyan-400 to-teal-500" />
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-800">Today's Games</h2>
+          <div className="w-8 h-1 rounded-full bg-gradient-to-r from-teal-500 to-cyan-400" />
         </div>
+        {/*<div className="container">*/}
+        {/*  <div className="space-y-2 mb-8 text-center">*/}
+        {/*    <h2 className="text-2xl sm:text-3xl font-bold text-bgColor">Today's Games</h2>*/}
+        {/*    <p className="text-sm text-slate-500 leading-relaxed">You could be our next winner</p>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
         {/* Today's game slider*/}
         {todaysGames && <TodayGameSlider options={OPTIONS} slides={todaysGames}/>}
 
         <div className="flex justify-center mt-8">
-          <Link to="/games" className="text-sm flex items-center justify-center gap-2 text-primary-900 font-medium hover:gap-3 transition-all duration-300">
+          <Link to="/games"
+                className="text-sm flex items-center justify-center gap-2 text-primary-900 font-medium hover:gap-3 transition-all duration-300">
             View all games
             <ChevronRight className="text-primary-900 w-4 h-4"/>
           </Link>
@@ -161,11 +179,12 @@ function App() {
       </section>
 
       {/* === Why Choose Us === */}
-      <section className="py-16 sm:py-20 relative overflow-hidden bg-gradient-to-br from-[#01B1A8] via-[#0195B6] to-[#0165A6]">
+      <section
+        className="py-16 sm:py-20 relative overflow-hidden bg-gradient-to-br from-[#01B1A8] via-[#0195B6] to-[#0165A6]">
         {/* Decorative background elements */}
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-72 h-72 bg-white rounded-full blur-3xl" />
-          <div className="absolute bottom-10 right-10 w-96 h-96 bg-white rounded-full blur-3xl" />
+          <div className="absolute top-10 left-10 w-72 h-72 bg-white rounded-full blur-3xl"/>
+          <div className="absolute bottom-10 right-10 w-96 h-96 bg-white rounded-full blur-3xl"/>
         </div>
 
         <div className="container relative z-10">
@@ -190,14 +209,14 @@ function App() {
                   "w-14 h-14 rounded-xl flex items-center justify-center mb-5 bg-gradient-to-br shadow-lg",
                   gradient
                 )}>
-                  <Icon className="w-7 h-7 text-white" />
+                  <Icon className="w-7 h-7 text-white"/>
                 </div>
 
                 <h3 className="text-lg text-white font-bold mb-2">{title}</h3>
                 <p className="text-white/70 text-sm leading-relaxed mb-5">{description}</p>
 
                 <Button asChild size="sm"
-                  className="bg-white/20 hover:bg-white/30 text-white rounded-full px-5 text-xs font-semibold backdrop-blur-sm border border-white/20 transition-all duration-300">
+                        className="bg-white/20 hover:bg-white/30 text-white rounded-full px-5 text-xs font-semibold backdrop-blur-sm border border-white/20 transition-all duration-300">
                   <Link to="/play">Get Started</Link>
                 </Button>
               </div>
@@ -216,7 +235,7 @@ function App() {
             </div>
             <Link to="/" className="text-sm text-primary-900 font-medium hover:underline flex items-center gap-1">
               See All
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-4 h-4"/>
             </Link>
           </div>
 
@@ -227,8 +246,9 @@ function App() {
                 className="group flex items-center gap-4 bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md hover:border-primary-900/20 transition-all duration-300"
               >
                 {/* Trophy icon */}
-                <div className="flex size-12 shrink-0 justify-center items-center rounded-full bg-gradient-to-br from-rose-500 to-pink-600 shadow-md shadow-rose-500/20">
-                  <Image src="winner-trophy.png" alt="Winner Trophy" width={28} height={28} />
+                <div
+                  className="flex size-12 shrink-0 justify-center items-center rounded-full bg-gradient-to-br from-rose-500 to-pink-600 shadow-md shadow-rose-500/20">
+                  <Image src="winner-trophy.png" alt="Winner Trophy" width={28} height={28}/>
                 </div>
 
                 {/* Winner Info */}
@@ -239,11 +259,15 @@ function App() {
                     </h4>
                     {/* Rank star */}
                     {winner.rank && (
-                      <span 
+                      <span
                         className="inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full"
-                        style={{ color: getRankColor(winner.rank), backgroundColor: `${getRankColor(winner.rank)}1A` }} // 1A = 10% opacity
+                        style={{
+                          color: getRankColor(winner.rank),
+                          backgroundColor: `${getRankColor(winner.rank)}1A`
+                        }} // 1A = 10% opacity
                       >
-                        <Star className="w-3 h-3" style={{ fill: getRankColor(winner.rank), color: getRankColor(winner.rank) }} />
+                        <Star className="w-3 h-3"
+                              style={{fill: getRankColor(winner.rank), color: getRankColor(winner.rank)}}/>
                         {winner.rank}
                       </span>
                     )}

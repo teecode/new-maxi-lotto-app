@@ -15,6 +15,15 @@ const Footer = () => {
               </Link>
             </div>
             <div>
+              <h2 className="mb-2 text-lg font-bold text-[#fff100] capitalize dark:text-white">Legal Links</h2>
+              <ul className="text-white text-sm font-medium space-y-3">
+                <li><Link to="/privacy-policy" className="hover:underlined">Privacy Policy</Link></li>
+                <li><Link to="/terms-and-condition">Terms And Condition</Link></li>
+                <li><Link to="/responsible-gambling">Responsible Gambling</Link></li>
+                <li><Link to="/withdrawal-policy">Withdrawal Policy</Link></li>
+              </ul>
+            </div>
+            <div>
               <h2 className="mb-2 text-lg font-bold text-[#fff100] capitalize dark:text-white">email newsletters</h2>
               <ul className="text-white text-sm font-medium">
                 <li className="mb-4">
