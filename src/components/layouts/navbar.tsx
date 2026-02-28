@@ -95,7 +95,7 @@ const Navbar = () => {
             <MobileNav navGroups={navGroups}/>
           </div>
           <Link to="/" className="flex items-center">
-            <Image src="/maxilotto.png" alt="Maxi Lotto" width={126} height={26} className="h-7 w-auto object-contain brightness-0 invert drop-shadow-md" />
+            <Image src="/maxilotto.png" alt="Maxi Lotto" width={126} height={26} className="h-6 sm:h-7 w-auto object-contain brightness-0 invert drop-shadow-md" />
           </Link>
         </div>
 
@@ -105,7 +105,7 @@ const Navbar = () => {
               <li key={group.title}>
                 <Link
                   to={group.url}
-                  className="px-3 py-2 font-semibold tracking-[-2%] text-sm uppercase text-white hover:text-primary transition-colors"
+                  className="px-3 py-2 font-semibold tracking-[-2%] text-sm uppercase text-white hover:text-accent-1-500 transition-colors"
                 >
                   {group.title}
                 </Link>
@@ -114,7 +114,7 @@ const Navbar = () => {
               <li key={group.title}>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <button className="flex items-center text-white gap-1 px-3 py-2 text-sm uppercase font-semibold tracking-[-2%] hover:text-primary transition-colors outline-none">
+                    <button className="flex items-center text-white gap-1 px-3 py-2 text-sm uppercase font-semibold tracking-[-2%] hover:text-accent-1-500 transition-colors outline-none">
                       {group.title}
                       <ChevronDown className="h-4 w-4 opacity-60" />
                     </button>
@@ -154,7 +154,7 @@ const Navbar = () => {
                     </div>
                     <p className="text-xs text-muted-foreground me-1.5">
                       <span
-                        className="font-semibold text-foreground">NGN {user?.walletBalance ?? 0}</span>
+                        className="font-semibold text-background">NGN {user?.walletBalance ?? 0}</span>
                     </p>
                     {/* {isFetching && (
                       <Spinner className="size-4 absolute right-1 -top-2 text-primary-900" />

@@ -1,6 +1,7 @@
 import ContactForm from '@/components/contact-form'
 import { createFileRoute } from '@tanstack/react-router'
 import { Globe, PhoneCall } from 'lucide-react'
+import PageHeader from "@/components/layouts/page-header.tsx";
 
 export const Route = createFileRoute('/_layout/contact')({
   component: RouteComponent,
@@ -8,6 +9,9 @@ export const Route = createFileRoute('/_layout/contact')({
 
 function RouteComponent() {
   return (
+    <>
+      <PageHeader title="Contacts"/>
+
     <section className="py-8 sm:py-12">
       <div className="container">
         <div className="grid lg:grid-cols-2 items-start gap-16 p-0 mx-auto max-w-5xl max-lg:max-w-2xl">
@@ -50,5 +54,6 @@ function RouteComponent() {
         </div>
       </div>
     </section>
+    </>
   )
 }

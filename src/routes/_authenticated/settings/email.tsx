@@ -6,6 +6,7 @@ import {sendEmailVerification} from '@/services/AuthService';
 import {createFileRoute, redirect, useNavigate} from '@tanstack/react-router'
 import {useState} from 'react';
 import {toast} from 'sonner';
+import PageHeader from "@/components/layouts/page-header.tsx";
 
 export const Route = createFileRoute('/_authenticated/settings/email')({
   beforeLoad: ({context}) => {
@@ -45,12 +46,7 @@ function RouteComponent() {
   }
   return (
     <>
-      <section className="py-10 sm:py-24 flex justify-center items-center relative overflow-hidden">
-        <h3 className="font-montserrat text-lg text-foreground font-bold">
-          Verify Your Email Address
-        </h3>
-      </section>
-
+      <PageHeader title="Email Verification"/>
 
       <section className="pb-8 sm:pb-12">
         <div className="container mx-auto px-4">

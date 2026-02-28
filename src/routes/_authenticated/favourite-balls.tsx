@@ -6,6 +6,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { useFetchFavouriteBalls, useUserProfile } from '@/hooks/useUserProfile';
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react';
+import PageHeader from "@/components/layouts/page-header.tsx";
 
 export const Route = createFileRoute('/_authenticated/favourite-balls')({
   component: RouteComponent,
@@ -19,9 +20,7 @@ function RouteComponent() {
 
   return (
     <>
-      <section className="py-14 sm:py-24 flex justify-center items-center relative bg-gradient-to-b from-[#01B1A8] to-[#0185B6] overflow-hidden">
-        <h3 className="font-montserrat text-lg text-white font-bold">Favourite Balls</h3>
-      </section>
+      <PageHeader title="Favourite Ball"/>
 
       <section className="py-8 sm:py-12">
         <div className="container mx-auto px-4">

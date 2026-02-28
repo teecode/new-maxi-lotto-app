@@ -38,7 +38,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="sm:flex bg-white sm:items-center sm:justify-between">
-        <div className="mx-auto w-full max-w-screen-xl  px-10 py-8 lg:py-8">
+        <div className="mx-auto w-full max-w-screen-xl  px-10 py-4 lg:py-5">
           <div className="flex mb-4 gap-4 justify-center sm:justify-center sm:mt-0">
             <Image src={"/payment-1.png"} width={118} height={21} className="h-auto object-contain" alt="Payment Method" />
             <Image src={"/gamify.png"} width={92} height={32} className="h-auto object-contain" alt="Gamify" />

@@ -3,6 +3,7 @@ import {Alert, AlertContent, AlertDescription, AlertIcon} from '@/components/ui/
 import {AlertCircle, Loader2} from 'lucide-react'; // Added Loader2
 import {useGetBetTypes, useGetBlockingRules} from '@/hooks/useGames'; // Added hooks
 import {useMemo} from 'react';
+import PageHeader from "@/components/layouts/page-header.tsx";
 
 const HOW_TO_PLAY_STEPS: string[] = [
   'Create an account and complete quick KYC when required for withdrawals.',
@@ -56,12 +57,7 @@ function RouteComponent() {
 
   return (
     <>
-      <section className="bg-gradient-to-br from-slate-900 via-[#0f2d37] to-[#042f2e] pt-32 sm:pt-36 pb-16 sm:pb-20">
-        <div className="container text-center">
-          <h3 className="font-montserrat text-lg text-white font-bold">Learn the Basics in
-            Minutes</h3>
-        </div>
-      </section>
+      <PageHeader title="How to play" />
 
       <section className="py-8 sm:py-12">
         <div className="container space-y-6">

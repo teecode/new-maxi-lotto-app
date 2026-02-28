@@ -16,6 +16,7 @@ import type {Game} from "@/types/game.ts";
 import Countdown from "@/components/count-down.tsx";
 import {Badge} from "@/components/ui/badge.tsx";
 import {useBetStore} from "@/store/bet-store.ts";
+import PageHeader from "@/components/layouts/page-header.tsx";
 
 export const Route = createFileRoute('/_layout/games')({
   component: RouteComponent
@@ -38,10 +39,7 @@ function RouteComponent() {
 
   return (
     <>
-      <section className="py-14 sm:py-24 flex justify-center items-center relative bg-gradient-to-b from-[#01B1A8] to-[#0185B6] overflow-hidden">
-        <h3 className="font-montserrat text-lg text-white font-bold">Games</h3>
-        <Image src="/games-bg.png" alt="Games Background" width={148} height={143} priority className="rounded absolute right-1 top-0" />
-      </section>
+      <PageHeader title="Games"/>
 
       <section className="overflow-hidden py-8 sm:py-16">
         <div className="container">

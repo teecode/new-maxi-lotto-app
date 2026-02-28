@@ -10,6 +10,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Plus } from 'lucide-react'
 import type { EmblaOptionsType } from 'embla-carousel'
 import DataLoader from "@/components/data-loader.tsx";
+import PageHeader from "@/components/layouts/page-header.tsx";
 
 const OPTIONS: EmblaOptionsType = { slidesToScroll: 2 }
 
@@ -23,6 +24,7 @@ function RouteComponent() {
 
   return (
     <>
+      <PageHeader title="My Wallet"/>
       <section className="py-8 sm:py-12">
         <div className="container mx-auto px-4">
           {/* Balance */}
