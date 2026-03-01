@@ -115,11 +115,12 @@ function App() {
 
       {/*=== Games Marquee === */}
       <section
-        className="py-8 relative bg-[conic-gradient(at_top_right,_var(--tw-gradient-stops))] from-slate-900 via-[#0f2d37] to-[#042f2e]">
+        className="py-10 border-y border-white/5 relative shadow-[0_0_50px_rgba(0,0,0,0.5)] z-20 bg-gradient-to-r from-[#0f172a] via-[#0f2d37] to-[#0f172a]">
+        <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5 mix-blend-overlay pointer-events-none"></div>
         <div className="relative flex w-full flex-col overflow-x-hidden items-center justify-center gap-1">
           {games && (
             <>
-              <Marquee pauseOnHover repeat={3} className="[--duration:60s] !overflow-hidden">
+              <Marquee pauseOnHover repeat={4} className="[--duration:60s] !overflow-hidden py-2">
                 {games.map((review) => (
                   <GameCard key={review.gameID} name={review.gameName} image={review.gameImageUrl || undefined}/>
                 ))}
