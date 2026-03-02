@@ -33,21 +33,17 @@ const TodayGameSlider = (props: PropType) => {
       </div>
 
       {/* Navigation buttons */}
-      <button
-        className="absolute left-0 top-1/2 -translate-y-1/2 z-20"
+      <PrevButton
+        className="absolute left-0 top-1/2 -translate-y-1/2 z-20 text-primary-900 border-0 bg-white shadow-md hover:bg-slate-50"
         onClick={onPrevButtonClick}
         disabled={prevBtnDisabled}
-      >
-        <PrevButton className="text-primary-900 border-0" />
-      </button>
+      />
 
-      <button
-        className="absolute right-0 top-1/2 -translate-y-1/2 z-20"
+      <NextButton
+        className="absolute right-0 top-1/2 -translate-y-1/2 z-20 text-primary-900 border-0 bg-white shadow-md hover:bg-slate-50"
         onClick={onNextButtonClick}
         disabled={nextBtnDisabled}
-      >
-        <NextButton className="text-primary-900 border-0" />
-      </button>
+      />
     </section>
 
   )
