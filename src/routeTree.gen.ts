@@ -44,6 +44,7 @@ import { Route as AuthenticatedSettingsEmailRouteImport } from './routes/_authen
 import { Route as AuthenticatedSettingsChangePasswordRouteImport } from './routes/_authenticated/settings/change-password'
 import { Route as AuthenticatedSettingsBankRouteImport } from './routes/_authenticated/settings/bank'
 import { Route as AuthenticatedPayoutsPayoutIdRouteImport } from './routes/_authenticated/payouts/$payoutId'
+import { Route as AuthenticatedDepositSarepayTransferRouteImport } from './routes/_authenticated/deposit/sarepay-transfer'
 import { Route as AuthenticatedDepositVerifyDepositIdRouteImport } from './routes/_authenticated/deposit/verify/$depositId'
 
 const AuthRoute = AuthRouteImport.update({
@@ -232,6 +233,12 @@ const AuthenticatedPayoutsPayoutIdRoute =
     path: '/payouts/$payoutId',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedDepositSarepayTransferRoute =
+  AuthenticatedDepositSarepayTransferRouteImport.update({
+    id: '/deposit/sarepay-transfer',
+    path: '/deposit/sarepay-transfer',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedDepositVerifyDepositIdRoute =
   AuthenticatedDepositVerifyDepositIdRouteImport.update({
     id: '/deposit/verify/$depositId',
@@ -263,6 +270,7 @@ export interface FileRoutesByFullPath {
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/deposit/sarepay-transfer': typeof AuthenticatedDepositSarepayTransferRoute
   '/payouts/$payoutId': typeof AuthenticatedPayoutsPayoutIdRoute
   '/settings/bank': typeof AuthenticatedSettingsBankRoute
   '/settings/change-password': typeof AuthenticatedSettingsChangePasswordRoute
@@ -299,6 +307,7 @@ export interface FileRoutesByTo {
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/deposit/sarepay-transfer': typeof AuthenticatedDepositSarepayTransferRoute
   '/payouts/$payoutId': typeof AuthenticatedPayoutsPayoutIdRoute
   '/settings/bank': typeof AuthenticatedSettingsBankRoute
   '/settings/change-password': typeof AuthenticatedSettingsChangePasswordRoute
@@ -338,6 +347,7 @@ export interface FileRoutesById {
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/_layout/': typeof LayoutIndexRoute
+  '/_authenticated/deposit/sarepay-transfer': typeof AuthenticatedDepositSarepayTransferRoute
   '/_authenticated/payouts/$payoutId': typeof AuthenticatedPayoutsPayoutIdRoute
   '/_authenticated/settings/bank': typeof AuthenticatedSettingsBankRoute
   '/_authenticated/settings/change-password': typeof AuthenticatedSettingsChangePasswordRoute
@@ -376,6 +386,7 @@ export interface FileRouteTypes {
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/signup'
+    | '/deposit/sarepay-transfer'
     | '/payouts/$payoutId'
     | '/settings/bank'
     | '/settings/change-password'
@@ -412,6 +423,7 @@ export interface FileRouteTypes {
     | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/signup'
+    | '/deposit/sarepay-transfer'
     | '/payouts/$payoutId'
     | '/settings/bank'
     | '/settings/change-password'
@@ -450,6 +462,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/signup'
     | '/_layout/'
+    | '/_authenticated/deposit/sarepay-transfer'
     | '/_authenticated/payouts/$payoutId'
     | '/_authenticated/settings/bank'
     | '/_authenticated/settings/change-password'
@@ -717,6 +730,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPayoutsPayoutIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/deposit/sarepay-transfer': {
+      id: '/_authenticated/deposit/sarepay-transfer'
+      path: '/deposit/sarepay-transfer'
+      fullPath: '/deposit/sarepay-transfer'
+      preLoaderRoute: typeof AuthenticatedDepositSarepayTransferRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/deposit/verify/$depositId': {
       id: '/_authenticated/deposit/verify/$depositId'
       path: '/deposit/verify/$depositId'
@@ -733,6 +753,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedTransactionsRoute: typeof AuthenticatedTransactionsRoute
   AuthenticatedWalletRoute: typeof AuthenticatedWalletRoute
   AuthenticatedWithdrawalRoute: typeof AuthenticatedWithdrawalRoute
+  AuthenticatedDepositSarepayTransferRoute: typeof AuthenticatedDepositSarepayTransferRoute
   AuthenticatedPayoutsPayoutIdRoute: typeof AuthenticatedPayoutsPayoutIdRoute
   AuthenticatedSettingsBankRoute: typeof AuthenticatedSettingsBankRoute
   AuthenticatedSettingsChangePasswordRoute: typeof AuthenticatedSettingsChangePasswordRoute
@@ -752,6 +773,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedTransactionsRoute: AuthenticatedTransactionsRoute,
   AuthenticatedWalletRoute: AuthenticatedWalletRoute,
   AuthenticatedWithdrawalRoute: AuthenticatedWithdrawalRoute,
+  AuthenticatedDepositSarepayTransferRoute:
+    AuthenticatedDepositSarepayTransferRoute,
   AuthenticatedPayoutsPayoutIdRoute: AuthenticatedPayoutsPayoutIdRoute,
   AuthenticatedSettingsBankRoute: AuthenticatedSettingsBankRoute,
   AuthenticatedSettingsChangePasswordRoute:

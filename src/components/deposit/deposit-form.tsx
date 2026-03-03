@@ -21,12 +21,15 @@ import type { DepositResponse } from '@/types/api';
 import { Spinner } from '@/components/ui/spinner';
 import type { User } from '@/types/user';
 import { ConfirmationModal } from './deposit-confirmation';
+import { SarePayCheckoutModal } from './sarepay-checkout-modal';
+import { useNavigate } from '@tanstack/react-router';
 
 // Config arrays
 const paymentMethods = [
   { id: 'card', label: 'Card' },
   { id: 'transfer', label: 'Transfer' },
   { id: 'ussd', label: 'USSD' },
+  { id: 'sarepay', label: 'SarePay' },
 ];
 
 // const channels = [
@@ -59,7 +62,10 @@ export const DepositForm = ({ user }: DepositFormProps) => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
-  const [depositData, setDepositData] = useState<DepositResponse | null>(null)
+  const [sarePayOpen, setSarePayOpen] = useState<boolean>(false);
+  const [depositData, setDepositData] = useState<DepositResponse | null>(null);
+
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -77,15 +83,26 @@ export const DepositForm = ({ user }: DepositFormProps) => {
 
   async function onSubmit(values: z.infer<typeof FormSchema>) {
     try {
-      setLoading(true)
-      const { amount, channel } = values
-      const customerId = user.customerId
-      const response = await depositFunds(customerId, amount, channel)
-      if (response) {
-        setOpen(true)
-        setDepositData(response)
-      }
+      setLoading(true);
+      const { amount, selectedOption, channel } = values;
 
+      if (selectedOption === 'sarepay') {
+        setSarePayOpen(true);
+      } else if (selectedOption === 'transfer') {
+        navigate({
+          to: '/deposit/sarepay-transfer',
+          search: {
+            amount
+          }
+        });
+      } else {
+        const customerId = user.customerId;
+        const response = await depositFunds(customerId, amount, channel);
+        if (response) {
+          setOpen(true);
+          setDepositData(response);
+        }
+      }
     } catch (error: any) {
       toast.error(error.message || "Account validation failed")
     } finally {
@@ -192,6 +209,11 @@ export const DepositForm = ({ user }: DepositFormProps) => {
         {/* Confirmation Modal */}
         {depositData && (
           <ConfirmationModal open={open} handleFormReset={handleFormReset} setOpen={setOpen} user={user} data={depositData} />
+        )}
+
+        {/* SarePay Modal */}
+        {sarePayOpen && (
+          <SarePayCheckoutModal open={sarePayOpen} setOpen={setSarePayOpen} handleFormReset={handleFormReset} user={user} amount={form.getValues().amount} />
         )}
       </form>
     </Form>
