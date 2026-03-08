@@ -18,16 +18,18 @@ jobs:
     - name: Set Environment Variables
       id: set-env
       run: |
-        if ("${{ github.ref }}" -eq "refs/heads/main") {
+        if ($env:GITHUB_REF -eq "refs/heads/main") {
             echo "DEPLOY_ENV=prod" >> $env:GITHUB_ENV
             echo "DEPLOY_SUFFIX=-prod" >> $env:GITHUB_ENV
-        } elseif ("${{ github.ref }}" -eq "refs/heads/staging") {
+        } elseif ($env:GITHUB_REF -eq "refs/heads/staging") {
             echo "DEPLOY_ENV=staging" >> $env:GITHUB_ENV
             echo "DEPLOY_SUFFIX=-staging" >> $env:GITHUB_ENV
         } else {
             Write-Error "Unsupported branch for deployment"
             exit 1
         }
+      env:
+        GITHUB_REF: ${{ github.ref }}
 
     # - name: Setup Node.js
     #   uses: actions/setup-node@v4
