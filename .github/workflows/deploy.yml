@@ -38,6 +38,11 @@ jobs:
     #   uses: oven-sh/setup-bun@v1
     #   with:
     #     bun-version: latest
+    
+    - name: Install Bun
+      run: |
+        powershell -c "irm bun.sh/install.ps1 | iex"
+        echo "$env:USERPROFILE\.bun\bin" >> $env:GITHUB_PATH
 
     - name: Check Bun
       run: |
