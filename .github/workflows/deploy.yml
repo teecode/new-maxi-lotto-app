@@ -1,0 +1,55 @@
+name: Deploy maxi-lotto-online-web to IIS
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+  workflow_dispatch:
+
+jobs:
+  build_and_deploy:
+    runs-on: self-hosted
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set Environment Variables
+      id: set-env
+      run: |
+        if ("${{ github.ref }}" -eq "refs/heads/main") {
+            echo "DEPLOY_ENV=prod" >> $env:GITHUB_ENV
+            echo "DEPLOY_SUFFIX=-prod" >> $env:GITHUB_ENV
+        } elseif ("${{ github.ref }}" -eq "refs/heads/staging") {
+            echo "DEPLOY_ENV=staging" >> $env:GITHUB_ENV
+            echo "DEPLOY_SUFFIX=-staging" >> $env:GITHUB_ENV
+        } else {
+            Write-Error "Unsupported branch for deployment"
+            exit 1
+        }
+
+    # - name: Setup Node.js
+    #   uses: actions/setup-node@v4
+    #   with:
+    #     node-version: '20'
+
+    - name: Install Bun
+      uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: latest
+
+    - name: Build
+      run: |
+        bun install
+        bun run build
+
+    - name: Ensure Target Directories Exist
+      run: |
+        $baseDir = "C:\inetpub\wwwroot\${{ env.DEPLOY_ENV }}"
+        New-Item -ItemType Directory -Force -Path "$baseDir\maxilotto-online-web${{ env.DEPLOY_SUFFIX }}"
+
+    - name: Copy Files to IIS
+      run: |
+        $baseDir = "C:\inetpub\wwwroot\${{ env.DEPLOY_ENV }}"
+        Copy-Item -Path "dist\*" -Destination "$baseDir\maxilotto-online-web${{ env.DEPLOY_SUFFIX }}" -Recurse -Force
