@@ -39,6 +39,11 @@ jobs:
     #   with:
     #     bun-version: latest
 
+    - name: Check Bun
+      run: |
+        bun --version
+        where bun
+
     - name: Build
       run: |
         bun install
