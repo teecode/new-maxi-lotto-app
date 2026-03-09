@@ -29,16 +29,6 @@ jobs:
             exit 1
         }
 
-    # - name: Setup Node.js
-    #   uses: actions/setup-node@v4
-    #   with:
-    #     node-version: '20'
-
-    # - name: Install Bun
-    #   uses: oven-sh/setup-bun@v1
-    #   with:
-    #     bun-version: latest
-    
     - name: Install Bun
       run: |
         powershell -c "irm bun.sh/install.ps1 | iex"
