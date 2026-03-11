@@ -21,35 +21,27 @@ import MobileNav from './mobile-nav-drawer';
 import type {navGroupProps} from "@/types";
 
 const navGroups: Array<navGroupProps> = [
-  // {
-  //   title: "Home",
-  //   url: "/",
-  //   single: true,
-  // },
   {
-    title: "Info",
-    single: false,
-    children: [
-      {title: "About Us", url: "/about"},
-      {title: "How To Play", url: "/how-to-play"},
-    ],
-  },
-  {
-    title: "Play Now",
+    title: "Play 5/90",
     url: "/play",
-    single: true
+    single: true,
   },
   {
-    title: "Accumulator",
+    title: "Maxi Special Combo",
     url: "/accumulator",
-    single: true
+    single: true,
+  },
+  {
+    title: "My Bets",
+    url: "/tickets",
+    single: true,
   },
   {
     title: "Game Center",
     single: false,
     children: [
-      {title: "Games", url: "/games"},
-      {title: "Results", url: "/results"},
+      {title: "Maxi Games", url: "/games"},
+      {title: "Maxi Results", url: "/results"},
     ],
   },
   {
