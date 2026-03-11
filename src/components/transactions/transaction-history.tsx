@@ -23,6 +23,10 @@ import { columns } from './column';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { DatePicker } from '@/components/ui/date-picker';
 import { fetchUserTransactions } from '@/services/Transactions';
+import { MobileDataCards, type CardField } from '@/components/ui/mobile-data-cards';
+import { Badge } from '@/components/ui/base-badge';
+import { formatCurrency, fullDateFormat } from '@/lib/utils';
+import type { Transaction } from '@/types/transaction';
 
 
 interface PageProps {
@@ -32,6 +36,21 @@ interface PageProps {
   endDate?: string;
 }
 
+const mobileFields: CardField<Transaction>[] = [
+  {
+    label: 'Date',
+    value: (t) => fullDateFormat(t.date),
+  },
+  {
+    label: 'Amount',
+    value: (t) => formatCurrency(t.amount),
+    bold: true,
+  },
+  {
+    label: 'Type',
+    value: (t) => t.category,
+  },
+];
 
 export const TransactionsHistory = () => {
 
@@ -113,7 +132,28 @@ export const TransactionsHistory = () => {
           />
 
         </CardHeader>
-        <CardTable>
+
+        {/* Mobile card view */}
+        <div className="block md:hidden">
+          <MobileDataCards<Transaction>
+            data={transactions?.data ?? []}
+            fields={mobileFields}
+            keyAccessor={(t) => t.id}
+            isLoading={isFetching}
+            emptyMessage="No Transactions Found."
+            cardHeader={(t) => (
+              <>
+                <span className="font-semibold text-sm text-foreground">#{t.id}</span>
+                <Badge variant="success" appearance="outline" size="sm" shape="circle">
+                  Success
+                </Badge>
+              </>
+            )}
+          />
+        </div>
+
+        {/* Desktop table view */}
+        <CardTable className="hidden md:block">
           <ScrollArea>
             <DataGridTable />
             <ScrollBar orientation="horizontal" />

@@ -8,7 +8,7 @@ import {
 
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Pagination, PaginationContent, PaginationItem } from '@/components/ui/pagination';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Eye } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 import {
@@ -26,6 +26,9 @@ import { ticketStatus } from '@/configs/app';
 import type { GameTicket } from '@/types/game';
 import { getColumns } from './column';
 import { TicketPreview } from './ticketPreview';
+import { MobileDataCards, type CardField } from '@/components/ui/mobile-data-cards';
+import { Badge } from '@/components/ui/base-badge';
+import { formatCurrency, fullDateFormat } from '@/lib/utils';
 
 // interface TicketHistoryProps {
 //   tickets: GameTicket[];
@@ -42,6 +45,44 @@ interface PageProps {
   startDate?: string;
   endDate?: string;
   ticketStatusId?: number;
+}
+
+const mobileFields: CardField<GameTicket>[] = [
+  {
+    label: 'Date',
+    value: (t) => fullDateFormat(t.dateRegistered),
+  },
+  {
+    label: 'Game',
+    value: (t) => t.game.name,
+  },
+  {
+    label: 'Amount',
+    value: (t) => formatCurrency(t.amount),
+    bold: true,
+  },
+  {
+    label: 'Won',
+    value: (t) => formatCurrency(t.wonAmount),
+    bold: true,
+  },
+];
+
+function getStatusBadge(status?: string) {
+  switch (status) {
+    case 'Won':
+      return <Badge variant="success" appearance="outline" size="sm" shape="circle">Won</Badge>;
+    case 'Lost':
+      return <Badge variant="destructive" appearance="outline" size="sm" shape="circle">Lost</Badge>;
+    case 'Undecided':
+      return <Badge variant="warning" appearance="outline" size="sm" shape="circle">Undecided</Badge>;
+    case 'Active':
+      return <Badge variant="primary" appearance="outline" size="sm" shape="circle">Active</Badge>;
+    case 'Inactive':
+      return <Badge variant="secondary" appearance="outline" size="sm" shape="circle">Inactive</Badge>;
+    default:
+      return <Badge variant="secondary" appearance="outline" size="sm" shape="circle">{status || 'Pending'}</Badge>;
+  }
 }
 
 export const TicketsHistory = () => {
@@ -156,7 +197,37 @@ export const TicketsHistory = () => {
           />
 
         </CardHeader>
-        <CardTable>
+
+        {/* Mobile card view */}
+        <div className="block md:hidden">
+          <MobileDataCards<GameTicket>
+            data={tickets?.data ?? []}
+            fields={mobileFields}
+            keyAccessor={(t) => t.id}
+            isLoading={isFetching}
+            emptyMessage="No Tickets Found."
+            cardHeader={(t) => (
+              <>
+                <span className="font-semibold text-sm text-foreground">#{t.id}</span>
+                {getStatusBadge(t.status?.name)}
+              </>
+            )}
+            cardFooter={(t) => (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleSelectedTicket(t)}
+                className="w-full text-muted-foreground text-sm"
+              >
+                <Eye className="mr-1 h-4 w-4" />
+                View Ticket
+              </Button>
+            )}
+          />
+        </div>
+
+        {/* Desktop table view */}
+        <CardTable className="hidden md:block">
           <ScrollArea>
             <DataGridTable />
             <ScrollBar orientation="horizontal" />
