@@ -24,6 +24,12 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { DatePicker } from '@/components/ui/date-picker';
 import { fetchGameResults } from '@/services/GameService';
 import { useFetchDailyGames } from '@/hooks/useGames';
+import { MobileDataCards, type CardField } from '@/components/ui/mobile-data-cards';
+import type { GameResultType } from '@/types/game';
+import Ball from '../ball';
+import { Badge } from '../ui/base-badge';
+import { fullDateFormat, getImageUrl } from '@/lib/utils';
+import { Image } from "@unpic/react";
 
 
 interface PageProps {
@@ -33,6 +39,42 @@ interface PageProps {
   endDate?: string;
   gameId?: number
 }
+
+const mobileFields: CardField<GameResultType>[] = [
+  {
+    label: 'Draw Date',
+    value: (r) => fullDateFormat(r.endDateTime),
+  },
+  {
+    label: 'Winning Numbers',
+    value: (r) => (
+      <div className="flex flex-wrap gap-1 mt-1">
+        {[r.result.winningBall1, r.result.winningBall2, r.result.winningBall3, r.result.winningBall4, r.result.winningBall5].map((num) => (
+          <Ball
+            key={num}
+            value={num}
+            className="bg-gradient-to-b from-[#01B1A8] to-[#0185B6] rounded-full h-8 w-8 text-xs"
+          />
+        ))}
+      </div>
+    ),
+  },
+  {
+    label: 'Machine Numbers',
+    value: (r) => (
+      <div className="flex flex-wrap gap-1 mt-1">
+        {[r.result.machineBall1, r.result.machineBall2, r.result.machineBall3, r.result.machineBall4, r.result.machineBall5].map((num) => (
+          <Ball
+            key={num}
+            value={num}
+            isSelected
+            className="rounded-full h-8 w-8 text-xs"
+          />
+        ))}
+      </div>
+    ),
+  },
+];
 
 
 export const GameResultHistory = () => {
@@ -102,7 +144,7 @@ export const GameResultHistory = () => {
       emptyMessage="No Results Found."
     >
       <Card className="border-none shadow-none">
-        <CardHeader className="flex flex-row border-b-0 flex-wrap gap-4 px-0 pb-4">
+        <CardHeader className="flex flex-col md:flex-row border-b-0 gap-4 px-0 pb-4">
           <Select
             value={String(pagination.gameId ?? 0)}
             onValueChange={(gameId) =>
@@ -140,13 +182,36 @@ export const GameResultHistory = () => {
           />
 
         </CardHeader>
-        <CardTable>
+
+        {/* Mobile card view */}
+        <div className="block md:hidden">
+          <MobileDataCards<GameResultType>
+            data={results?.data ?? []}
+            fields={mobileFields}
+            keyAccessor={(r) => r.gameID}
+            isLoading={isFetching}
+            emptyMessage="No Results Found."
+            cardHeader={(r) => (
+              <div className="flex items-center justify-between w-full">
+                <div className="flex items-center gap-2">
+                  <Image src={getImageUrl(r.gameBackgroundImageUrl)} alt={r.gameName} width={24} height={24} />
+                  <span className="font-semibold text-sm uppercase">{r.gameName}</span>
+                </div>
+                <Badge variant={r.isValidated ? "success" : "destructive"} appearance="outline" size="sm">
+                  {r.isValidated ? "Validated" : "Not Validated"}
+                </Badge>
+              </div>
+            )}
+          />
+        </div>
+
+        <CardTable className="hidden md:block">
           <ScrollArea>
             <DataGridTable />
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
         </CardTable>
-        <CardFooter className="p-0 flex items-center justify-between gap-2">
+        <CardFooter className="p-0 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-2">
 
 
           <Pagination className="justify-start w-fit mx-0">

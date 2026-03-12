@@ -162,7 +162,7 @@ export const TicketsHistory = () => {
       emptyMessage="No Tickets Found."
     >
       <Card className="border-none shadow-none">
-        <CardHeader className="flex flex-row border-b-0 flex-nowrap gap-4 px-0 pb-4">
+        <CardHeader className="flex flex-col md:flex-row border-b-0 gap-4 px-0 pb-4">
           {/* ticket status */}
           <Select
             value={String(pagination.ticketStatusId ?? 0)}
@@ -233,7 +233,7 @@ export const TicketsHistory = () => {
             <ScrollBar orientation="horizontal" />
           </ScrollArea>
         </CardTable>
-        <CardFooter className="p-0 flex items-center justify-between gap-2">
+        <CardFooter className="p-0 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-2">
 
           <Pagination className="justify-start w-fit mx-0">
             <PaginationContent className='gap-2'>
