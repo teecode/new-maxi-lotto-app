@@ -100,6 +100,12 @@ function RouteComponent() {
                                 </Badge>
                               </div>
 
+                              <div className="absolute top-4 right-4 z-20">
+                                <div className="size-8 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center">
+                                  <span className="text-white font-black text-[10px]">18+</span>
+                                </div>
+                              </div>
+
                               <div className="absolute bottom-4 left-4 right-4 z-20 flex justify-between items-end text-white">
                                 <div className="space-y-0.5">
                                   <h3 className="text-xl font-bold tracking-tight">{game.gameName}</h3>

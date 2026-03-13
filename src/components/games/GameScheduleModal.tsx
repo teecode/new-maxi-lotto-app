@@ -137,10 +137,7 @@ export const GameScheduleModal: React.FC<GameScheduleModalProps> = ({ isOpen, on
                 <div className="w-full p-6 flex flex-col items-center gap-6 relative z-10 bg-white">
                   {/* Logo */}
                   <div className="w-full flex justify-end px-4">
-                    <div className="flex items-center gap-2">
-                        <img src="/logo.png" alt="Maxi Lotto" className="h-8 w-auto" />
-                        <span className="font-black text-[#0A4B7F] text-xl tracking-tighter">MAXI LOTTO</span>
-                    </div>
+                    <img src="/logo.png" alt="Maxi Lotto" className="h-10 w-auto" />
                   </div>
 
                   {/* Title Visual */}
@@ -154,7 +151,7 @@ export const GameScheduleModal: React.FC<GameScheduleModalProps> = ({ isOpen, on
                     
                     <div className="flex flex-col items-center relative z-10">
                       <h2 className="text-4xl sm:text-5xl font-black text-[#FFF100] italic tracking-tight drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] uppercase">
-                        {moment().format('ddddd').toUpperCase()}'S
+                        {moment().format('dddd').toUpperCase()}'S
                       </h2>
                       <div className="mt-[-10px] bg-[#0A4B7F] px-4 py-1 skew-x-[-12deg] shadow-lg">
                         <h3 className="text-2xl sm:text-3xl font-black text-white italic tracking-wide uppercase skew-x-[12deg]">
