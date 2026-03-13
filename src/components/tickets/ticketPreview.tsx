@@ -14,6 +14,8 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card.
 import { Badge } from "@/components/ui/badge.tsx";
 import { DownloadIcon, Share2, Loader2 } from "lucide-react";
 import { ScrollArea } from "../ui/scroll-area"
+import { useQuery } from "@tanstack/react-query"
+import { fetchGameResultByDailyGameId } from "@/services/GameService"
 
 type TicketPreviewProps = {
   open: boolean
@@ -30,6 +32,12 @@ export function TicketPreview({ open, setOpen, ticket }: TicketPreviewProps) {
   const totalOdds = isAccumulator
     ? ticket.betslips.reduce((acc, slip) => acc * (slip.betType.winFactor || 1), 1)
     : 0;
+
+  const { data: gameResult } = useQuery({
+    queryKey: ['gameResult', ticket.game.id],
+    queryFn: () => fetchGameResultByDailyGameId(ticket.game.id),
+    enabled: ticket.status.name === 'Won' || ticket.status.name === 'Lost',
+  });
 
   const handleDownload = useCallback(async () => {
     if (!ticketCardRef.current) return;
@@ -128,6 +136,17 @@ export function TicketPreview({ open, setOpen, ticket }: TicketPreviewProps) {
                     >
                       {ticket.status.name}
                     </Badge>
+
+                    {gameResult && gameResult.result && (
+                      <div className="flex flex-col gap-2 mt-4 items-center animate-in fade-in slide-in-from-top-2 duration-500">
+                        <p className="text-[10px] text-blue-200 font-bold uppercase tracking-widest leading-none">Winning Numbers</p>
+                        <div className="flex gap-2">
+                          {[gameResult.result.winningBall1, gameResult.result.winningBall2, gameResult.result.winningBall3, gameResult.result.winningBall4, gameResult.result.winningBall5].map((ball, i) => (
+                            <Ball key={i} value={ball} variant="winning" className="h-8 w-8 text-[10px] md:h-10 md:w-10 md:text-xs shadow-lg border-white/10" />
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Decorational Circles */}

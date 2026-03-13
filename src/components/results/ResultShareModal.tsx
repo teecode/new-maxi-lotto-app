@@ -11,7 +11,7 @@ import { Share2, Download, X, MessageCircle, Twitter } from 'lucide-react';
 import type { GameResultType } from "@/types/game";
 import { fullDateFormat } from "@/lib/utils";
 import Ball from "../ball";
-import logo from '@/logo.svg'; 
+import logo from '/maxilotto.png'; 
 
 interface ResultShareModalProps {
   result: GameResultType | null;
@@ -28,6 +28,7 @@ export const ResultShareModal: React.FC<ResultShareModalProps> = ({ result, isOp
       const dataUrl = await toPng(previewRef.current, {
         backgroundColor: '#ffffff',
         pixelRatio: 2,
+        filter: (node) => (node as HTMLElement).dataset?.exportHide !== 'true',
       });
       const link = document.createElement('a');
       link.download = `maxilotto-${result?.gameName || 'result'}-${Date.now()}.png`;
@@ -92,19 +93,19 @@ export const ResultShareModal: React.FC<ResultShareModalProps> = ({ result, isOp
               className="bg-white rounded-2xl p-6 shadow-sm border border-border/40 space-y-6"
             >
               {/* Preview Header */}
-              <div className="flex flex-col gap-4">
-                <div className="flex items-center justify-between">
-                  <img src={logo} alt="MaxiLotto" className="h-8" />
-                  <div className="text-right text-[10px] text-muted-foreground leading-tight">
-                    <p className="font-semibold">{fullDateFormat(result.endDateTime)}</p>
+              <div className="flex flex-col gap-6 text-center">
+                <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between gap-4">
+                  <img src={logo} alt="MaxiLotto" className="h-10 md:h-12 object-contain" />
+                  <div className="text-center sm:text-right text-[10px] md:text-xs text-muted-foreground leading-tight">
+                    <p className="font-semibold uppercase tracking-wider">{fullDateFormat(result.endDateTime)}</p>
                   </div>
                 </div>
                 
-                <div className="border-t border-primary/10 pt-2">
-                  <h2 className="font-bold text-xl text-primary tracking-tight uppercase">
+                <div className="border-t border-primary/10 pt-6">
+                  <h2 className="font-black text-3xl md:text-4xl text-primary tracking-tight uppercase leading-none mb-1">
                     {result.gameName}
                   </h2>
-                  <p className="text-[10px] text-muted-foreground font-mono uppercase tracking-widest">
+                  <p className="text-[10px] text-muted-foreground font-mono uppercase tracking-widest" data-export-hide="true">
                     Draw Code: {result.gameCode}
                   </p>
                 </div>
@@ -112,26 +113,26 @@ export const ResultShareModal: React.FC<ResultShareModalProps> = ({ result, isOp
 
               {/* Numbers Section */}
               <div className="space-y-4">
-                <div className="space-y-2">
-                   <div className="flex items-center gap-2">
+                <div className="space-y-4">
+                   <div className="flex items-center justify-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-[#01B1A8]" />
-                      <span className="text-[10px] font-bold uppercase text-muted-foreground">Winning Numbers</span>
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Winning Numbers</span>
                    </div>
-                   <div className="flex gap-2">
+                   <div className="flex justify-center gap-2 md:gap-3">
                       {[result.result.winningBall1, result.result.winningBall2, result.result.winningBall3, result.result.winningBall4, result.result.winningBall5].map((num, i) => (
-                        <Ball key={i} value={num} className="bg-gradient-to-b from-[#01B1A8] to-[#0185B6] rounded-full h-10 w-10 text-xs shadow-md" />
+                        <Ball key={i} value={num} variant="winning" className="h-10 w-10 md:h-12 md:w-12 text-sm shadow-xl" />
                       ))}
                    </div>
                 </div>
 
-                <div className="space-y-2">
-                   <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-primary" />
-                      <span className="text-[10px] font-bold uppercase text-muted-foreground">Machine Numbers</span>
+                <div className="space-y-4">
+                   <div className="flex items-center justify-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-[#FDBF03]" />
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Machine Numbers</span>
                    </div>
-                   <div className="flex gap-2">
+                   <div className="flex justify-center gap-2 md:gap-3">
                       {[result.result.machineBall1, result.result.machineBall2, result.result.machineBall3, result.result.machineBall4, result.result.machineBall5].map((num, i) => (
-                        <Ball key={i} value={num} isSelected className="rounded-full h-10 w-10 text-xs shadow-md border-primary/20" />
+                        <Ball key={i} value={num} variant="machine" className="h-10 w-10 md:h-12 md:w-12 text-sm shadow-xl" />
                       ))}
                    </div>
                 </div>

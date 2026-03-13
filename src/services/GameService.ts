@@ -219,3 +219,18 @@ export const fetchBlockingRules = async (): Promise<
 		return { groups: [] };
 	}
 };
+export const fetchGameResultByDailyGameId = async (id: number): Promise<GameResultType> => {
+	try {
+		const response = await apiClient.get<GameResultType>(
+			`DailyGameResult/GameResult/${id}`
+		);
+		return response.data;
+	} catch (error: any) {
+		if (error.response) {
+			throw new Error(
+				error.response.data || 'Failed to fetch game result. Please try again.'
+			);
+		}
+		throw new Error('Network error, please try again.');
+	}
+};

@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import moment from 'moment';
 import { Button } from '@/components/ui/button';
 import { Card, CardFooter, CardHeader, CardTable } from '@/components/ui/card';
 import { DataGrid } from '@/components/ui/data-grid';
@@ -90,8 +91,8 @@ export const TicketsHistory = () => {
   const [pagination, setPagination] = useState<PageProps>({
     pageIndex: 0,
     pageSize: 10,
-    startDate: '',
-    endDate: '',
+    startDate: moment().subtract(7, 'days').toISOString(),
+    endDate: moment().add(1, 'days').toISOString(),
     ticketStatusId: 0
   });
 
