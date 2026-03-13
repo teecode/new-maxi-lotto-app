@@ -90,8 +90,9 @@ export const GameScheduleModal: React.FC<GameScheduleModalProps> = ({ isOpen, on
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl p-0 overflow-hidden bg-white border-0 sm:rounded-2xl shadow-2xl">
-        <DialogHeader className="sr-only">
-          <DialogTitle>Game Schedule</DialogTitle>
+        <DialogHeader>
+          <DialogTitle className="sr-only">Game Schedule</DialogTitle>
+          <div className="sr-only">Daily game schedule and timetable for export and sharing.</div>
         </DialogHeader>
 
         <div className="flex flex-col h-full max-h-[90vh]">
@@ -137,7 +138,7 @@ export const GameScheduleModal: React.FC<GameScheduleModalProps> = ({ isOpen, on
                   {/* Logo */}
                   <div className="w-full flex justify-end px-4">
                     <div className="flex items-center gap-2">
-                        <img src="/logo.svg" alt="Maxi Lotto" className="h-8" />
+                        <img src="/logo.png" alt="Maxi Lotto" className="h-8 w-auto" />
                         <span className="font-black text-[#0A4B7F] text-xl tracking-tighter">MAXI LOTTO</span>
                     </div>
                   </div>
