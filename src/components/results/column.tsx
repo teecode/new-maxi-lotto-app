@@ -6,6 +6,8 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { Image } from "@unpic/react";
 import Ball from "../ball";
 import { Badge } from "../ui/base-badge";
+import { Share2 } from "lucide-react";
+import { Button } from "../ui/button";
 
 export const columns: ColumnDef<GameResultType>[] = [
   {
@@ -45,7 +47,6 @@ export const columns: ColumnDef<GameResultType>[] = [
             <Ball
               key={num}
               value={num}
-              onClick={() => console}
               className="bg-gradient-to-b from-[#01B1A8] to-[#0185B6] rounded-full h-9 w-9"
             />
           ))}
@@ -77,7 +78,6 @@ export const columns: ColumnDef<GameResultType>[] = [
             <Ball
               key={num}
               value={num}
-              onClick={() => console}
               isSelected
               className="rounded-full h-9 w-9"
             />
@@ -122,5 +122,28 @@ export const columns: ColumnDef<GameResultType>[] = [
     size: 100,
     enableSorting: true,
     meta: { skeleton: <Skeleton className="w-24 h-7" /> },
+  },
+
+  {
+    id: "actions",
+    header: ({ column }) => (
+      <DataGridColumnHeader title="Actions" visibility={true} column={column} />
+    ),
+    cell: ({ row, table }) => {
+      const onShare = (table.options.meta as any)?.onShare;
+      return (
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => onShare?.(row.original)}
+          className="flex items-center gap-2 h-10 px-4 border-primary text-primary hover:bg-primary/5 font-bold uppercase text-[10px]"
+        >
+          <Share2 className="w-3.5 h-3.5" />
+          Share
+        </Button>
+      );
+    },
+    size: 80,
+    enableSorting: false,
   },
 ];

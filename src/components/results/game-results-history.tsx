@@ -20,6 +20,8 @@ import {
 } from '@tanstack/react-table';
 
 import { columns } from './column';
+import { ResultShareModal } from './ResultShareModal';
+import { Share2 } from 'lucide-react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { DatePicker } from '@/components/ui/date-picker';
 import { fetchGameResults } from '@/services/GameService';
@@ -87,6 +89,14 @@ export const GameResultHistory = () => {
     gameId: 0
   });
 
+  const [selectedResult, setSelectedResult] = useState<GameResultType | null>(null);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+
+  const handleShare = (result: GameResultType) => {
+    setSelectedResult(result);
+    setIsShareModalOpen(true);
+  };
+
   const { data: results, isFetching } = useQuery({
     queryKey: ['games_results', pagination],
     queryFn: () => fetchGameResults(pagination),
@@ -122,11 +132,14 @@ export const GameResultHistory = () => {
     getSortedRowModel: getSortedRowModel(),
     manualPagination: true,
     debugTable: true,
-
+    meta: {
+      onShare: handleShare,
+    },
   });
 
   return (
-    <DataGrid
+    <>
+      <DataGrid
       table={table}
       recordCount={results?.totalCount || 0}
       tableLayout={{
@@ -197,9 +210,19 @@ export const GameResultHistory = () => {
                   <Image src={getImageUrl(r.gameBackgroundImageUrl)} alt={r.gameName} width={24} height={24} />
                   <span className="font-semibold text-sm uppercase">{r.gameName}</span>
                 </div>
-                <Badge variant={r.isValidated ? "success" : "destructive"} appearance="outline" size="sm">
-                  {r.isValidated ? "Validated" : "Not Validated"}
-                </Badge>
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="icon" 
+                    onClick={() => handleShare(r)}
+                    className="h-8 w-8 rounded-full border-primary text-primary bg-background"
+                  >
+                    <Share2 className="h-4 w-4" />
+                  </Button>
+                  <Badge variant={r.isValidated ? "success" : "destructive"} appearance="outline" size="sm">
+                    {r.isValidated ? "Validated" : "Not Validated"}
+                  </Badge>
+                </div>
               </div>
             )}
           />
@@ -287,5 +310,12 @@ export const GameResultHistory = () => {
         </CardFooter>
       </Card>
     </DataGrid>
+      
+      <ResultShareModal 
+        result={selectedResult} 
+        isOpen={isShareModalOpen} 
+        onClose={() => setIsShareModalOpen(false)} 
+      />
+    </>
   );
 }
