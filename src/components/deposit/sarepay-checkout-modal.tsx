@@ -211,6 +211,9 @@ export function SarePayCheckoutModal({
         params: {
           depositId: reference,
         },
+        search: {
+          provider: 'sarepay',
+        },
       });
     }, 1500);
   };

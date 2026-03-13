@@ -1,25 +1,52 @@
-import {createFileRoute, Link} from '@tanstack/react-router'
-import {verifyDeposit} from "@/services/PaymentService.ts";
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { z } from 'zod';
+import {
+  verifyDeposit,
+  verifySarepayDeposit,
+  verifySarePayTransfer
+} from "@/services/PaymentService.ts";
 
-import {Card, CardContent, CardHeader, CardHeading, CardTitle,} from '@/components/ui/card';
-import {Button} from '@/components/ui/button';
-import {DownloadIcon, Share2} from "lucide-react";
-import {Image} from "@unpic/react";
+import { Card, CardContent, CardHeader, CardHeading, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { DownloadIcon, Share2 } from "lucide-react";
+import { Image } from "@unpic/react";
 import useAuthStore from "@/store/authStore.ts";
-import {useQueryClient} from "@tanstack/react-query";
-import {useEffect} from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
+
+const verificationSearchSchema = z.object({
+  provider: z.string().optional(),
+});
 
 export const Route = createFileRoute(
   '/_authenticated/deposit/verify/$depositId',
 )({
-  loader: async ({ params }) => {
-    const reference = params.depositId
-    const response = await verifyDeposit(reference)
-    if (!response) {
-      throw new Error("Payout not found")
-    }
+  validateSearch: verificationSearchSchema,
+  loader: async ({ params, search }: any) => {
+    const reference = params.depositId;
+    const provider = search.provider;
 
-    return response;
+    try {
+      if (provider === 'sarepay') {
+        return await verifySarepayDeposit(reference);
+      } else if (provider === 'sarepay-transfer') {
+        const res = await verifySarePayTransfer(reference);
+        const isSuccess = res.status === 'Successful' || res.status === 'COMPLETED' || res.transactionStatus === 'Successful';
+        return {
+          statusCode: isSuccess,
+          reference: reference
+        };
+      } else {
+        const response = await verifyDeposit(reference);
+        if (!response) {
+          throw new Error("Deposit details not found");
+        }
+        return response;
+      }
+    } catch (error) {
+      console.error('Verification error:', error);
+      throw new Error("Verification failed");
+    }
   },
   component: RouteComponent,
 })

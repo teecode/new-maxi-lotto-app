@@ -126,6 +126,9 @@ function SarepayTransferPage() {
         params: {
           depositId: ref,
         },
+        search: {
+          provider: 'sarepay-transfer',
+        },
       });
     }, 2000);
   };
