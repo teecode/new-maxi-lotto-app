@@ -86,8 +86,9 @@ const Navbar = () => {
           <div className="md:hidden">
             <MobileNav navGroups={navGroups}/>
           </div>
-          <Link to="/" className="flex items-center">
-            <Image src="/maxilotto.png" alt="Maxi Lotto" width={126} height={26} className="h-6 sm:h-7 w-auto object-contain brightness-0 invert drop-shadow-md" />
+          <Link to="/" className="flex items-center gap-2">
+            <Image priority src="/maxilotto-icon.png" alt="MaxiLotto Icon" width={40} height={40} className="h-9 sm:h-10 w-auto object-contain brightness-0 invert drop-shadow-md" />
+            <Image src="/maxilotto.png" alt="Maxi Lotto" width={126} height={26} className="hidden md:block h-6 sm:h-7 w-auto object-contain brightness-0 invert drop-shadow-md" />
           </Link>
         </div>
 

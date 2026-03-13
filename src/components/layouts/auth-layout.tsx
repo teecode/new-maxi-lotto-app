@@ -54,6 +54,7 @@ const AuthLayout = () => {
           {/* Logo */}
           <div className="mb-12">
             <div className="bg-white/5 backdrop-blur-sm inline-flex items-center gap-3 px-6 py-4 rounded-2xl border border-white/10 shadow-xl">
+              <Image src="/maxilotto-icon.png" alt="MaxiLotto Icon" width={48} height={48} className="h-12 w-auto object-contain brightness-0 invert drop-shadow-md" />
               <Image src="/maxilotto.png" alt="Maxi Lotto" width={180} height={56} className="h-10 w-auto object-contain brightness-0 invert drop-shadow-md" />
             </div>
           </div>

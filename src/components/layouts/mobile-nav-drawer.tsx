@@ -44,7 +44,13 @@ const MobileNav = ({navGroups}: MobileNavProps) => {
         </SheetHeader>
 
         <div className="flex items-center justify-between mb-6">
-          <Link to="/app">
+          <Link to="/app" className="flex items-center gap-2">
+            <Image
+              src="/maxilotto-icon.png"
+              alt="MaxiLotto Icon"
+              width={40}
+              height={40}
+            />
             <Image
               src="/logo.png"
               alt="MaxiLotto Logo"

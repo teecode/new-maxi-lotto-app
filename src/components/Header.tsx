@@ -18,9 +18,11 @@ export default function Header() {
           <Menu size={24} />
         </button>
         <h1 className="ml-4 text-xl font-semibold">
-          <Link to="/">
+          <Link to="/" className="flex items-center gap-2">
+            <Image priority src="/maxilotto-icon.png" alt="MaxiLotto Icon"
+              className="aspect-square object-contain" width={40} height={40} />
             <Image priority src="/logo.png" alt="MaxiLotto Logo"
-              className="aspect-auto object-cover" width={99} height={25} />
+              className="hidden md:block aspect-auto object-cover" width={99} height={25} />
           </Link>
         </h1>
       </header>
