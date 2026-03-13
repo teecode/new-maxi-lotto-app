@@ -136,8 +136,8 @@ export const GameScheduleModal: React.FC<GameScheduleModalProps> = ({ isOpen, on
                 {/* Header Section */}
                 <div className="w-full p-6 flex flex-col items-center gap-6 relative z-10 bg-white">
                   {/* Logo */}
-                  <div className="w-full flex justify-end px-4">
-                    <img src="/logo.png" alt="Maxi Lotto" className="h-10 w-auto" />
+                  <div className="w-full flex justify-center px-4">
+                    <img src="/logo.png" alt="Maxi Lotto" className="h-12 w-auto" />
                   </div>
 
                   {/* Title Visual */}
@@ -213,9 +213,8 @@ export const GameScheduleModal: React.FC<GameScheduleModalProps> = ({ isOpen, on
                             <span className="text-[#0A4B7F] font-black text-lg">18+</span>
                         </div>
                     </div>
-                    <div className="flex flex-col text-[9px] leading-tight opacity-90">
-                        <p className="font-bold mb-1">MAXI LOTTO is a regulated lottery operator licensed by Delta State Internal Revenue Service.</p>
-                        <p>MAXI LOTTO supports responsible gambling. Winners know when to stop.</p>
+                    <div className="flex flex-col text-[10px] sm:text-[11px] leading-tight opacity-95">
+                        <p>Maxilotto is a regulated lottery operator licensed by Delta State Internal Revenue Service. We support responsible gambling. 18+ only</p>
                     </div>
                 </div>
 
