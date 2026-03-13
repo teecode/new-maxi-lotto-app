@@ -1,113 +1,179 @@
-import {createFileRoute, useNavigate} from '@tanstack/react-router'
-
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { useState } from 'react'
 import { Image } from '@unpic/react'
 import { useFetchDailyGames } from '@/hooks/useGames'
 import * as _ from 'lodash';
+import moment from 'moment';
 
 import { Spinner } from '@/components/ui/spinner'
-import {cn, finalImagePath, formattedDate, isGameClosed} from '@/lib/utils'
-import type {Game} from "@/types/game.ts";
+import { cn, finalImagePath, isGameClosed } from '@/lib/utils'
+import type { Game } from "@/types/game.ts";
 import Countdown from "@/components/count-down.tsx";
-import {Badge} from "@/components/ui/badge.tsx";
-import {useBetStore} from "@/store/bet-store.ts";
+import { Badge } from "@/components/ui/badge.tsx";
+import { useBetStore } from "@/store/bet-store.ts";
 import PageHeader from "@/components/layouts/page-header.tsx";
+import { Button } from '@/components/ui/button';
+import { Share2, Clock, PlayCircle, ChevronRight } from 'lucide-react';
+import { GameScheduleModal } from '@/components/games/GameScheduleModal';
 
 export const Route = createFileRoute('/_layout/games')({
   component: RouteComponent
 })
 
 function RouteComponent() {
-
   const { data: games, isLoading } = useFetchDailyGames()
-  const {setSelectedGame} = useBetStore()
+  const { setSelectedGame } = useBetStore()
   const navigate = useNavigate()
+  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false)
 
   const groupGamesByDate = _.groupBy(games, 'date');
+  const todayGames = games || [];
 
   const playGame = async (game: Game) => {
-    if (game) {
+    if (game && !isGameClosed(game.endDateTime)) {
       setSelectedGame(game)
-      await navigate({to: "/play"})
+      await navigate({ to: "/play" })
     }
   }
 
   return (
-    <>
-      <PageHeader title="Games"/>
+    <div className="min-h-screen bg-gray-50/50">
+      <PageHeader title="Daily Games" />
 
-      <section className="overflow-hidden py-8 sm:py-16">
-        <div className="container">
-        {isLoading && (
-          <Spinner />
-        )}
-        {groupGamesByDate && Object.keys(groupGamesByDate).map((game, index) => (
-          <Accordion
-            key={index}
-            type="single"
-            collapsible
-            className="w-full"
-            defaultValue={`item-${index}`}
-          >
-            <AccordionItem value={`item-${index}`} className="space-y-2 border-b-0">
-              <AccordionTrigger className="flex items-center gap-5 bg-primary-900 rounded-2xl px-4">
-                <div className="flex items-center gap-4">
-                  {/* Content */}
-                  <div className="flex-1 min-w-0 py-2">
-                    <h3 className="text-sm font-semibold text-white mb-1">
-                      {formattedDate(game)}
-                    </h3>
+      <section className="py-8 sm:py-16">
+        <div className="container px-4">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 sm:mb-12">
+            <div className="space-y-1">
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#0A4B7F] tracking-tight">Available Draws</h2>
+              <p className="text-gray-500 text-sm sm:text-base font-medium">Select a game to participate in today's draws</p>
+            </div>
+            <Button 
+              onClick={() => setIsScheduleModalOpen(true)}
+              className="w-full sm:w-auto bg-[#0A4B7F] hover:bg-[#0A4B7F]/90 text-white font-bold h-11 px-6 rounded-full shadow-lg shadow-[#0A4B7F]/20 gap-2 transition-all hover:scale-105 active:scale-95"
+            >
+              <Share2 className="size-4" />
+              Share Today's Schedule
+            </Button>
+          </div>
+
+          {isLoading ? (
+            <div className="flex justify-center py-20">
+              <Spinner />
+            </div>
+          ) : (
+            <div className="space-y-12">
+              {Object.keys(groupGamesByDate).map((date) => (
+                <div key={date} className="space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="h-px flex-1 bg-gray-200" />
+                    <Badge variant="outline" className="px-6 py-1.5 rounded-full border-gray-300 bg-white text-gray-600 font-bold uppercase tracking-wider text-[10px] sm:text-xs shadow-sm">
+                      {moment(date).format('dddd, Do MMMM YYYY')}
+                    </Badge>
+                    <div className="h-px flex-1 bg-gray-200" />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {groupGamesByDate[date].map((game: Game) => {
+                      const closed = isGameClosed(game.endDateTime);
+                      return (
+                        <div 
+                          key={game.gameID} 
+                          className={cn(
+                            "group relative bg-white rounded-3xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500",
+                            closed && "opacity-75 grayscale-[0.5]"
+                          )}
+                        >
+                          {/* Banner/Image Area */}
+                          <div className="relative h-40 sm:h-48 overflow-hidden">
+                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
+                             <Image
+                                src={finalImagePath(game.gameBackgroundImageUrl)}
+                                alt={game.gameName}
+                                layout="fullWidth"
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                              />
+                              
+                              {/* Overlay Content */}
+                              <div className="absolute top-4 left-4 z-20">
+                                <Badge className="bg-[#FFF100] text-[#0A4B7F] border-0 font-black px-3 py-1 text-xs">
+                                  ID: {game.gameID}
+                                </Badge>
+                              </div>
+
+                              <div className="absolute bottom-4 left-4 right-4 z-20 flex justify-between items-end text-white">
+                                <div className="space-y-0.5">
+                                  <h3 className="text-xl font-bold tracking-tight">{game.gameName}</h3>
+                                  <div className="flex items-center gap-1.5 text-xs font-semibold text-blue-200 uppercase tracking-widest leading-none">
+                                    <Clock className="size-3" />
+                                    Closes: {moment(game.endDateTime).format('h:mm A')}
+                                  </div>
+                                </div>
+                              </div>
+                          </div>
+
+                          {/* Details Area */}
+                          <div className="p-6 space-y-6">
+                            <div className="flex items-center justify-between">
+                              <div className="space-y-1">
+                                <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Status</p>
+                                <div className="flex items-center gap-2">
+                                  <div className={cn("size-2 rounded-full", closed ? "bg-red-500" : "bg-green-500 animate-pulse")} />
+                                  <span className={cn("text-xs font-bold uppercase", closed ? "text-red-500" : "text-green-600")}>
+                                    {closed ? "Draw Closed" : "Accepting Bets"}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {!closed && (
+                                <div className="text-right">
+                                  <p className="text-[10px] uppercase font-bold text-gray-400 tracking-wider mb-1">Time Left</p>
+                                  <div className="text-[#0A4B7F] font-black text-sm font-mono">
+                                    <Countdown targetDate={game.endDateTime} />
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+
+                            <Button 
+                              onClick={() => playGame(game)}
+                              disabled={closed}
+                              className={cn(
+                                "w-full h-12 rounded-2xl font-black uppercase tracking-wider text-sm gap-2 transition-all",
+                                closed 
+                                  ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed" 
+                                  : "bg-gradient-to-r from-[#0A4B7F] to-[#0185B6] text-white shadow-lg shadow-blue-900/10 hover:shadow-blue-900/20 active:scale-[0.98]"
+                              )}
+                            >
+                              {closed ? (
+                                <>
+                                  <Clock className="size-4" />
+                                  Expired
+                                </>
+                              ) : (
+                                <>
+                                  <PlayCircle className="size-4" />
+                                  Play Now
+                                  <ChevronRight className="size-4" />
+                                </>
+                              )}
+                            </Button>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
-              </AccordionTrigger>
-              <AccordionContent className="flex flex-col gap-4 text-balance">
-                {groupGamesByDate[game].map((game: Game, index: number) => (
-                  <div key={index} className="rounded-lg w-full shadow-xs border border-gray-200 overflow-hidden max-w-sm mx-auto">
-                    <button onClick={() => playGame(game)} type="button" className={cn("flex items-stretch w-full gap-0 cursor-pointer", isGameClosed(game.endDateTime) ? "opacity-50 cursor-not-allowed" : "")} disabled={isGameClosed(game.endDateTime)}>
-                      {/* Icon container - Full height with gray background */}
-                      <div className="bg-gray-200 flex items-center justify-center px-4">
-                        <div className="size-12 rounded-full flex items-center justify-center shadow-lg">
-                          <Image
-                            src={finalImagePath(game.gameBackgroundImageUrl)}
-                            alt={game.gameName}
-                            width={38}
-                            height={38}
-                            priority
-                            className="rounded size-12"
-                          />
-                        </div>
-                      </div>
-
-                      {/* Content */}
-                      <div className="flex-1 w-full py-2 px-4 text-left">
-                        <h3 className="text-sm font-semibold text-gray-900 mb-1">
-                          {game.gameName}
-                        </h3>
-                        <Badge variant="secondary" className="bg-gray-100 text-amber-500 font-medium px-5">
-                          {game.gameID}
-                        </Badge>
-                        <p className="text-sm text-foreground-muted">
-                          <Countdown targetDate={game.endDateTime} />
-                        </p>
-                        {/* Stats row */}
-                        <div className="flex items-center gap-1 text-sm">
-                          <span className="text-orange-500 font-medium">{formattedDate(game.endDateTime)}</span>
-                        </div>
-                      </div>
-                    </button>
-                  </div>
-                ))}
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        ))}
+              ))}
+            </div>
+          )}
         </div>
       </section>
-    </>
+
+      <GameScheduleModal 
+        isOpen={isScheduleModalOpen}
+        onClose={() => setIsScheduleModalOpen(false)}
+        games={todayGames}
+      />
+    </div>
   )
 }
