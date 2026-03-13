@@ -98,7 +98,7 @@ function SarepayTransferPage() {
       try {
         const res = await verifySarePayTransfer(ref);
         if (res.status === 'COMPLETED' || res.status === 'Successful' || res.transactionStatus === 'COMPLETED' || res.transactionStatus === 'Successful') {
-          handleSuccess(ref);
+          handleSuccess();
         }
       } catch (e) {
         // Silently ignore polling errors to not spam user, let it retry
@@ -114,7 +114,7 @@ function SarepayTransferPage() {
     }
   };
 
-  const handleSuccess = (ref: string) => {
+  const handleSuccess = () => {
     stopPolling();
     setIsSuccess(true);
     toast.success('Transfer received successfully!');
@@ -122,13 +122,7 @@ function SarepayTransferPage() {
     
     setTimeout(() => {
       navigate({
-        to: '/deposit/verify/$depositId',
-        params: {
-          depositId: ref,
-        },
-        search: {
-          provider: 'sarepay-transfer',
-        },
+        to: '/games',
       });
     }, 2000);
   };

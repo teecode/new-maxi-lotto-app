@@ -207,13 +207,7 @@ export function SarePayCheckoutModal({
     setTimeout(() => {
       setOpen(false);
       navigate({
-        to: '/deposit/verify/$depositId',
-        params: {
-          depositId: reference,
-        },
-        search: {
-          provider: 'sarepay',
-        },
+        to: '/games',
       });
     }, 1500);
   };
