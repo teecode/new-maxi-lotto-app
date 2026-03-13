@@ -122,14 +122,14 @@ export function TicketPreview({ open, setOpen, ticket }: TicketPreviewProps) {
             <Card className="bg-white border-0 shadow-xl overflow-hidden rounded-2xl">
               {/* Header */}
               <CardHeader className="p-0 border-b border-gray-100">
-                <div className="bg-[#0A4B7F] w-full p-6 text-white text-center relative overflow-hidden">
+                <div className="bg-[#0A4B7F] w-full p-4 sm:p-6 text-white text-center relative overflow-hidden">
                   <div className="relative z-10 flex flex-col items-center gap-2">
-                    <h1 className="text-2xl font-bold font-poppins">Ticket Details</h1>
-                    <p className="text-blue-100 text-sm font-medium opacity-90">
+                    <h1 className="text-xl sm:text-2xl font-bold font-poppins">Ticket Details</h1>
+                    <p className="text-blue-100 text-xs sm:text-sm font-medium opacity-90">
                       ID: #{ticket.id}
                     </p>
                     <Badge
-                      className={`mt-2 px-4 py-1 text-xs font-bold uppercase tracking-wider ${ticket.status.name === 'Won' ? 'bg-teal-500 hover:bg-teal-600' :
+                      className={`mt-1 px-4 py-0.5 sm:py-1 text-[10px] sm:text-xs font-bold uppercase tracking-wider ${ticket.status.name === 'Won' ? 'bg-teal-500 hover:bg-teal-600' :
                         ticket.status.name === 'Lost' ? 'bg-red-500 hover:bg-red-600' :
                           'bg-gray-500 hover:bg-gray-600'
                         }`}
@@ -138,11 +138,11 @@ export function TicketPreview({ open, setOpen, ticket }: TicketPreviewProps) {
                     </Badge>
 
                     {gameResult && gameResult.result && (
-                      <div className="flex flex-col gap-2 mt-4 items-center animate-in fade-in slide-in-from-top-2 duration-500">
-                        <p className="text-[10px] text-blue-200 font-bold uppercase tracking-widest leading-none">Winning Numbers</p>
-                        <div className="flex gap-2">
+                      <div className="flex flex-col gap-1.5 mt-3 items-center animate-in fade-in slide-in-from-top-2 duration-500">
+                        <p className="text-[9px] sm:text-[10px] text-blue-200 font-bold uppercase tracking-widest leading-none">Winning Numbers</p>
+                        <div className="flex gap-1.5 sm:gap-2">
                           {[gameResult.result.winningBall1, gameResult.result.winningBall2, gameResult.result.winningBall3, gameResult.result.winningBall4, gameResult.result.winningBall5].map((ball, i) => (
-                            <Ball key={i} value={ball} variant="winning" className="h-8 w-8 text-[10px] md:h-10 md:w-10 md:text-xs shadow-lg border-white/10" />
+                            <Ball key={i} value={ball} variant="winning" className="h-7 w-7 text-[9px] sm:h-8 sm:w-8 sm:text-[10px] md:h-10 md:w-10 md:text-xs shadow-lg border-white/10" />
                           ))}
                         </div>
                       </div>
@@ -155,33 +155,33 @@ export function TicketPreview({ open, setOpen, ticket }: TicketPreviewProps) {
                 </div>
               </CardHeader>
 
-              {/* Summary Info */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-6 bg-blue-50/50 border-b border-blue-100">
+               {/* Summary Info */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 p-4 sm:p-6 bg-blue-50/50 border-b border-blue-100">
                 <div>
-                  <p className="text-xs text-gray-500 uppercase font-semibold">Date</p>
-                  <p className="text-sm font-medium text-[#0A4B7F]">{fullDateTimeFormat(ticket.dateRegistered).split(',')[0]}</p>
+                  <p className="text-[10px] text-gray-500 uppercase font-semibold">Date</p>
+                  <p className="text-xs sm:text-sm font-medium text-[#0A4B7F]">{fullDateTimeFormat(ticket.dateRegistered).split(',')[0]}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 uppercase font-semibold">Stake</p>
-                  <p className="text-sm font-bold text-[#0A4B7F]">{formatCurrency(ticket.amount)}</p>
+                  <p className="text-[10px] text-gray-500 uppercase font-semibold">Stake</p>
+                  <p className="text-xs sm:text-sm font-bold text-[#0A4B7F]">{formatCurrency(ticket.amount)}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 uppercase font-semibold">
+                  <p className="text-[10px] text-gray-500 uppercase font-semibold">
                     {ticket.status.name === 'Won' ? 'Won Amount' : 'Potential Win'}
                   </p>
-                  <p className={`text-sm font-bold ${ticket.status.name === 'Won' ? 'text-teal-600' : 'text-[#0A4B7F]'}`}>
+                  <p className={`text-xs sm:text-sm font-bold ${ticket.status.name === 'Won' ? 'text-teal-600' : 'text-[#0A4B7F]'}`}>
                     {ticket.status.name === 'Won' ? formatCurrency(ticket.wonAmount) : formatCurrency(ticket.possibleWin)}
                   </p>
                 </div>
                 {isAccumulator && (
                   <div>
-                    <p className="text-xs text-gray-500 uppercase font-semibold">Total Odds</p>
-                    <p className="text-sm font-bold text-[#0A4B7F]">{totalOdds.toFixed(2)}</p>
+                    <p className="text-[10px] text-gray-500 uppercase font-semibold">Total Odds</p>
+                    <p className="text-xs sm:text-sm font-bold text-[#0A4B7F]">{totalOdds.toFixed(2)}</p>
                   </div>
                 )}
               </div>
 
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <h4 className="flex items-center gap-2 font-bold text-[#0A4B7F] mb-4">
                   <span className="w-1 h-6 bg-[#FFF100] rounded-full block"></span>
                   {isAccumulator ? 'Accumulator Legs' : 'Bet Slips'}
@@ -191,17 +191,26 @@ export function TicketPreview({ open, setOpen, ticket }: TicketPreviewProps) {
                   {ticket.betslips.map((betslip, index) => (
                     <div key={index} className="border border-gray-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-white">
                       {/* Betslip Header */}
-                      <div className="bg-gray-50 px-4 py-2 flex justify-between items-center border-b border-gray-100">
+                      <div className="bg-gray-50 px-3 sm:px-4 py-2 flex justify-between items-center border-b border-gray-100">
                         <div className="flex items-center gap-2">
                           <span className="font-bold text-[#0A4B7F] text-sm">{betslip.betType.code}</span>
                           {isAccumulator && <Badge variant="outline" className="text-xs bg-white text-gray-600 border-gray-200">Odds: {(betslip.betType.winFactor || 1).toFixed(2)}</Badge>}
                         </div>
-                        <Badge variant={betslip.status.name === 'Won' ? 'default' : 'secondary'} className={betslip.status.name === 'Won' ? 'bg-teal-100 text-teal-700 hover:bg-teal-100' : 'bg-gray-100 text-gray-600 hover:bg-gray-100'}>
+                        <Badge
+                          variant={betslip.status.name === 'Won' ? 'default' : 'secondary'}
+                          className={
+                            betslip.status.name === 'Won'
+                              ? 'bg-teal-100 text-teal-700 hover:bg-teal-100 text-[10px] sm:text-xs'
+                              : betslip.status.name === 'Lost'
+                                ? 'bg-red-100 text-red-700 hover:bg-red-100 text-[10px] sm:text-xs'
+                                : 'bg-gray-100 text-gray-600 hover:bg-gray-100 text-[10px] sm:text-xs'
+                          }
+                        >
                           {betslip.status.name}
                         </Badge>
                       </div>
 
-                      <div className="p-4">
+                      <div className="p-3 sm:p-4">
                         {/* Game Info for Accumulator context, or generally useful */}
                         <div className="mb-3 flex justify-between items-center text-xs text-gray-500">
                           <span>Game: <span className="font-medium text-gray-700">{ticket.game.name}</span></span>
@@ -222,7 +231,7 @@ export function TicketPreview({ open, setOpen, ticket }: TicketPreviewProps) {
                                     betslip.bet1.map((ball) => (
                                       isAccumulator && ball === 0 ?
                                         <span className="text-sm font-medium text-[#0A4B7F]"> Standard - {betslip.betType.description} </span> :
-                                        <Ball key={ball} className="h-8 w-8 text-xs font-bold" value={ball} />
+                                        <Ball key={ball} className="h-7 w-7 text-[10px] sm:h-8 sm:w-8 sm:text-xs font-bold" value={ball} />
                                     ))
                                   ) : (
                                     <span className="text-sm text-gray-400 italic">None</span>
@@ -250,7 +259,7 @@ export function TicketPreview({ open, setOpen, ticket }: TicketPreviewProps) {
                               </span>
                               <div className="flex flex-wrap gap-2">
                                 {betslip.bet2.map((ball) => (
-                                  <Ball key={ball} className="h-8 w-8 text-xs bg-red-50 text-red-600 border-red-100" value={ball} />
+                                  <Ball key={ball} className="h-7 w-7 text-[10px] sm:h-8 sm:w-8 sm:text-xs bg-red-50 text-red-600 border-red-100" value={ball} />
                                 ))}
                               </div>
                             </div>
@@ -263,7 +272,7 @@ export function TicketPreview({ open, setOpen, ticket }: TicketPreviewProps) {
 
               </CardContent>
 
-              <CardFooter className="bg-gray-50 p-6 flex flex-col gap-4 border-t border-gray-100">
+              <CardFooter className="bg-gray-50 p-4 sm:p-6 flex flex-col gap-4 border-t border-gray-100">
                 <div className="flex justify-between gap-4 w-full">
                   <Button
                     variant="outline"
