@@ -26,9 +26,10 @@ export const ResultShareModal: React.FC<ResultShareModalProps> = ({ result, isOp
     if (!previewRef.current) return;
     try {
       const dataUrl = await toPng(previewRef.current, {
-        backgroundColor: '#ffffff',
+        backgroundColor: '#f9fafb',
         pixelRatio: 2,
-        filter: (node) => (node as HTMLElement).dataset?.exportHide !== 'true',
+        quality: 1,
+        filter: (node: HTMLElement) => node.dataset?.exportHide !== 'true',
       });
       const link = document.createElement('a');
       link.download = `maxilotto-${result?.gameName || 'result'}-${Date.now()}.png`;
