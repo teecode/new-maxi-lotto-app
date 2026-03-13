@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { toPng } from 'html-to-image';
 import { Share2, Download, X, MessageCircle, Twitter } from 'lucide-react';
 import type { GameResultType } from "@/types/game";
-import { fullDateFormat, getImageUrl } from "@/lib/utils";
+import { fullDateFormat } from "@/lib/utils";
 import Ball from "../ball";
 import logo from '@/logo.svg'; 
 
