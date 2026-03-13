@@ -97,7 +97,7 @@ function SarepayTransferPage() {
     intervalRef.current = setInterval(async () => {
       try {
         const res = await verifySarePayTransfer(ref);
-        if (res.transactionStatus === 'COMPLETED' || res.transactionStatus === 'Successful') {
+        if (res.status === 'COMPLETED' || res.status === 'Successful' || res.transactionStatus === 'COMPLETED' || res.transactionStatus === 'Successful') {
           handleSuccess(ref);
         }
       } catch (e) {
