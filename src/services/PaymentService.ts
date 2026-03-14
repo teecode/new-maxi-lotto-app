@@ -79,6 +79,25 @@ export const sarePayCharge = async (
 	}
 };
 
+export const initSarePayDeposit = async (
+	customerId: number,
+	amount: number
+): Promise<DepositResponse> => {
+	try {
+		const response = await apiClient.post<DepositResponse>('Payments/sarepay/Deposit/Request', {
+			customerId,
+			amount,
+			paymentProviderValue: 'Sarepay',
+		});
+		return response.data;
+	} catch (error: any) {
+		if (error.response?.data) {
+			throw new Error(error.response.data.error || error.response.data || 'SarePay deposit initialization failed.');
+		}
+		throw new Error('Network error, please check your connection.');
+	}
+};
+
 export const sarePaySubmitPin = async (
 	customerId: number,
 	amount: number,

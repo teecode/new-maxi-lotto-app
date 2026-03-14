@@ -26,10 +26,10 @@ import { useNavigate } from '@tanstack/react-router';
 
 // Config arrays
 const paymentMethods = [
-  { id: 'card', label: 'Card' },
+  { id: 'cards-paystack', label: 'Paystack Card' },
+  { id: 'cards-sarepay', label: 'SarePay Card' },
   { id: 'transfer', label: 'Transfer' },
   { id: 'ussd', label: 'USSD' },
-  { id: 'sarepay', label: 'SarePay' },
 ];
 
 // const channels = [
@@ -86,7 +86,7 @@ export const DepositForm = ({ user }: DepositFormProps) => {
       setLoading(true);
       const { amount, selectedOption, channel } = values;
 
-      if (selectedOption === 'sarepay') {
+      if (selectedOption === 'cards-sarepay') {
         setSarePayOpen(true);
       } else if (selectedOption === 'transfer') {
         navigate({
