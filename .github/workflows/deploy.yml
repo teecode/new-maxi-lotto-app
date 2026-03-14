@@ -40,6 +40,9 @@ jobs:
         where bun
 
     - name: Build
+      env:
+        VITE_SAREPAY_PUBLIC_KEY: ${{ secrets.VITE_SAREPAY_PUBLIC_KEY }}
+        VITE_SAREPAY_TOKEN: ${{ secrets.VITE_SAREPAY_TOKEN }}
       run: |
         bun install
         bun run build

@@ -68,8 +68,8 @@ export function SarePayCheckoutModal({
       }
 
       window.Sarepay.initialize({
-        key: "PUBLIC-C3yCwvIiNmwE9pqIR3jG3TcRuiU7", // Should ideally be in env
-        token: "lV6KiEcG2BBKWmyT1UVqYtvL7ilxp3M6", // Should ideally be in env
+        key: import.meta.env.VITE_SAREPAY_PUBLIC_KEY,
+        token: import.meta.env.VITE_SAREPAY_TOKEN,
         amount: amount * 100, // Typically amounts are in kobo when using integrations, confirm with Sarepay docs if needed, but the user snippet showed an integer. If it expects NGN, just use `amount`. Based on the snippet amount was 7106, likely raw integer or kobo. Let's send raw amount.
         currency: "NGN",
         feeBearer: "customer",
