@@ -51,7 +51,7 @@ export const updatePassword = async (
 
 export const updateUser = async (user: User): Promise<User> => {
 	try {
-		const response = await apiClient.put<User>('User/Update', {
+		const response = await apiClient.post<User>('User/UpdateAccount', {
 			...user,
 		});
 		return response.data;

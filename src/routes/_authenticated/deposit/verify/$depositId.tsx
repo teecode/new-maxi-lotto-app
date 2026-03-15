@@ -24,7 +24,7 @@ export const Route = createFileRoute(
   validateSearch: verificationSearchSchema,
   loader: async ({ params, search }: any) => {
     const reference = params.depositId;
-    const provider = search.provider;
+    const provider = search?.provider;
 
     try {
       if (provider === 'sarepay') {

@@ -7,7 +7,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { cn } from '@/lib/utils';
 
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -121,23 +121,48 @@ export const DepositForm = ({ user }: DepositFormProps) => {
           control={form.control}
           name="selectedOption"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Payment Method</FormLabel>
+            <FormItem className="space-y-4">
+              <FormLabel className="text-base font-bold text-slate-700">Select Payment Method</FormLabel>
               <FormControl>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  value={field.value}
-                  className="flex justify-evenly gap-4"
-                >
-                  {paymentMethods.map((method) => (
-                    <div key={method.id} className="flex items-center space-x-2">
-                      <RadioGroupItem value={method.id} id={method.id} />
-                      <FormLabel htmlFor={method.id} className="font-normal">
-                        {method.label}
-                      </FormLabel>
-                    </div>
-                  ))}
-                </RadioGroup>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {paymentMethods.map((method) => {
+                    const isActive = field.value === method.id;
+                    return (
+                      <div
+                        key={method.id}
+                        onClick={() => field.onChange(method.id)}
+                        className={cn(
+                          "relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 cursor-pointer transition-all duration-300 group",
+                          isActive 
+                            ? "bg-pink-50 border-pink-500 shadow-md shadow-pink-500/10 scale-[1.02]" 
+                            : "bg-white border-slate-100 hover:border-pink-200 hover:bg-slate-50/50"
+                        )}
+                      >
+                        <div className={cn(
+                          "w-10 h-10 rounded-xl mb-3 flex items-center justify-center transition-colors",
+                          isActive ? "bg-pink-500 text-white" : "bg-slate-100 text-slate-400 group-hover:bg-pink-100 group-hover:text-pink-400"
+                        )}>
+                          {/* Placeholder Icon - would be better with real icons per method */}
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+                        </div>
+                        <span className={cn(
+                          "text-xs font-bold text-center leading-tight transition-colors",
+                          isActive ? "text-pink-600" : "text-slate-500 group-hover:text-slate-700"
+                        )}>
+                          {method.label}
+                        </span>
+                        
+                        {isActive && (
+                          <div className="absolute top-2 right-2">
+                            <div className="bg-pink-500 rounded-full p-0.5">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>

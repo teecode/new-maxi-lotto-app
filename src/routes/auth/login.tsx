@@ -57,7 +57,6 @@ function RouteComponent() {
       // redirect
       await navigate({ to: search.redirect || fallback })
       // show toast
-      toast.success("Login successful")
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       // console.log("error", error);
