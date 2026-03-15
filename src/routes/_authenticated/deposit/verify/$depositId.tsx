@@ -6,10 +6,8 @@ import {
   verifySarePayTransfer
 } from "@/services/PaymentService.ts";
 
-import { Card, CardContent, CardHeader, CardHeading, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { DownloadIcon, Share2 } from "lucide-react";
-import { Image } from "@unpic/react";
 import useAuthStore from "@/store/authStore.ts";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";

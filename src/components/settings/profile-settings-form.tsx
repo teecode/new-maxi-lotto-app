@@ -27,7 +27,7 @@ const profileSchema = z.object({
   address: z.string().optional(),
   mobile: z.string().min(6, "Mobile is too short"),
   country: z.string().optional(),
-  dateOfBirth: z.union([z.date(), z.string()]).optional().transform((val) => val ? new Date(val) : undefined),
+  dateOfBirth: z.date().optional(),
 })
 
 type ProfileFormValues = z.infer<typeof profileSchema>
@@ -35,8 +35,8 @@ type ProfileFormValues = z.infer<typeof profileSchema>
 export function ProfileSettingsForm({ user }: { user: User }) {
   const [loading, setLoading] = useState(false)
 
-  const form = useForm<z.infer<typeof profileSchema>>({
-    resolver: zodResolver(profileSchema),
+  const form = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileSchema) as any,
     defaultValues: {
       firstname: user.firstname ?? "",
       lastname: user.lastname ?? "",
@@ -44,7 +44,7 @@ export function ProfileSettingsForm({ user }: { user: User }) {
       address: user.address ?? "",
       mobile: user.mobile ?? "",
       country: user.country ?? "",
-      dateOfBirth: user.dateOfBirth ?? undefined,
+      dateOfBirth: user.dateOfBirth ? new Date(user.dateOfBirth) : undefined,
     },
   })
 
@@ -53,7 +53,10 @@ export function ProfileSettingsForm({ user }: { user: User }) {
     try {
       setLoading(true)
 
-      const {firstname, lastname, middlename, address, mobile, country, dateOfBirth} = await updateUser(values as User)
+      const {firstname, lastname, middlename, address, mobile, country, dateOfBirth} = await updateUser({
+        ...user,
+        ...values,
+      } as any)
       toast.success("Profile updated successfully")
         form.reset({
           firstname: firstname ?? "",
@@ -62,7 +65,7 @@ export function ProfileSettingsForm({ user }: { user: User }) {
           address: address ?? "",
           mobile: mobile ?? "",
           country: country ?? "",
-          dateOfBirth: dateOfBirth ?? undefined,
+          dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : undefined,
         })
 
     } catch (error: any) {
