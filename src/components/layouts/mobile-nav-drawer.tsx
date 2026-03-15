@@ -52,9 +52,13 @@ const MobileNav = ({navGroups}: MobileNavProps) => {
               height={40}
               className="brightness-0 invert-0" // Ensure it looks good in drawer
             />
-            <span className="text-2xl font-black text-foreground tracking-tighter text-tertiary-900">
-              ML
-            </span>
+            <Image
+              src="/maxilotto.png"
+              alt="MaxiLotto Logo"
+              width={105}
+              height={32}
+              className="brightness-0" // High contrast for drawer
+            />
           </Link>
         </div>
 

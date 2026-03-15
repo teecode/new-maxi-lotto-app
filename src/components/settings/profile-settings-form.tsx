@@ -27,7 +27,7 @@ const profileSchema = z.object({
   address: z.string().optional(),
   mobile: z.string().min(6, "Mobile is too short"),
   country: z.string().optional(),
-  dateOfBirth: z.date().optional(),
+  dateOfBirth: z.union([z.date(), z.string()]).optional().transform((val) => val ? new Date(val) : undefined),
 })
 
 type ProfileFormValues = z.infer<typeof profileSchema>
