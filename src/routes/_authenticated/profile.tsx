@@ -18,34 +18,47 @@ function RouteComponent() {
     <>
       <PageHeader title="Profile"/>
 
-      <section className=" bg-background py-4 sm:py-12">
-        <div className="container mx-auto space-y-4">
-          <div className="flex flex-col py-4 gap-4 shadow-none">
-            {user && (
-              <>
-                {!user.isVerified && (
-                  <EmailVerificationAlert/>
-                )}
-                <UserInfoCard
-                  name={user.username}
-                  email={user.email}
-                  balance={user.walletBalance || 0}
-                  avatar={"/avatar.jpg"}
-                  rank={user.rank || "Newbie"}
-                />
-              </>
-            )}
+      <section className="bg-slate-50/50 py-6 sm:py-12 min-h-screen">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            {/* Sidebar: User Info */}
+            <div className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
+              {user && (
+                <>
+                  {!user.isVerified && (
+                    <div className="animate-in fade-in slide-in-from-top-4 duration-500">
+                      <EmailVerificationAlert/>
+                    </div>
+                  )}
+                  <UserInfoCard
+                    name={user.username}
+                    email={user.email}
+                    balance={user.walletBalance || 0}
+                    avatar={"/avatar.jpg"}
+                    rank={user.rank || "Newbie"}
+                  />
+                </>
+              )}
+            </div>
 
-          </div>
+            {/* Main Content: Navigation Actions */}
+            <div className="lg:col-span-8 space-y-8">
+              <div className="space-y-6">
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Main Menu</h3>
+                  <ProfileNavigation/>
+                </div>
+                
+                <div className="flex flex-col gap-1">
+                  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-slate-400 ml-1">Account Settings</h3>
+                  <ProfileSettingsMenu/>
+                </div>
+              </div>
+            </div>
 
-          {/* profile settings menu */}
-          <div className="p-4 rounded space-y-4 bg-neutral-100">
-            <ProfileNavigation/>
-            <ProfileSettingsMenu/>
           </div>
         </div>
-
-
       </section>
 
     </>

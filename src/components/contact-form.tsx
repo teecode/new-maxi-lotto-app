@@ -140,9 +140,17 @@ const ContactForm = () => {
           )}
         />
 
-        <Button type="submit" className="bg-primary-900 px-6 w-full">
-          {isLoading && <Spinner />}
-          {isLoading ? "Submitting..." : "Submit"}
+        <Button 
+          type="submit" 
+          disabled={isLoading}
+          className="relative h-14 w-full bg-slate-900 text-white rounded-[1.25rem] font-black uppercase tracking-widest text-xs transition-all duration-300 hover:bg-slate-800 hover:shadow-[0_10px_30px_rgba(15,23,42,0.15)] disabled:opacity-50 overflow-hidden group"
+        >
+          <span className="relative z-10 flex items-center gap-2">
+            {isLoading ? <Spinner className="w-4 h-4" /> : null}
+            {isLoading ? "Sending Message..." : "Send Message"}
+          </span>
+          {/* Animated gradient overlay for hover */}
+          <div className="absolute inset-0 bg-gradient-to-r from-pink-500 to-purple-500 opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
         </Button>
       </form>
     </Form>

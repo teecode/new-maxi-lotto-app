@@ -11,7 +11,7 @@ const UserInfoCard = ({ name, balance, email, rank }: UserInfoCardProps) => {
   const rankColor = getRankColor(rank);
 
   return (
-    <div className="w-full max-w-2xl mx-auto overflow-hidden rounded-3xl bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] ring-1 ring-slate-900/5">
+    <div className="w-full animate-in fade-in zoom-in duration-700 overflow-hidden rounded-[2.5rem] bg-white border border-slate-100 shadow-[0_8px_40px_rgb(0,0,0,0.03)] ring-1 ring-slate-900/5">
       <div className="relative p-6 sm:p-10 flex flex-col items-center text-center gap-6">
         {/* Decorative Background Element */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-48 bg-pink-500/5 blur-[100px] rounded-full -z-10" />
