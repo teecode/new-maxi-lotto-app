@@ -256,5 +256,3 @@ export function ProfileSettingsForm({ user }: { user: User }) {
     </div>
   )
 }
-  )
-}
