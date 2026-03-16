@@ -51,24 +51,24 @@ export function RanksDisplay({ isOpen, onClose, currentRankName }: RanksDisplayP
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl bg-white/95 backdrop-blur-xl border-slate-200/50 p-0 overflow-hidden rounded-[2.5rem] shadow-2xl">
-        <DialogHeader className="p-8 pb-4">
-          <div className="flex items-center justify-between">
-            <div className="space-y-1">
-              <DialogTitle className="text-2xl font-black tracking-tight text-slate-900 flex items-center gap-2">
-                <Trophy className="w-6 h-6 text-yellow-500 animate-bounce" />
-                Rank Progression
+      <DialogContent className="w-[95vw] max-w-2xl bg-white/95 backdrop-blur-xl border-slate-200/50 p-0 overflow-hidden rounded-[1.5rem] sm:rounded-[2.5rem] shadow-2xl">
+        <DialogHeader className="p-5 sm:p-8 pb-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="space-y-1 min-w-0">
+              <DialogTitle className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 flex items-center gap-2">
+                <Trophy className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-500 animate-bounce shrink-0" />
+                <span className="truncate">Rank Progression</span>
               </DialogTitle>
-              <DialogDescription className="text-slate-500 font-medium">
-                Climb the ranks and unlock exclusive rewards
+              <DialogDescription className="text-slate-500 font-medium text-xs sm:text-sm truncate">
+                Climb the ranks and unlock rewards
               </DialogDescription>
             </div>
             <div 
-              className="px-4 py-2 rounded-2xl border shadow-sm flex items-center gap-2"
+              className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl sm:rounded-2xl border shadow-sm flex items-center gap-2 shrink-0"
               style={{ borderColor: `${currentRank.color}40`, backgroundColor: `${currentRank.color}10` }}
             >
-              <Star className="w-4 h-4" style={{ color: currentRank.color }} fill={currentRank.color} />
-              <span className="text-xs font-black uppercase tracking-wider" style={{ color: currentRank.color }}>
+              <Star className="w-3.5 h-3.5 sm:w-4 sm:h-4" style={{ color: currentRank.color }} fill={currentRank.color} />
+              <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider" style={{ color: currentRank.color }}>
                 {currentRank.name}
               </span>
             </div>
@@ -78,23 +78,23 @@ export function RanksDisplay({ isOpen, onClose, currentRankName }: RanksDisplayP
         <DialogBody className="p-0">
           <div className="space-y-0">
             {/* Growth Progress Area */}
-            <div className="bg-slate-50/50 p-8 border-y border-slate-100 relative overflow-hidden">
+            <div className="bg-slate-50/50 p-5 sm:p-8 border-y border-slate-100 relative overflow-hidden">
                <div className="absolute top-0 right-0 w-64 h-64 bg-pink-500/5 blur-[100px] rounded-full pointer-events-none" />
                
-               <div className="relative z-10 space-y-6">
+               <div className="relative z-10 space-y-4 sm:space-y-6">
                  <div className="flex justify-between items-end">
-                   <div className="space-y-1">
-                     <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Current Progress</p>
-                     <p className="text-3xl font-black text-slate-900">Level {currentRank.level}</p>
+                   <div className="space-y-0.5 sm:space-y-1">
+                     <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Current Progress</p>
+                     <p className="text-2xl sm:text-3xl font-black text-slate-900">Level {currentRank.level}</p>
                    </div>
                    <div className="text-right">
-                     <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Growth Score</p>
-                     <p className="text-xl font-bold text-slate-700">{Math.round((currentLevel / RANKS.length) * 100)}%</p>
+                     <p className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Growth Score</p>
+                     <p className="text-lg sm:text-xl font-bold text-slate-700">{Math.round((currentLevel / RANKS.length) * 100)}%</p>
                    </div>
                  </div>
 
                  {/* Animated Progress Bar */}
-                 <div className="h-4 w-full bg-slate-200 rounded-full overflow-hidden shadow-inner ring-4 ring-white">
+                 <div className="h-3 sm:h-4 w-full bg-slate-200 rounded-full overflow-hidden shadow-inner ring-2 sm:ring-4 ring-white">
                    <motion.div 
                      initial={{ width: 0 }}
                      animate={{ width: showGrowth ? `${(currentLevel / RANKS.length) * 100}%` : 0 }}
@@ -110,7 +110,7 @@ export function RanksDisplay({ isOpen, onClose, currentRankName }: RanksDisplayP
                    </motion.div>
                  </div>
 
-                 <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-400 mt-2">
+                 <div className="flex justify-between text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1 sm:mt-2">
                    <span>Newbie</span>
                    <span>GOAT</span>
                  </div>
@@ -118,8 +118,8 @@ export function RanksDisplay({ isOpen, onClose, currentRankName }: RanksDisplayP
             </div>
 
             {/* Scrollable Rank List */}
-            <div className="max-h-[400px] overflow-y-auto px-6 py-4 custom-scrollbar">
-              <div className="grid gap-3">
+            <div className="max-h-[350px] sm:max-h-[400px] overflow-y-auto px-4 sm:px-6 py-4 custom-scrollbar">
+              <div className="grid gap-2 sm:gap-3">
                 {RANKS.map((rank: RankDefinition, index: number) => {
                   const isUnlocked = rank.level <= currentLevel;
                   const isCurrent = rank.level === currentLevel;
@@ -132,7 +132,7 @@ export function RanksDisplay({ isOpen, onClose, currentRankName }: RanksDisplayP
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.05 }}
                       className={cn(
-                        "group relative flex items-center gap-4 p-4 rounded-3xl border transition-all duration-300",
+                        "group relative flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-2xl sm:rounded-3xl border transition-all duration-300",
                         isUnlocked ? "bg-white border-slate-100 shadow-sm" : "bg-slate-50/50 border-transparent grayscale opacity-60",
                         isCurrent && "ring-2 ring-slate-900 ring-offset-2 scale-[1.02] shadow-xl z-20 bg-white"
                       )}
@@ -140,37 +140,37 @@ export function RanksDisplay({ isOpen, onClose, currentRankName }: RanksDisplayP
                       {/* Rank Icon/Level */}
                       <div 
                         className={cn(
-                          "w-12 h-12 rounded-2xl flex items-center justify-center text-lg font-black shrink-0 shadow-md",
+                          "w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center text-base sm:text-lg font-black shrink-0 shadow-md",
                           isUnlocked ? "text-white" : "bg-slate-200 text-slate-400"
                         )}
                         style={isUnlocked ? { backgroundColor: rank.color } : {}}
                       >
                         {isUnlocked ? (
-                          isCurrent ? <Trophy className="w-6 h-6" /> : index + 1
+                          isCurrent ? <Trophy className="w-5 h-5 sm:w-6 sm:h-6" /> : index + 1
                         ) : (
-                          <Lock className="w-5 h-5 text-slate-400" />
+                          <Lock className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400" />
                         )}
                       </div>
 
                       {/* Rank Details */}
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1.5 sm:gap-2">
                           <h4 className={cn(
-                            "text-sm font-black uppercase tracking-wider truncate",
+                            "text-xs sm:text-sm font-black uppercase tracking-wider truncate",
                             isUnlocked ? "text-slate-900" : "text-slate-400"
                           )}>
                             {rank.name}
                           </h4>
                           {isCurrent && (
-                            <span className="bg-slate-900 text-white text-[8px] font-black uppercase px-2 py-0.5 rounded-full tracking-tighter">Current</span>
+                            <span className="bg-slate-900 text-white text-[7px] sm:text-[8px] font-black uppercase px-1.5 py-0.5 rounded-full tracking-tighter shrink-0">Current</span>
                           )}
                         </div>
-                        <div className="flex items-center gap-3 mt-1">
-                          <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1">
-                            <Star className="w-3 h-3" /> {rank.minWins} Wins
+                        <div className="flex items-center gap-2 sm:gap-3 mt-0.5 sm:mt-1">
+                          <span className="text-[9px] sm:text-[10px] font-bold text-slate-400 flex items-center gap-1">
+                            <Star className="w-2.5 h-2.5 sm:w-3 h-3" /> {rank.minWins} Wins
                           </span>
-                          <span className="w-1 h-1 rounded-full bg-slate-200" />
-                          <span className="text-[10px] font-bold text-slate-400">
+                          <span className="w-0.5 h-0.5 sm:w-1 sm:h-1 rounded-full bg-slate-200" />
+                          <span className="text-[9px] sm:text-[10px] font-bold text-slate-400 truncate">
                             {formatCurrency(rank.minAmount)}
                           </span>
                         </div>
@@ -179,11 +179,11 @@ export function RanksDisplay({ isOpen, onClose, currentRankName }: RanksDisplayP
                       {/* Status Indicator */}
                       <div className="shrink-0">
                          {isUnlocked ? (
-                           <CheckCircle2 className="w-6 h-6 text-emerald-500" />
+                           <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-500" />
                          ) : (
                            isNext && (
-                             <div className="w-6 h-6 rounded-full border-2 border-slate-200 flex items-center justify-center">
-                               <div className="w-2 h-2 rounded-full bg-slate-200 animate-pulse" />
+                             <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-slate-200 flex items-center justify-center">
+                               <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-slate-200 animate-pulse" />
                              </div>
                            )
                          )}
