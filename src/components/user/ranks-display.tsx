@@ -1,5 +1,5 @@
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 import { 
   Dialog, 
@@ -9,8 +9,8 @@ import {
   DialogDescription,
   DialogBody
 } from "@/components/ui/dialog";
-import { RankDefinition, RANKS, getRankByName } from "@/lib/ranks";
-import { Trophy, Star, ChevronRight, CheckCircle2, Lock } from "lucide-react";
+import { type RankDefinition, RANKS, getRankByName } from "@/lib/ranks";
+import { Trophy, Star, CheckCircle2, Lock } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
@@ -35,7 +35,7 @@ export function RanksDisplay({ isOpen, onClose, currentRankName }: RanksDisplayP
       if (!audioRef.current) {
         audioRef.current = new Audio("https://assets.mixkit.co/active_storage/sfx/2012/2012-preview.mp3");
       }
-      audioRef.current.play().catch(e => console.log("Audio playback failed", e));
+      audioRef.current.play().catch((e: Error) => console.log("Audio playback failed", e));
 
       return () => {
         clearTimeout(timer);
@@ -120,7 +120,7 @@ export function RanksDisplay({ isOpen, onClose, currentRankName }: RanksDisplayP
             {/* Scrollable Rank List */}
             <div className="max-h-[400px] overflow-y-auto px-6 py-4 custom-scrollbar">
               <div className="grid gap-3">
-                {RANKS.map((rank, index) => {
+                {RANKS.map((rank: RankDefinition, index: number) => {
                   const isUnlocked = rank.level <= currentLevel;
                   const isCurrent = rank.level === currentLevel;
                   const isNext = rank.level === currentLevel + 1;

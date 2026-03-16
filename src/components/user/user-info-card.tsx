@@ -75,5 +75,3 @@ const UserInfoCard = ({ name, balance, email, rank }: UserInfoCardProps) => {
 };
 
 export default UserInfoCard;
-
-export default UserInfoCard;
