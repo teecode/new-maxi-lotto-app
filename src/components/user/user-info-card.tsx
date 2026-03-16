@@ -1,13 +1,13 @@
-
 import { Button } from "@/components/ui/button";
 import type {UserInfoCardProps} from "@/types/profile";
 import { formatCurrency } from "@/lib/utils";
 import {Link} from "@tanstack/react-router";
-
+import { useState } from "react";
 import { getRankColor } from "@/lib/ranks";
-// ... (keep existing imports)
+import { RanksDisplay } from "./ranks-display";
 
 const UserInfoCard = ({ name, balance, email, rank }: UserInfoCardProps) => {
+  const [isRanksOpen, setIsRanksOpen] = useState(false);
   const rankColor = getRankColor(rank);
 
   return (
@@ -21,16 +21,18 @@ const UserInfoCard = ({ name, balance, email, rank }: UserInfoCardProps) => {
             {name}
           </h2>
           <div className="flex flex-col items-center gap-3">
-            <span 
-              className="inline-flex items-center gap-1.5 text-xs font-black px-4 py-1.5 rounded-full border shadow-sm uppercase tracking-wider"
+            <button 
+              onClick={() => setIsRanksOpen(true)}
+              className="group inline-flex items-center gap-1.5 text-xs font-black px-4 py-1.5 rounded-full border shadow-sm uppercase tracking-wider cursor-pointer hover:scale-105 active:scale-95 transition-all duration-300"
               style={{ 
                 color: rankColor, 
                 backgroundColor: `${rankColor}10`,
                 borderColor: `${rankColor}30`
               }}
             >
-              <span className="text-sm">★</span> {rank}
-            </span>
+              <span className="text-sm group-hover:rotate-12 transition-transform duration-300">★</span> 
+              {rank}
+            </button>
             <p className="text-slate-500 text-sm font-semibold tracking-wide flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
               {email}
@@ -62,8 +64,16 @@ const UserInfoCard = ({ name, balance, email, rank }: UserInfoCardProps) => {
           </div>
         </div>
       </div>
+
+      <RanksDisplay 
+        isOpen={isRanksOpen} 
+        onClose={() => setIsRanksOpen(false)} 
+        currentRankName={rank} 
+      />
     </div>
   );
 };
+
+export default UserInfoCard;
 
 export default UserInfoCard;

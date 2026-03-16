@@ -24,8 +24,12 @@ export const RANKS: RankDefinition[] = [
   { level: 15, name: "GOAT", minWins: 35, minAmount: 50000000, color: "#310d46ff" }
 ];
 
+export const getRankByName = (rankName?: string): RankDefinition | undefined => {
+  if (!rankName) return RANKS[0]; // Default to Newbie
+  return RANKS.find(r => r.name.toLowerCase() === rankName.toLowerCase());
+};
+
 export const getRankColor = (rankName?: string): string => {
-  if (!rankName) return "#808080"; // Default to Newbie color
-  const rank = RANKS.find(r => r.name.toLowerCase() === rankName.toLowerCase());
+  const rank = getRankByName(rankName);
   return rank ? rank.color : "#808080";
 };

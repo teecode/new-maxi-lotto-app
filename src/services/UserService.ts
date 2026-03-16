@@ -209,3 +209,22 @@ export const updateFavouriteBall = async (
 		throw new Error('Network error, please try again.');
 	}
 };
+export type Rank = {
+	level: number;
+	name: string;
+	minWins: number;
+	minAmount: number;
+	color: string;
+};
+
+export const fetchRanks = async (): Promise<Rank[]> => {
+	try {
+		const response = await apiClient.get<Rank[]>('User/GetRanks');
+		return response.data;
+	} catch (error: any) {
+		if (error.response && error.response.data) {
+			throw new Error(error.response.data.error || 'Failed to fetch ranks.');
+		}
+		throw new Error('Network error, please try again.');
+	}
+};
