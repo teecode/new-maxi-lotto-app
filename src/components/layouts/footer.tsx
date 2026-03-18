@@ -123,7 +123,7 @@ const Footer = () => {
           <div className="flex mb-4 gap-4 justify-center sm:justify-center sm:mt-0">
             <Image src={"/payment-1.png"} width={118} height={21} className="h-auto object-contain" alt="Payment Method" />
             <Image src={"/gamify.png"} width={92} height={32} className="h-auto object-contain" alt="Gamify" />
-            <Image src={"/responsible-bet.png"} width={50} height={50} className="h-auto object-contain" alt="Responsible Bet" />
+            {/*<Image src={"/responsible-bet.png"} width={50} height={50} className="h-auto object-contain" alt="Responsible Bet" />*/}
           </div>
           <span className="text-sm flex justify-center text-muted-foreground text-center dark:text-gray-400">
             © {new Date().getFullYear()}{' '}
