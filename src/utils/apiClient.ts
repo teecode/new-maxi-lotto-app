@@ -1,9 +1,7 @@
 import axios from 'axios';
 import useAuthStore from '@/store/authStore';
 
-// const apiURL = 'http://108.181.175.92:94/api/';
-// https://testapi.maxilotto.ng/api/
-const apiURL = 'https://testapi.maxilotto.ng/api/';
+const apiURL = import.meta.env.VITE_API_URL || 'https://testapi.maxilotto.ng/api/';
 
 const apiClient = axios.create({
 	baseURL: apiURL,

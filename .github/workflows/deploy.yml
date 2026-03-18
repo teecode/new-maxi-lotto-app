@@ -41,8 +41,15 @@ jobs:
 
     - name: Build
       env:
+        # Common Secrets
         VITE_SAREPAY_PUBLIC_KEY: ${{ secrets.VITE_SAREPAY_PUBLIC_KEY }}
         VITE_SAREPAY_TOKEN: ${{ secrets.VITE_SAREPAY_TOKEN }}
+        VITE_SAREPAY_ENCRYPTION_KEY: ${{ secrets.VITE_SAREPAY_ENCRYPTION_KEY }}
+        VITE_SAREPAY_IV: ${{ secrets.VITE_SAREPAY_IV }}
+        
+        # Environment Specific Variables & Secrets
+        VITE_API_URL: ${{ env.DEPLOY_ENV == 'prod' && vars.PROD_API_URL || vars.STAGING_API_URL }}
+        VITE_PAYSTACK_PUBLIC_KEY: ${{ env.DEPLOY_ENV == 'prod' && secrets.PROD_PAYSTACK_PUBLIC_KEY || secrets.STAGING_PAYSTACK_PUBLIC_KEY }}
       run: |
         bun install
         bun run build

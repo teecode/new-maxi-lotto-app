@@ -47,8 +47,7 @@ export function ConfirmationModal({open, setOpen, data, user, handleFormReset}: 
       const paystack = new PaystackPop();
 
       paystack.newTransaction({
-        // ⚠️ NOTE: Use a proper environment variable for the key in a real application
-        key: "pk_test_ca2dd4df87ee7d55fafcf8670fdc1479db22ac3d",
+        key: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || "pk_test_ca2dd4df87ee7d55fafcf8670fdc1479db22ac3d",
         email: user.email,
         amount: data.amount * 100, // Paystack expects amount in kobo
         ref: data.transactionRefrence,
