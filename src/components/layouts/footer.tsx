@@ -124,7 +124,6 @@ const Footer = () => {
             <Image src={"/payment-1.png"} width={118} height={21} className="h-auto object-contain" alt="Payment Method" />
             <Image src={"/gamify.png"} width={92} height={32} className="h-auto object-contain" alt="Gamify" />
 <div className="flex items-center gap-2">
-            <Image src={"/responsible-bet.png"} width={40} height={40} className="h-auto object-contain" alt="Responsible Bet" />
   <Image src={"/18plus.png"} width={45} height={45} className="h-auto object-contain" alt="18+ Warning" />
 </div>
           </div>
