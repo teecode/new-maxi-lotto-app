@@ -80,10 +80,10 @@ const Navbar = () => {
     <header className="absolute w-full">
 
       <nav
-        className="h-[70px] relative w-full px-6 md:px-16 lg:px-24 xl:px-32 flex items-center justify-between z-20  text-gray-700 shadow-[0px_4px_25px_0px_#0000000D] transition-all">
+        className="h-[70px] relative w-full px-4 md:px-8 lg:px-16 flex items-center justify-between z-20  text-gray-700 shadow-[0px_4px_25px_0px_#0000000D] transition-all">
         <div className="flex items-center space-x-3">
           {/* Hamburger Icon (Mobile) */}
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <MobileNav navGroups={navGroups}/>
           </div>
           <Link to="/" className="flex items-center gap-1.5 sm:gap-2 group">
@@ -100,7 +100,7 @@ const Navbar = () => {
           </Link>
         </div>
 
-        <ul className="hidden md:flex items-center gap-1">
+        <ul className="hidden lg:flex items-center gap-1">
           {navGroups.map((group) =>
             group.single ? (
               <li key={group.title}>

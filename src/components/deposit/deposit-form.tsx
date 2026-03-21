@@ -21,13 +21,11 @@ import type { DepositResponse } from '@/types/api';
 import { Spinner } from '@/components/ui/spinner';
 import type { User } from '@/types/user';
 import { ConfirmationModal } from './deposit-confirmation';
-import { SarePayCheckoutModal } from './sarepay-checkout-modal';
 import { useNavigate } from '@tanstack/react-router';
 
 // Config arrays
 const paymentMethods = [
   { id: 'cards-paystack', label: 'Paystack Card' },
-  { id: 'cards-sarepay', label: 'SarePay Card' },
   { id: 'transfer', label: 'Transfer' },
   { id: 'ussd', label: 'USSD' },
 ];
@@ -62,7 +60,6 @@ export const DepositForm = ({ user }: DepositFormProps) => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
-  const [sarePayOpen, setSarePayOpen] = useState<boolean>(false);
   const [depositData, setDepositData] = useState<DepositResponse | null>(null);
 
   const navigate = useNavigate();
@@ -86,9 +83,7 @@ export const DepositForm = ({ user }: DepositFormProps) => {
       setLoading(true);
       const { amount, selectedOption, channel } = values;
 
-      if (selectedOption === 'cards-sarepay') {
-        setSarePayOpen(true);
-      } else if (selectedOption === 'transfer') {
+      if (selectedOption === 'transfer') {
         navigate({
           to: '/deposit/sarepay-transfer',
           search: {
@@ -234,11 +229,6 @@ export const DepositForm = ({ user }: DepositFormProps) => {
         {/* Confirmation Modal */}
         {depositData && (
           <ConfirmationModal open={open} handleFormReset={handleFormReset} setOpen={setOpen} user={user} data={depositData} />
-        )}
-
-        {/* SarePay Modal */}
-        {sarePayOpen && (
-          <SarePayCheckoutModal open={sarePayOpen} setOpen={setSarePayOpen} handleFormReset={handleFormReset} user={user} amount={form.getValues().amount} />
         )}
       </form>
     </Form>

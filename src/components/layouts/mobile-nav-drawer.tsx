@@ -32,7 +32,7 @@ const MobileNav = ({navGroups}: MobileNavProps) => {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="md:hidden">
+        <Button variant="ghost" size="icon" className="lg:hidden">
           <Menu className="!size-9 text-tertiary-900"/>
           <span className="sr-only">Toggle navigation menu</span>
         </Button>
