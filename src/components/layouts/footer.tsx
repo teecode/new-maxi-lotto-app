@@ -131,6 +131,9 @@ const Footer = () => {
             © {new Date().getFullYear()}{' '}
             <Link to="/" className="hover:underline ml-1">MaxiLotto</Link>. All Rights Reserved.
           </span>
+          <div className="mt-2 text-[10px] sm:text-xs flex justify-center text-muted-foreground/60 text-center uppercase tracking-widest">
+            Powered by <a href="http://www.gamifylabs.ng" target="_blank" rel="noreferrer" className="hover:text-[#0185B6] ml-1 font-bold transition-colors">GamifyLabs</a>
+          </div>
         </div>
       </div>
     </footer>
