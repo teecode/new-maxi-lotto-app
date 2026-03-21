@@ -108,7 +108,7 @@ export const updateBankDetails = async (
 	bank: number
 ): Promise<User> => {
 	try {
-		const response = await apiClient.put<User>('User/update-bank-details', {
+		const response = await apiClient.post<User>('User/update-bank-details', {
 			id,
 			accountName,
 			accountNumber,
