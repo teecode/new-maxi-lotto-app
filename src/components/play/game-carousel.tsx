@@ -23,7 +23,11 @@ const GameCarousel: React.FC<PropType> = (props) => {
   const { games, options, handleSelectedGame } = props
   const {selectedGame} = useBetStore()
 
-  const [emblaRef, emblaApi] = useEmblaCarousel(options, [
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    watchDrag: true,
+    dragFree: true,
+    ...options
+  }, [
     AutoScroll({ playOnInit: false }), Autoplay({ playOnInit: true, delay: 4000 })
   ])
 
