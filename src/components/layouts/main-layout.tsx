@@ -2,6 +2,7 @@ import { Outlet } from '@tanstack/react-router'
 import Navbar from './navbar'
 import Footer from './footer'
 import PageLoader from "@/components/page-loader.tsx";
+import WhatsAppButton from "@/components/whatsapp-button";
 
 const MainLayout = () => {
   return (
@@ -11,6 +12,7 @@ const MainLayout = () => {
         <PageLoader />
         <Outlet /> {/* Child routes render here */}
       </main>
+      <WhatsAppButton />
       <Footer />
     </div>
   )
