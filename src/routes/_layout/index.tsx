@@ -11,7 +11,7 @@ import type {EmblaOptionsType} from "embla-carousel";
 import {ChevronRight, Gamepad2, Star, Trophy, UserPlus, Wallet} from "lucide-react";
 import {Image} from "@unpic/react"
 import {getRankColor} from "@/lib/ranks"
-import {motion} from "framer-motion";
+import HeroCarousel from "@/components/hero-carousel";
 
 export const Route = createFileRoute('/_layout/')({
   component: App,
@@ -23,6 +23,7 @@ interface WhyChooseUsItem {
   description: string,
   icon: typeof Gamepad2,
   gradient: string,
+  href: string,
 }
 
 const whyChooseUs: WhyChooseUsItem[] = [
@@ -32,6 +33,7 @@ const whyChooseUs: WhyChooseUsItem[] = [
     description: "Learn the rules and start winning in minutes",
     icon: Gamepad2,
     gradient: "from-violet-500 to-purple-600",
+    href: "/how-to-play",
   },
   {
     id: 2,
@@ -39,6 +41,7 @@ const whyChooseUs: WhyChooseUsItem[] = [
     description: "Create your account and join thousands of winners",
     icon: UserPlus,
     gradient: "from-teal-500 to-cyan-600",
+    href: "/auth/signup",
   },
   {
     id: 3,
@@ -46,6 +49,7 @@ const whyChooseUs: WhyChooseUsItem[] = [
     description: "Multiple secure payment options available instantly",
     icon: Wallet,
     gradient: "from-amber-500 to-orange-600",
+    href: "/wallet",
   },
   {
     id: 4,
@@ -53,6 +57,7 @@ const whyChooseUs: WhyChooseUsItem[] = [
     description: "View your results and claim your prizes anytime",
     icon: Trophy,
     gradient: "from-rose-500 to-pink-600",
+    href: "/results",
   }
 ];
 
@@ -75,44 +80,8 @@ function App() {
 
   return (
     <>
-      {/* === Hero Section === */}
-      <section
-        className="relative flex min-h-screen items-center bg-[url('/new-bg.jpg')] bg-cover bg-center py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0f172a]/80 via-[#0f172a]/60 to-transparent"/>
-
-        <div className="container relative z-10">
-          <div className="flex flex-col gap-4 sm:gap-6 max-w-3xl">
-            <motion.h1
-              className="text-4xl sm:text-[4.2rem] font-semibold text-background tracking-[-1.92px] decoration-skip-ink"
-              initial={{opacity: 0, y: -30}}
-              animate={{opacity: 1, y: 0}}
-              transition={{duration: 1, ease: "easeInOut"}}
-            > Big Wins Start with
-              <br/>
-              <span className="bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">One Game</span>
-            </motion.h1>
-
-            <motion.p
-              className="text-xl text-background font-medium leading-relaxed max-w-lg"
-              initial={{opacity: 0, y: 20}}
-              animate={{opacity: 1, y: 0}}
-              transition={{duration: 1, ease: "easeInOut", delay: 0.3}}
-            >
-              Play your favorite lottery games and win big prizes every day.
-            </motion.p>
-            <Button
-              asChild
-              className="w-fit px-8 h-12 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold text-base rounded-3xl shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 hover:scale-[1.01] active:scale-[0.99] transition-all duration-300"
-              size={"lg"}
-            >
-              <Link to="/play" className="text-background">
-                Play Now
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
+      {/* === Hero Carousel Section === */}
+      <HeroCarousel />
       {/*=== Games Marquee === */}
       <section
         className="py-10 border-y border-white/5 relative shadow-[0_0_50px_rgba(0,0,0,0.5)] z-20 bg-gradient-to-r from-[#0f172a] via-[#0f2d37] to-[#0f172a]">
@@ -195,7 +164,7 @@ function App() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {whyChooseUs.map(({id, title, description, icon: Icon, gradient}) => (
+            {whyChooseUs.map(({id, title, description, icon: Icon, gradient, href}) => (
               <div
                 key={id}
                 className="group relative bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 hover:bg-white/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/10"
@@ -218,7 +187,7 @@ function App() {
 
                 <Button asChild size="sm"
                         className="bg-white/20 hover:bg-white/30 text-white rounded-full px-5 text-xs font-semibold backdrop-blur-sm border border-white/20 transition-all duration-300">
-                  <Link to="/play">Get Started</Link>
+                  <Link to={href as any}>Get Started</Link>
                 </Button>
               </div>
             ))}

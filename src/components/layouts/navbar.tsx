@@ -48,7 +48,8 @@ const navGroups: Array<navGroupProps> = [
     title: "Support",
     single: false,
     children: [
-      {title: "FAQ", url: "/faq"},
+      {title: "Maxi Ask", url: "/faq"},
+      {title: "Maxi Drive", url: "/how-to-play"},
       {title: "Contact Us", url: "/contact"},
     ],
   },
