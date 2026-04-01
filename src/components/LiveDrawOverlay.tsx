@@ -4,7 +4,8 @@ import { io, Socket } from 'socket.io-client';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Info } from 'lucide-react';
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:4000';
+// Use the current origin for the socket (proxied through IIS) to avoid Mixed Content errors.
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || window.location.origin;
 
 interface DrawReadyData {
     gameName: string;
