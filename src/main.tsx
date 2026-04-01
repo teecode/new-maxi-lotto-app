@@ -12,7 +12,6 @@ import { ThemeProvider } from './components/theme-provider.tsx'
 import { Provider } from './utils/Provider.tsx'
 import { Toaster } from './components/ui/sonner.tsx'
 import useAuthStore from './store/authStore.ts'
-import { LiveDrawOverlay } from './components/LiveDrawOverlay.tsx'
 
 // Create a new router instance
 const router = createRouter({
@@ -35,12 +34,7 @@ declare module '@tanstack/react-router' {
 
 function InnerApp() {
   const auth = useAuthStore()
-  return (
-    <>
-      <RouterProvider router={router} context={{ auth }} />
-      <LiveDrawOverlay />
-    </>
-  )
+  return <RouterProvider router={router} context={{ auth }} />
 }
 
 // Render the app
