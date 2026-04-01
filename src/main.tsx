@@ -35,7 +35,12 @@ declare module '@tanstack/react-router' {
 
 function InnerApp() {
   const auth = useAuthStore()
-  return <RouterProvider router={router} context={{ auth }} />
+  return (
+    <>
+      <RouterProvider router={router} context={{ auth }} />
+      <LiveDrawOverlay />
+    </>
+  )
 }
 
 // Render the app
@@ -47,7 +52,6 @@ if (rootElement && !rootElement.innerHTML) {
       <Provider>
         <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
           <InnerApp />
-          <LiveDrawOverlay />
           <Toaster richColors position='top-right' />
         </ThemeProvider>
       </Provider>

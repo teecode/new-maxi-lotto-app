@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Info } from 'lucide-react';
+import { useLocation } from '@tanstack/react-router';
 
 // Use the current origin for the socket (proxied through IIS) to avoid Mixed Content errors.
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || window.location.origin;
@@ -14,11 +15,17 @@ interface DrawReadyData {
 }
 
 export const LiveDrawOverlay: React.FC = () => {
+    const location = useLocation();
     const [drawData, setDrawData] = useState<DrawReadyData | null>(null);
     const [countdown, setCountdown] = useState<number | null>(null);
     const [showVideo, setShowVideo] = useState(false);
     const socketRef = useRef<Socket | null>(null);
     const timerRef = useRef<any | null>(null);
+
+    // Only show the overlay on the homepage
+    if (location.pathname !== '/') {
+        return null;
+    }
 
     useEffect(() => {
         // Initialize socket connection with reconnection limits
@@ -162,16 +169,19 @@ export const LiveDrawOverlay: React.FC = () => {
                         <motion.div
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
-                            className="w-full aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/10"
+                            className="relative w-full aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl ring-1 ring-white/10"
                         >
                             <video
                                 src={drawData.videoUrl}
                                 autoPlay
-                                controls
-                                className="w-full h-full object-contain"
+                                muted
+                                playsInline
+                                className="w-full h-full object-cover pointer-events-none"
                                 onEnded={handleClose}
                                 onError={handleClose}
                             />
+                            
+                            <div className="absolute inset-0 pointer-events-none" />
                             
                             <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center text-white/50 text-xs px-4 pointer-events-none">
                                 <span>Record Date: {new Date(drawData.timestamp).toLocaleString()}</span>
