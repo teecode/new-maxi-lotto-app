@@ -234,3 +234,15 @@ export const fetchGameResultByDailyGameId = async (id: number): Promise<GameResu
 		throw new Error('Network error, please try again.');
 	}
 };
+
+export const fetchDailyStakeSum = async (): Promise<{ sum: number }> => {
+	try {
+		const response = await apiClient.get<{ sum: number }>(
+			'Ticket/daily-stake-sum'
+		);
+		return response.data;
+	} catch (error: any) {
+		console.error('Failed to fetch daily stake sum', error);
+		return { sum: 0 };
+	}
+};
