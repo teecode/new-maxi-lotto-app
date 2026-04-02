@@ -105,6 +105,17 @@ export const usePlaceBet = ({
       if (response) {
         await queryClient.invalidateQueries({ queryKey: ['userProfile'] });
         toast.success("Bet placed successfully!")
+
+        const dateKey = `dailyStake_${new Date().toISOString().split('T')[0]}`
+        const localStake = Number(localStorage.getItem(dateKey)) || 0
+        const ticketTotal = betsList.reduce((sum, bet) => sum + bet.stake, 0)
+        const newTotal = localStake + ticketTotal
+        localStorage.setItem(dateKey, String(newTotal))
+
+        if (ticketType === 2 && newTotal >= 100000) {
+          toast.info(`Friendly Reminder: You have staked a total of ₦${newTotal.toLocaleString()} today. Please gamble safely.`, { duration: 5000 });
+        }
+
         resetAllGames()
         await syncUser()
       }

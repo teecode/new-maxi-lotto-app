@@ -190,14 +190,25 @@ const BetSlip = ({
 
     if (betLists.length === 0) {
       try {
+        const dateKey = `dailyStake_${new Date().toISOString().split('T')[0]}`
+        const localStake = Number(localStorage.getItem(dateKey)) || 0
+
         const result = await fetchDailyStakeSum();
-        if (result && result.sum >= 100000) {
-          toast.info(`Friendly Reminder: You have staked a total of ₦${result.sum.toLocaleString()} today. Please gamble safely.`, { duration: 5000 });
+        
+        let currentStake = localStake
+        if (result && result.sum > localStake) {
+          localStorage.setItem(dateKey, String(result.sum))
+          currentStake = result.sum
+        }
+
+        if (currentStake >= 100000) {
+          toast.info(`Friendly Reminder: You have staked a total of ₦${currentStake.toLocaleString()} today. Please gamble safely.`, { duration: 5000 });
         }
       } catch (e) {
         // ignore
       }
     }
+
 
     // Scroll to games list after adding
     setTimeout(() => {
