@@ -22,10 +22,6 @@ export const LiveDrawOverlay: React.FC = () => {
     const socketRef = useRef<Socket | null>(null);
     const timerRef = useRef<any | null>(null);
 
-    // Only show the overlay on the homepage
-    if (location.pathname !== '/') {
-        return null;
-    }
 
     useEffect(() => {
         // Initialize socket connection with reconnection limits
@@ -98,6 +94,11 @@ export const LiveDrawOverlay: React.FC = () => {
             clearTimeout(timerRef.current);
         }
     };
+
+    // Only show the overlay on the homepage
+    if (location.pathname !== '/') {
+        return null;
+    }
 
     if (!drawData) return null;
 
