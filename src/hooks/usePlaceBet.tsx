@@ -108,7 +108,13 @@ export const usePlaceBet = ({
 
         const dateKey = `dailyStake_${new Date().toISOString().split('T')[0]}`
         const localStake = Number(localStorage.getItem(dateKey)) || 0
-        const ticketTotal = betsList.reduce((sum, bet) => sum + bet.stake, 0)
+        
+        // For accumulators (ticketType === 2), the total stake is just the stake of the first leg
+        // since it represents one single combined bet. For regular bets, it's the sum of all bets.
+        const ticketTotal = ticketType === 2 
+          ? (betsList[0]?.stake || 0) 
+          : betsList.reduce((sum, bet) => sum + bet.stake, 0)
+          
         const newTotal = localStake + ticketTotal
         localStorage.setItem(dateKey, String(newTotal))
 
