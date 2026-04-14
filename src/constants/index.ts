@@ -2,6 +2,7 @@ import {
 	ArrowRightLeft,
 	Circle,
 	CreditCard,
+	Gift,
 	Handshake,
 	LockIcon,
 	Ticket,
@@ -85,6 +86,11 @@ export const ProfileSettingsTwo = [
 		label: 'Change Password',
 		route: '/settings/change-password',
 		icon: LockIcon,
+	},
+	{
+		label: 'Referral Program',
+		route: '/settings/referral',
+		icon: Gift,
 	},
 ];
 

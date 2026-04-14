@@ -228,3 +228,23 @@ export const fetchRanks = async (): Promise<Rank[]> => {
 		throw new Error('Network error, please try again.');
 	}
 };
+
+/**
+ * Request a referral code for the currently authenticated user.
+ * The request will be reviewed by an admin before the referral is activated.
+ */
+export const requestReferral = async (): Promise<any> => {
+	try {
+		const response = await apiClient.post('referral/referrer/request');
+		return response.data;
+	} catch (error: any) {
+		if (error.response && error.response.data) {
+			throw new Error(
+				typeof error.response.data === 'string'
+					? error.response.data
+					: error.response.data.message || 'Failed to request referral.'
+			);
+		}
+		throw new Error('Network error, please try again.');
+	}
+};

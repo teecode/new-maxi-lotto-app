@@ -22,4 +22,5 @@ export const PROTECTED_SUB_ROUTES = [
 	'/settings/change-password,',
 	'/settings/profile',
 	'/settings/email',
+	'/settings/referral',
 ];
