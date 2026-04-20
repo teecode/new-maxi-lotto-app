@@ -2,7 +2,7 @@ import { useUserProfile } from '@/hooks/useUserProfile'
 import { createFileRoute } from '@tanstack/react-router'
 import DataLoader from "@/components/data-loader.tsx"
 import PageHeader from "@/components/layouts/page-header.tsx"
-import { ReferralPanel } from '@/components/settings/referral-panel'
+import { ReferralPanel } from "@/components/settings/referral-panel"
 
 export const Route = createFileRoute('/_authenticated/settings/referral')({
   component: RouteComponent,
