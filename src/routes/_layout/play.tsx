@@ -224,7 +224,14 @@ function RouteComponent() {
   }
 
   // Handle place bet
-  const {handlePlaceBet, loading} = usePlaceBet({
+  const {
+    handlePlaceBet,
+    loading,
+    handleBookBet,
+    bookingLoading,
+    bookedTicketId,
+    setBookedTicketId
+  } = usePlaceBet({
     user,
     betsList,
     selectedGame: selectedGame,
@@ -687,14 +694,24 @@ function RouteComponent() {
                             </span>
                             </div>
                           </div>
-                          <Button
-                            type="button"
-                            onClick={handlePlaceBet}
-                            disabled={loading}
-                            className="w-full bg-gradient-to-r from-[#0185B6] to-[#01B1A8] text-[#FFF100] rounded-xl py-5 text-base font-bold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] disabled:opacity-50"
-                          >
-                            {loading ? 'Placing Bet...' : 'Place Bet'}
-                          </Button>
+                          <div className="flex flex-col gap-2">
+                            <Button
+                              type="button"
+                              onClick={handlePlaceBet}
+                              disabled={loading || bookingLoading}
+                              className="w-full bg-gradient-to-r from-[#0185B6] to-[#01B1A8] text-[#FFF100] rounded-xl py-5 text-base font-bold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] disabled:opacity-50"
+                            >
+                              {loading ? 'Placing Bet...' : 'Place Bet'}
+                            </Button>
+                            <Button
+                              type="button"
+                              onClick={handleBookBet}
+                              disabled={loading || bookingLoading}
+                              className="w-full bg-[#FFF100] text-[#0A4B7F] hover:bg-[#FFE600] rounded-xl py-5 text-base font-bold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] disabled:opacity-50"
+                            >
+                              {bookingLoading ? 'Booking...' : 'BOOK A BET'}
+                            </Button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -715,6 +732,35 @@ function RouteComponent() {
               againstBalls={againstBalls}
               normalBalls={selectedBalls}
             />
+          )}
+
+          {bookedTicketId && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+              <div className="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl border border-gray-100 text-center animate-in zoom-in-95 duration-200">
+                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <span className="text-4xl">🎟️</span>
+                </div>
+                <h3 className="text-2xl font-bold text-[#0A4B7F] mb-2">Ticket Booked Successfully!</h3>
+                <p className="text-gray-600 mb-6 text-sm">
+                  Your booking ID is:
+                </p>
+                <div className="bg-gradient-to-r from-[#0185B6]/10 to-[#01B1A8]/10 border-2 border-dashed border-[#0185B6] rounded-2xl p-4 mb-6">
+                  <span className="text-3xl font-extrabold tracking-widest text-[#0A4B7F] select-all">
+                    {bookedTicketId}
+                  </span>
+                </div>
+                <p className="text-gray-700 font-medium mb-8 text-sm leading-relaxed">
+                  Proceed to any <strong>MaxiLotto Shop</strong> near you to place your bet.
+                </p>
+                <Button
+                  type="button"
+                  onClick={() => setBookedTicketId(null)}
+                  className="w-full bg-gradient-to-r from-[#0185B6] to-[#01B1A8] text-white rounded-xl py-4 font-bold hover:opacity-90 shadow-md transition-all"
+                >
+                  Done
+                </Button>
+              </div>
+            </div>
           )}
         </div>
       </section>

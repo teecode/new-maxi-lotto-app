@@ -97,6 +97,33 @@ export const placeBet = async (
 	}
 };
 
+export const bookBet = async (
+	payload: {
+		customerID: number;
+		dailyGameId: number;
+        ticketType?: number;
+	},
+	betSlips: any
+) => {
+	try {
+		const response = await apiClient.post<{ ticketId: number }>('Ticket/BookTicket', {
+			...payload,
+			betslips: betSlips,
+			requestId: generateUUID(),
+			regMethod: 1,
+			vouchersEarnedId: 0,
+		});
+		return response.data;
+	} catch (error: any) {
+		if (error.response) {
+			throw new Error(
+				error.response.data || 'Failed to book bet. Please try again.'
+			);
+		}
+		throw new Error('Network error, please try again.');
+	}
+};
+
 export const fetchGameTicketById = async (id: number): Promise<GameTicket> => {
 	try {
 		// v1 / dailygame / get;

@@ -168,7 +168,14 @@ function AccumulatorPage() {
     }))
   }, [accumulatorLegs, stakeAmount])
 
-  const {handlePlaceBet, loading} = usePlaceBet({
+  const {
+    handlePlaceBet,
+    loading,
+    handleBookBet,
+    bookingLoading,
+    bookedTicketId,
+    setBookedTicketId
+  } = usePlaceBet({
     user,
     betsList: formattedBetsList,
     selectedGame: selectedGame,
@@ -392,20 +399,38 @@ function AccumulatorPage() {
                       </p>
                     )}
 
-                    <Button
-                      className="w-full bg-[#0A4B7F] hover:bg-[#093e6b] text-white py-6 text-lg rounded-xl shadow-lg shadow-[#0A4B7F]/20"
-                      disabled={
-                        accumulatorLegs.length < 2 ||
-                        !selectedGame ||
-                        loading ||
-                        stakeAmount < MIN_STAKE ||
-                        stakeAmount > MAX_STAKE ||
-                        potentialWin > MAX_POTENTIAL_WIN
-                      }
-                      onClick={handlePlaceBet}
-                    >
-                      {loading ? "Processing..." : "Place Bet"}
-                    </Button>
+                    <div className="flex flex-col gap-2">
+                      <Button
+                        className="w-full bg-[#0A4B7F] hover:bg-[#093e6b] text-white py-6 text-lg rounded-xl shadow-lg shadow-[#0A4B7F]/20"
+                        disabled={
+                          accumulatorLegs.length < 2 ||
+                          !selectedGame ||
+                          loading ||
+                          bookingLoading ||
+                          stakeAmount < MIN_STAKE ||
+                          stakeAmount > MAX_STAKE ||
+                          potentialWin > MAX_POTENTIAL_WIN
+                        }
+                        onClick={handlePlaceBet}
+                      >
+                        {loading ? "Processing..." : "PLACE BET"}
+                      </Button>
+                      <Button
+                        className="w-full bg-[#FFF100] hover:bg-[#FFE600] text-[#0A4B7F] py-6 text-lg rounded-xl shadow-lg font-bold"
+                        disabled={
+                          accumulatorLegs.length < 2 ||
+                          !selectedGame ||
+                          loading ||
+                          bookingLoading ||
+                          stakeAmount < MIN_STAKE ||
+                          stakeAmount > MAX_STAKE ||
+                          potentialWin > MAX_POTENTIAL_WIN
+                        }
+                        onClick={handleBookBet}
+                      >
+                        {bookingLoading ? "Booking..." : "BOOK A BET"}
+                      </Button>
+                    </div>
 
                     {accumulatorLegs.length === 1 && (
                       <p className="text-center text-xs text-red-500 bg-red-50 p-1 rounded">
@@ -418,6 +443,34 @@ function AccumulatorPage() {
             </div>
 
           </div>
+          {bookedTicketId && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+              <div className="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl border border-gray-100 text-center animate-in zoom-in-95 duration-200">
+                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <span className="text-4xl">🎟️</span>
+                </div>
+                <h3 className="text-2xl font-bold text-[#0A4B7F] mb-2">Ticket Booked Successfully!</h3>
+                <p className="text-gray-600 mb-6 text-sm">
+                  Your booking ID is:
+                </p>
+                <div className="bg-gradient-to-r from-[#0185B6]/10 to-[#01B1A8]/10 border-2 border-dashed border-[#0185B6] rounded-2xl p-4 mb-6">
+                  <span className="text-3xl font-extrabold tracking-widest text-[#0A4B7F] select-all">
+                    {bookedTicketId}
+                  </span>
+                </div>
+                <p className="text-gray-700 font-medium mb-8 text-sm leading-relaxed">
+                  Proceed to any <strong>MaxiLotto Shop</strong> near you to place your bet.
+                </p>
+                <Button
+                  type="button"
+                  onClick={() => setBookedTicketId(null)}
+                  className="w-full bg-gradient-to-r from-[#0185B6] to-[#01B1A8] text-white rounded-xl py-4 font-bold hover:opacity-90 shadow-md transition-all"
+                >
+                  Done
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </section>
     </>

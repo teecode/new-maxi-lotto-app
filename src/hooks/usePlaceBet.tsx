@@ -1,5 +1,5 @@
 import { toast } from "sonner"
-import { placeBet } from "@/services/GameService"
+import { placeBet, bookBet } from "@/services/GameService"
 import { useState } from "react"
 import type { MinimalUser } from "@/types/user"
 import type { BetList } from "@/types/game"
@@ -24,6 +24,8 @@ export const usePlaceBet = ({
 }: PlaceBetProps) => {
 
   const [loading, setLoading] = useState(false)
+  const [bookingLoading, setBookingLoading] = useState(false)
+  const [bookedTicketId, setBookedTicketId] = useState<number | null>(null)
 
   const queryClient = useQueryClient();
 
@@ -133,5 +135,68 @@ export const usePlaceBet = ({
     }
   }
 
-  return { handlePlaceBet, loading }
+  const handleBookBet = async () => {
+    if (!betsList.length) {
+      toast.error("No game played")
+      return
+    }
+
+    if (!user) {
+      toast.error("You need to login before placing a bet")
+      return
+    }
+
+    try {
+      setBookingLoading(true)
+
+      const payload = {
+        customerID: user.customerId || 0,
+        dailyGameId: selectedGame?.gameID || 0,
+        ticketType: ticketType
+      }
+
+      const betSlips = betsList.map((value) => {
+        const code = value.betType.code.toUpperCase()
+
+        let bet1: number[] = []
+        let bet2: number[] = []
+        let numOfLines: number = value.numberOfLines
+
+        if (code.includes("BANKER")) {
+          bet1 = value.bankerBalls
+          bet2 = [1, 90]
+          numOfLines = 89
+        } else if (code.includes("AGAINST")) {
+          bet1 = value.selectedBalls
+          bet2 = value.againstBalls
+        } else {
+          bet1 = value.selectedBalls
+          bet2 = [0]
+        }
+
+        return {
+          bet1: bet1,
+          bet2: bet2,
+          betTypeId: value.betType.betTypeID,
+          stakeperline: value.amount,
+          lines: numOfLines,
+        }
+      })
+
+      const response = await bookBet(payload, betSlips)
+
+      if (response && response.ticketId) {
+        setBookedTicketId(response.ticketId)
+        toast.success(`Ticket Booked Successfully! ID: ${response.ticketId}`)
+        resetAllGames()
+        await syncUser()
+      }
+    } catch (error: any) {
+      toast.error(error.message || "An error occurred while booking your bet")
+    } finally {
+      setBookingLoading(false)
+    }
+  }
+
+  return { handlePlaceBet, loading, handleBookBet, bookingLoading, bookedTicketId, setBookedTicketId }
 }
