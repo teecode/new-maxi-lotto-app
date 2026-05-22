@@ -709,7 +709,7 @@ function RouteComponent() {
                               disabled={loading || bookingLoading}
                               className="w-full bg-[#FFF100] text-[#0A4B7F] hover:bg-[#FFE600] rounded-xl py-5 text-base font-bold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] disabled:opacity-50"
                             >
-                              {bookingLoading ? 'Booking...' : 'BOOK A BET'}
+                              {bookingLoading ? 'Booking...' : 'Book A Bet'}
                             </Button>
                           </div>
                         </div>

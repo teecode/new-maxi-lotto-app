@@ -428,7 +428,7 @@ function AccumulatorPage() {
                         }
                         onClick={handleBookBet}
                       >
-                        {bookingLoading ? "Booking..." : "BOOK A BET"}
+                        {bookingLoading ? "Booking..." : "Book A Bet"}
                       </Button>
                     </div>
 

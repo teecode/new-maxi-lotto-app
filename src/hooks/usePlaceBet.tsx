@@ -141,16 +141,11 @@ export const usePlaceBet = ({
       return
     }
 
-    if (!user) {
-      toast.error("You need to login before placing a bet")
-      return
-    }
-
     try {
       setBookingLoading(true)
 
       const payload = {
-        customerID: user.customerId || 0,
+        customerID: user?.customerId || 0,
         dailyGameId: selectedGame?.gameID || 0,
         ticketType: ticketType
       }
@@ -189,7 +184,9 @@ export const usePlaceBet = ({
         setBookedTicketId(response.ticketId)
         toast.success(`Ticket Booked Successfully! ID: ${response.ticketId}`)
         resetAllGames()
-        await syncUser()
+        if (user) {
+          await syncUser()
+        }
       }
     } catch (error: any) {
       toast.error(error.message || "An error occurred while booking your bet")
