@@ -12,6 +12,7 @@ import {ChevronRight, Gamepad2, Star, Trophy, UserPlus, Wallet} from "lucide-rea
 import {Image} from "@unpic/react"
 import {getRankColor} from "@/lib/ranks"
 import HeroCarousel from "@/components/hero-carousel";
+import ReferralPromoCarousel from "@/components/referral-promo-carousel";
 
 export const Route = createFileRoute('/_layout/')({
   component: App,
@@ -147,6 +148,9 @@ function App() {
         </div>
 
       </section>
+
+      {/* === Referral Promo Carousel === */}
+      <ReferralPromoCarousel />
 
       {/* === Why Choose Us === */}
       <section
