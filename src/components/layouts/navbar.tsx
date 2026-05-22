@@ -15,7 +15,7 @@ import {logout} from '@/services/AuthService'
 import useAuthStore from '@/store/authStore'
 import {Link} from '@tanstack/react-router';
 import {Image} from '@unpic/react';
-import {ChevronDown, Lock, LogOut, User} from 'lucide-react'
+import {ChevronDown, Lock, LogOut, User, Users} from 'lucide-react'
 import {useEffect} from 'react'
 import MobileNav from './mobile-nav-drawer';
 import type {navGroupProps} from "@/types";
@@ -172,6 +172,13 @@ const Navbar = () => {
                       <Link to="/profile">
                         <User/>
                         <span>Profile</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator/>
+                    <DropdownMenuItem asChild>
+                      <Link to="/referrals">
+                        <Users/>
+                        <span>Referrals</span>
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator/>
