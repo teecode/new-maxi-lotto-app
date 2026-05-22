@@ -60,11 +60,13 @@ export const fetchReferees = async (page = 1, pageSize = 10): Promise<PaginatedR
 
 export const fetchReferralTransactions = async (
   fromDate?: string,
-  toDate?: string
+  toDate?: string,
+  page = 1,
+  pageSize = 10
 ): Promise<PaginatedReferralTransactions> => {
   try {
     const response = await apiClient.get<PaginatedReferralTransactions>('referral/Transactions', {
-      params: { FromDate: fromDate, ToDate: toDate },
+      params: { FromDate: fromDate, ToDate: toDate, page, pageSize },
     });
     return response.data;
   } catch (error: any) {
@@ -72,5 +74,23 @@ export const fetchReferralTransactions = async (
       throw new Error(error.response.data.error || 'Failed to fetch referral transactions.');
     }
     throw new Error('Network error, please try again.');
+  }
+};
+
+export const fetchTotalReferralEarnings = async (): Promise<number> => {
+  try {
+    const response = await apiClient.get<number>('referral/earnings/total');
+    return response.data;
+  } catch (error: any) {
+    throw new Error('Failed to fetch total earnings.');
+  }
+};
+
+export const fetchMyReferralPlan = async (): Promise<any> => {
+  try {
+    const response = await apiClient.get<any>('referral/myplan');
+    return response.data; // this might return '' if 204 NoContent
+  } catch (error: any) {
+    throw new Error('Failed to fetch referral plan.');
   }
 };

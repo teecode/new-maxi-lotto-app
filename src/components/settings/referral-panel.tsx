@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { CheckIcon, CopyIcon, Gift, Loader2, Share2, Users, LinkIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -79,6 +80,12 @@ export function ReferralPanel({ user, refetchUser }: ReferralPanelProps) {
       {hasReferral ? (
         /* ── Approved: show referral link ── */
         <div className="rounded-2xl border border-gray-100 bg-white shadow-sm p-6 space-y-5">
+          <div className="flex justify-end mb-2">
+            <Link to="/referrals" className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold rounded-xl transition-colors">
+              <Users className="size-4" />
+              View Network Dashboard
+            </Link>
+          </div>
           <div className="flex items-center gap-3">
             <div className="bg-green-100 text-green-600 rounded-xl p-2.5">
               <LinkIcon className="size-5" />

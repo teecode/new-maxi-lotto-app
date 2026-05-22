@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import PageHeader from '@/components/layouts/page-header';
-import { useGetReferees, useGetReferralTransactions } from '@/hooks/useReferrals';
+import { useGetReferees, useGetTotalReferralEarnings, useGetMyReferralPlan } from '@/hooks/useReferrals';
 import { useUserProfile } from '@/hooks/useUserProfile';
 import { formatCurrency } from '@/lib/utils';
 import { Spinner } from '@/components/ui/spinner';
@@ -9,6 +9,8 @@ import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
+
+import { Link } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_authenticated/referrals/')({
   component: ReferralsPage,
@@ -21,12 +23,11 @@ function ReferralsPage() {
   const [filter, setFilter] = useState<'ALL' | 'ACTIVE' | 'INACTIVE'>('ALL');
   
   const { data: refereesData, isLoading: isRefereesLoading } = useGetReferees(page, 50);
-  const { data: transactionsData, isLoading: isTransactionsLoading } = useGetReferralTransactions();
+  const { data: totalEarnings, isLoading: isEarningsLoading } = useGetTotalReferralEarnings();
+  const { data: myPlan } = useGetMyReferralPlan();
 
   const referees = refereesData?.data || [];
-  const transactions = transactionsData?.data || [];
   
-  const totalEarnings = transactions.reduce((sum, tx) => sum + tx.amount, 0);
   const activeReferees = referees.filter((r) => r.isActive).length;
 
   const filteredReferees = referees.filter((r) => {
@@ -61,22 +62,29 @@ function ReferralsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-slate-900 to-slate-800 p-8 shadow-xl shadow-slate-900/10"
+              className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-slate-900 to-slate-800 p-8 shadow-xl shadow-slate-900/10 group hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
             >
-              <div className="absolute top-0 right-0 p-6 opacity-10">
+              <Link to="/referrals/earnings" className="absolute inset-0 z-10" />
+              <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:scale-110 transition-transform duration-500">
                 <DollarSign className="w-24 h-24 text-white" />
               </div>
-              <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 mb-2">Total Earnings</p>
-              {isTransactionsLoading ? (
-                <Spinner className="text-white my-4" />
-              ) : (
-                <h3 className="text-4xl font-black text-white tabular-nums tracking-tighter">
-                  {formatCurrency(totalEarnings)}
-                </h3>
-              )}
-              <div className="mt-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold">
-                <Activity className="w-3 h-3" />
-                <span>Lifetime referral bonus</span>
+              <div className="relative z-20 pointer-events-none">
+                <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 mb-2">Total Earnings</p>
+                {isEarningsLoading ? (
+                  <Spinner className="text-white my-4" />
+                ) : (
+                  <h3 className="text-4xl font-black text-white tabular-nums tracking-tighter group-hover:text-emerald-400 transition-colors">
+                    {formatCurrency(totalEarnings || 0)}
+                  </h3>
+                )}
+                <div className="mt-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-xs font-bold">
+                  <Activity className="w-3 h-3" />
+                  <span>
+                    {myPlan?.expiryDurationMonths > 0 
+                      ? `Policy: ${myPlan.expiryDurationMonths} Months Expiry` 
+                      : 'Non-Expiry Policy'}
+                  </span>
+                </div>
               </div>
             </motion.div>
 
