@@ -17,7 +17,7 @@ export const Route = createFileRoute('/_authenticated/referrals/')({
 function ReferralsPage() {
   const { data: user, isFetching: isUserFetching } = useUserProfile();
   
-  const [page, setPage] = useState(1);
+  const [page] = useState(1);
   const [filter, setFilter] = useState<'ALL' | 'ACTIVE' | 'INACTIVE'>('ALL');
   
   const { data: refereesData, isLoading: isRefereesLoading } = useGetReferees(page, 50);
