@@ -62,10 +62,10 @@ export default function ReferralPromoCarousel() {
         </div>
 
         <div className="relative max-w-5xl mx-auto rounded-[2rem] overflow-hidden shadow-2xl shadow-slate-200/50" ref={emblaRef}>
-          <div className="flex">
+          <div className="flex items-stretch">
             {slides.map((slide) => (
               <div className="flex-[0_0_100%] min-w-0 relative" key={slide.id}>
-                <div className={`relative min-h-[380px] sm:h-[400px] h-auto py-10 sm:py-0 w-full bg-gradient-to-br ${slide.gradient} overflow-hidden flex items-center`}>
+                <div className={`relative min-h-[380px] sm:min-h-[400px] h-full py-10 sm:py-0 w-full bg-gradient-to-br ${slide.gradient} overflow-hidden flex items-center`}>
                   {/* Background overlay */}
                   <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay pointer-events-none"></div>
                   
