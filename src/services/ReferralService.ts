@@ -15,6 +15,7 @@ export interface Referee {
   commissionType: string;
   referredRank: string;
   totalWinningAmount: number;
+  totalPlayedAmount: number;
   winningCount: number;
 }
 
