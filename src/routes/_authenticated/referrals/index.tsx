@@ -165,7 +165,8 @@ function ReferralsPage() {
               </div>
             </div>
 
-            <div className="overflow-x-auto w-full">
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto w-full">
               <table className="w-full text-left text-sm whitespace-nowrap">
                 <thead className="bg-slate-50/50 text-slate-500 text-xs uppercase tracking-wider font-black">
                   <tr>
@@ -238,6 +239,70 @@ function ReferralsPage() {
                   )}
                 </tbody>
               </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="grid grid-cols-1 gap-4 p-4 md:hidden bg-slate-50/50">
+              {isRefereesLoading ? (
+                <div className="py-12 text-center">
+                  <Spinner className="mx-auto text-pink-500" />
+                  <p className="text-xs text-slate-500 font-bold mt-4 animate-pulse">Loading downlines...</p>
+                </div>
+              ) : filteredReferees.length === 0 ? (
+                <div className="py-16 text-center">
+                  <Users className="w-12 h-12 text-slate-200 mx-auto mb-3" />
+                  <p className="text-sm font-bold text-slate-600">No referrals found</p>
+                  <p className="text-xs text-slate-400 mt-1">Invite friends to build your network.</p>
+                </div>
+              ) : (
+                filteredReferees.map((referee, idx) => (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: idx * 0.05 }}
+                    key={`mobile-${referee.id}`} 
+                    className="bg-white rounded-xl border border-slate-100 shadow-sm p-5 hover:shadow-md transition-shadow"
+                  >
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-600 font-bold border border-slate-200 shrink-0">
+                          {referee.referredName?.[0]?.toUpperCase() || referee.referredUsername?.[0]?.toUpperCase() || '?'}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="font-bold text-slate-900 truncate">
+                            {referee.referredUsername}
+                          </p>
+                          <p className="text-xs text-slate-500 truncate">{referee.referredName}</p>
+                        </div>
+                      </div>
+                      <span className={cn("px-2.5 py-1 text-[10px] font-black uppercase tracking-wider rounded-full border shrink-0 ml-2", getRankColor(referee.referredRank))}>
+                        {referee.referredRank || 'Newbie'}
+                      </span>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-slate-100">
+                      <div>
+                        <p className="text-[10px] uppercase tracking-wider font-black text-slate-400 mb-1">Total Winnings</p>
+                        <p className="font-bold text-slate-700">{formatCurrency(referee.totalWinningAmount || 0)}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] uppercase tracking-wider font-black text-slate-400 mb-1">Date Joined</p>
+                        <p className="text-sm text-slate-500">{referee.date ? format(new Date(referee.date), 'MMM dd, yyyy') : 'N/A'}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between">
+                      <span className="text-[10px] uppercase tracking-wider font-black text-slate-400">Status</span>
+                      <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-100">
+                        <span className={cn("w-2 h-2 rounded-full", referee.isActive ? "bg-emerald-500" : "bg-slate-300")} />
+                        <span className="text-xs font-bold text-slate-700">
+                          {referee.isActive ? 'Active' : 'Inactive'}
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))
+              )}
             </div>
             
             {/* Pagination / Load More (Placeholder for presentation) */}
