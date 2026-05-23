@@ -57,4 +57,9 @@ export const FAQ_DATA: FaqItem[] = [
 		answer:
 			'Buy as many tickets as you like—just follow the rules of each game and play responsibly.',
 	},
+	{
+		question: 'How does the Ambassador (Referral) program work?',
+		answer:
+			'You can earn up to 20% commission by referring friends to MaxiLotto! Navigate to your Profile Settings, click on the Referral tab, and copy your unique link. When friends sign up using your link, they become your downline and you earn passive income on their activities. Terms and conditions apply.',
+	},
 ];

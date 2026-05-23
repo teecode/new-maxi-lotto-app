@@ -48,7 +48,7 @@ export default function ReferralPromoCarousel() {
       gradient: "from-amber-500 via-orange-500 to-rose-500",
       image: "/noise.png",
       action: "Learn More",
-      href: "/faq"
+      href: "/how-to-play#referrals"
     }
   ];
 
@@ -65,7 +65,7 @@ export default function ReferralPromoCarousel() {
           <div className="flex">
             {slides.map((slide) => (
               <div className="flex-[0_0_100%] min-w-0 relative" key={slide.id}>
-                <div className={`relative h-[320px] sm:h-[400px] w-full bg-gradient-to-br ${slide.gradient} overflow-hidden flex items-center`}>
+                <div className={`relative min-h-[380px] sm:h-[400px] h-auto py-10 sm:py-0 w-full bg-gradient-to-br ${slide.gradient} overflow-hidden flex items-center`}>
                   {/* Background overlay */}
                   <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay pointer-events-none"></div>
                   
@@ -90,7 +90,7 @@ export default function ReferralPromoCarousel() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: 0.1 }}
-                        className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-4"
+                        className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-4"
                       >
                         {slide.title}
                       </motion.h3>
@@ -100,7 +100,7 @@ export default function ReferralPromoCarousel() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: 0.2 }}
-                        className="text-base sm:text-lg text-white/90 leading-relaxed max-w-lg mx-auto md:mx-0 mb-8 font-medium"
+                        className="text-sm sm:text-lg text-white/90 leading-relaxed max-w-lg mx-auto md:mx-0 mb-8 font-medium"
                       >
                         {slide.description}
                       </motion.p>
@@ -111,7 +111,7 @@ export default function ReferralPromoCarousel() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: 0.3 }}
                       >
-                        <Button asChild size="lg" className="bg-white text-slate-900 hover:bg-slate-50 font-bold rounded-full px-8 py-6 text-base shadow-[0_0_40px_rgba(255,255,255,0.3)] hover:shadow-[0_0_60px_rgba(255,255,255,0.5)] transition-all duration-300 hover:-translate-y-1">
+                        <Button asChild size="lg" className="bg-white text-slate-900 hover:bg-slate-50 font-bold rounded-full px-6 sm:px-8 py-5 sm:py-6 text-sm sm:text-base shadow-[0_0_40px_rgba(255,255,255,0.3)] hover:shadow-[0_0_60px_rgba(255,255,255,0.5)] transition-all duration-300 hover:-translate-y-1">
                           <Link to={slide.href as any}>{slide.action}</Link>
                         </Button>
                       </motion.div>
