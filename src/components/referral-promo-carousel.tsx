@@ -2,7 +2,7 @@
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import { motion } from 'framer-motion';
-import { Gift, Users, Coins } from 'lucide-react';
+import { Gift, Users, Coins, Trophy } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import { Button } from './ui/button';
 
@@ -36,6 +36,16 @@ export default function ReferralPromoCarousel() {
       description: "Hit referral milestones and unlock exclusive bonus rewards, rank upgrades, and higher commission rates!",
       icon: Gift,
       gradient: "from-rose-500 via-pink-600 to-purple-600",
+      image: "/noise.png",
+      action: "Learn More",
+      href: "/faq"
+    },
+    {
+      id: 4,
+      title: "Become a Maxi Ambassador",
+      description: "Become a Maxi Ambassador and earn 20% commission on referrals. Terms and conditions apply.",
+      icon: Trophy,
+      gradient: "from-amber-500 via-orange-500 to-rose-500",
       image: "/noise.png",
       action: "Learn More",
       href: "/faq"
