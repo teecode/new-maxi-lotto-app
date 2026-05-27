@@ -24,6 +24,7 @@ export const fetchBetTypes = async (gameType?: number): Promise<BetType[]> => {
 	try {
         const url = gameType ? `v1/betType/byGameType/${gameType}` : 'v1/betType';
 		const response = await apiClient.get<BetType[]>(url);
+		if (response.status === 204 || !response.data) return [];
 		return response.data;
 	} catch (error: any) {
 		if (error.response && error.response.data) {
@@ -39,6 +40,7 @@ export const fetchDailyGames = async (): Promise<Game[]> => {
 	try {
 		// v1 / dailygame / get;
 		const response = await apiClient.get<Game[]>('v1/dailygame/get');
+		if (response.status === 204 || !response.data) return [];
 		return response.data;
 	} catch (error: any) {
 		if (error.response && error.response.data) {
@@ -58,6 +60,7 @@ export const fetchLatestDraw = async (): Promise<
 		const response = await apiClient.get<LatestDrawTicketResponse[]>(
 			'DailyGameResult/RecentGameResult/4'
 		);
+		if (response.status === 204 || !response.data) return [];
 		return response.data;
 	} catch (error: any) {
 		if (error.response && error.response.data) {
@@ -206,6 +209,7 @@ export const fetchLastFourWinner = async (): Promise<WinnerTicket[]> => {
 		const response = await apiClient.get<WinnerTicket[]>(
 			'/Ticket/LatestWon?count=4'
 		);
+		if (response.status === 204 || !response.data) return [];
 		return response.data;
 	} catch (error: any) {
 		if (error.response) {
