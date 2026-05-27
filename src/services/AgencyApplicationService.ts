@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "";
+import apiClient from '@/utils/apiClient';
 
 export interface AgencyApplicationRequest {
   // Section 1 – Personal Details
@@ -41,30 +41,22 @@ export interface UploadResult {
 /** Upload a file via the backend Cloudinary proxy and return the URL */
 export async function uploadFile(file: File): Promise<UploadResult> {
   const formData = new FormData();
-  formData.append("file", file);
-  const res = await fetch(`${API_BASE}api/v1/AgencyApplication/upload`, {
-    method: "POST",
-    body: formData,
+  formData.append('file', file);
+
+  // axios automatically sets Content-Type: multipart/form-data with the correct boundary
+  const res = await apiClient.post<UploadResult>('v1/AgencyApplication/upload', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
   });
-  if (!res.ok) {
-    const msg = await res.text();
-    throw new Error(msg || "File upload failed");
-  }
-  return res.json();
+  return res.data;
 }
 
 /** Submit the completed agency application */
 export async function submitAgencyApplication(
   payload: AgencyApplicationRequest
 ): Promise<{ id: number; referenceNumber: string }> {
-  const res = await fetch(`${API_BASE}api/v1/AgencyApplication/apply`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
-  if (!res.ok) {
-    const data = await res.json().catch(() => ({}));
-    throw new Error((data as any).message ?? "Submission failed. Please try again.");
-  }
-  return res.json();
+  const res = await apiClient.post<{ id: number; referenceNumber: string }>(
+    'v1/AgencyApplication/apply',
+    payload
+  );
+  return res.data;
 }
