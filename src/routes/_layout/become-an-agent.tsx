@@ -340,7 +340,7 @@ export default function BecomeAnAgent() {
   // ── Success screen
   if (success) {
     return (
-      <div className="dark min-h-screen bg-[#0f172a] flex items-center justify-center px-4 pt-24 pb-16">
+      <div className="dark text-foreground min-h-screen bg-[#0f172a] flex items-center justify-center px-4 pt-24 pb-16">
         <div className="bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl p-8 max-w-md w-full text-center space-y-6">
           <CheckCircle2 className="w-16 h-16 text-emerald-500 mx-auto" />
           <h2 className="text-2xl font-bold text-white">Application Submitted!</h2>
@@ -367,7 +367,7 @@ export default function BecomeAnAgent() {
   }
 
   return (
-    <div className="dark min-h-screen bg-[#0f172a] px-4 pt-24 pb-16">
+    <div className="dark text-foreground min-h-screen bg-[#0f172a] px-4 pt-24 pb-16">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8 space-y-2">
