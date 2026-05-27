@@ -123,8 +123,9 @@ const Footer = () => {
           <div className="flex mb-4 gap-4 justify-center sm:justify-center sm:mt-0">
             <Image src={"/payment-1.png"} width={118} height={21} className="h-auto object-contain" alt="Payment Method" />
             <Image src={"/gamify.png"} width={92} height={32} className="h-auto object-contain" alt="Gamify" />
-<div className="flex items-center gap-2">
-  <Image src={"/18plus.png"} width={45} height={45} className="h-auto object-contain" alt="18+ Warning" />
+            <div className="flex items-center gap-2">
+              <Image src={"/18plus.png"} width={45} height={45} className="h-auto object-contain" alt="18+ Warning" />
+            </div>
           </div>
           <span className="text-sm flex justify-center text-muted-foreground text-center dark:text-gray-400">
             © {new Date().getFullYear()}{' '}
