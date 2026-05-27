@@ -26,6 +26,9 @@ import {
   Loader2,
   AlertCircle,
 } from "lucide-react";
+import { useFetchBanks } from "@/hooks/useUserProfile";
+import { resolveAccountDetails } from "@/services/UserService";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_layout/become-an-agent")({
   component: BecomeAnAgent,
@@ -77,7 +80,9 @@ interface FormData {
   lga: string;
   preferredSalesTerritory: string;
   yearsOfExperience: string;
+  yearsOfExperience: string;
   // Step 4
+  bankId: number;
   bankName: string;
   accountName: string;
   accountNumber: string;
@@ -107,6 +112,8 @@ const initialForm: FormData = {
   lga: "",
   preferredSalesTerritory: "",
   yearsOfExperience: "",
+  yearsOfExperience: "",
+  bankId: 0,
   bankName: "",
   accountName: "",
   accountNumber: "",
@@ -195,6 +202,9 @@ export default function BecomeAnAgent() {
   const [submitError, setSubmitError] = useState("");
   const [success, setSuccess] = useState<{ id: number; referenceNumber: string } | null>(null);
 
+  const { data: banks, isFetching: isBanksFetching } = useFetchBanks();
+  const [validatingAccount, setValidatingAccount] = useState(false);
+
   const lgas = getLgasByStateCode(form.stateCode);
 
   const set = (key: keyof FormData, value: unknown) => {
@@ -224,6 +234,25 @@ export default function BecomeAnAgent() {
       setUploading((p) => ({ ...p, [fileKey]: false }));
     }
   }
+
+  const handleAccountNumberChange = async (value: string) => {
+    set("accountNumber", value);
+    if (value.length === 10 && form.bankId) {
+      try {
+        setValidatingAccount(true);
+        const { account_name } = await resolveAccountDetails(value, form.bankId);
+        set("accountName", account_name);
+        toast.success("Account verified successfully");
+      } catch (error: any) {
+        toast.error(error.message || "Account validation failed");
+        set("accountName", "");
+      } finally {
+        setValidatingAccount(false);
+      }
+    } else {
+      set("accountName", "");
+    }
+  };
 
   // ── Validation per step
   function validateStep(s: number): boolean {
@@ -395,7 +424,7 @@ export default function BecomeAnAgent() {
               </h2>
             </div>
 
-            <div className="p-6 space-y-5">
+            <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* ─── STEP 1 ─── */}
               {step === 1 && (
                 <>
@@ -451,7 +480,7 @@ export default function BecomeAnAgent() {
                       placeholder="you@example.com"
                     />
                   </Field>
-                  <Field label="Residential Address" required error={errors.residentialAddress}>
+                  <Field label="Residential Address" required error={errors.residentialAddress} className="md:col-span-2">
                     <Input
                       value={form.residentialAddress}
                       onChange={(e) => set("residentialAddress", e.target.value)}
@@ -503,7 +532,7 @@ export default function BecomeAnAgent() {
                   </Field>
 
                   {/* File uploads */}
-                  <Field label="" error={errors.idDocumentUrl}>
+                  <Field label="" error={errors.idDocumentUrl} className="md:col-span-2">
                     <FileUploadField
                       label="Upload ID"
                       required
@@ -516,7 +545,7 @@ export default function BecomeAnAgent() {
                       }
                     />
                   </Field>
-                  <Field label="" error={errors.passportPhotoUrl}>
+                  <Field label="" error={errors.passportPhotoUrl} className="md:col-span-2">
                     <FileUploadField
                       label="Upload Passport Photograph"
                       required
@@ -529,7 +558,7 @@ export default function BecomeAnAgent() {
                       }
                     />
                   </Field>
-                  <Field label="" error={errors.utilityBillUrl}>
+                  <Field label="" error={errors.utilityBillUrl} className="md:col-span-2">
                     <FileUploadField
                       label="Upload Utility Bill"
                       required
@@ -559,6 +588,7 @@ export default function BecomeAnAgent() {
                     label="Proposed Agency Name"
                     required
                     error={errors.proposedAgencyName}
+                    className="md:col-span-2"
                   >
                     <Input
                       value={form.proposedAgencyName}
@@ -570,6 +600,7 @@ export default function BecomeAnAgent() {
                     label="Shop / Business Address"
                     required
                     error={errors.shopBusinessAddress}
+                    className="md:col-span-2"
                   >
                     <Input
                       value={form.shopBusinessAddress}
@@ -668,36 +699,51 @@ export default function BecomeAnAgent() {
               {step === 4 && (
                 <>
                   <Field label="Bank Name" required error={errors.bankName}>
-                    <Input
-                      value={form.bankName}
-                      onChange={(e) => set("bankName", e.target.value)}
-                      placeholder="e.g. Zenith Bank"
-                    />
-                  </Field>
-                  <Field label="Account Name" required error={errors.accountName}>
-                    <Input
-                      value={form.accountName}
-                      onChange={(e) => set("accountName", e.target.value)}
-                      placeholder="Account holder name"
-                    />
+                    <Select
+                      value={form.bankId ? String(form.bankId) : ""}
+                      onValueChange={(v) => {
+                        const bank = banks?.find((b) => String(b.id) === v);
+                        set("bankId", Number(v));
+                        set("bankName", bank?.name ?? "");
+                      }}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder={isBanksFetching ? "Loading banks..." : "Select bank"} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {banks?.map((bank) => (
+                          <SelectItem key={bank.id} value={String(bank.id)}>
+                            {bank.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </Field>
                   <Field label="Account Number" required error={errors.accountNumber}>
                     <Input
                       value={form.accountNumber}
-                      onChange={(e) => set("accountNumber", e.target.value)}
+                      onChange={(e) => handleAccountNumberChange(e.target.value)}
                       placeholder="10-digit account number"
                       maxLength={10}
+                      disabled={!form.bankId || validatingAccount}
+                    />
+                  </Field>
+                  <Field label="Account Name" required error={errors.accountName} className="md:col-span-2">
+                    <Input
+                      value={form.accountName}
+                      readOnly
+                      placeholder={validatingAccount ? "Validating account..." : "Account holder name"}
                     />
                   </Field>
 
                   {submitError && (
-                    <div className="flex items-start gap-2 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+                    <div className="md:col-span-2 flex items-start gap-2 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
                       <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
                       {submitError}
                     </div>
                   )}
 
-                  <div className="text-xs text-gray-500 border rounded-lg p-3 bg-gray-50">
+                  <div className="md:col-span-2 text-xs text-gray-500 border rounded-lg p-3 bg-gray-50">
                     By submitting this application you agree to our{" "}
                     <a
                       href="/terms-and-condition"
@@ -769,14 +815,16 @@ function Field({
   required,
   error,
   children,
+  className,
 }: {
   label: string;
   required?: boolean;
   error?: string;
   children: React.ReactNode;
+  className?: string;
 }) {
   return (
-    <div className="space-y-1.5">
+    <div className={cn("space-y-1.5", className)}>
       {label && (
         <Label>
           {label}
