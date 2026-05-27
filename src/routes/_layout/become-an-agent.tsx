@@ -80,7 +80,6 @@ interface FormData {
   lga: string;
   preferredSalesTerritory: string;
   yearsOfExperience: string;
-  yearsOfExperience: string;
   // Step 4
   bankId: number;
   bankName: string;
@@ -111,7 +110,6 @@ const initialForm: FormData = {
   stateCode: "",
   lga: "",
   preferredSalesTerritory: "",
-  yearsOfExperience: "",
   yearsOfExperience: "",
   bankId: 0,
   bankName: "",
