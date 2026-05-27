@@ -27,6 +27,7 @@ import { Route as LayoutHowToPlayRouteImport } from './routes/_layout/how-to-pla
 import { Route as LayoutGamesRouteImport } from './routes/_layout/games'
 import { Route as LayoutFaqRouteImport } from './routes/_layout/faq'
 import { Route as LayoutContactRouteImport } from './routes/_layout/contact'
+import { Route as LayoutBecomeAnAgentRouteImport } from './routes/_layout/become-an-agent'
 import { Route as LayoutAccumulatorRouteImport } from './routes/_layout/accumulator'
 import { Route as LayoutAboutRouteImport } from './routes/_layout/about'
 import { Route as AuthenticatedWithdrawalRouteImport } from './routes/_authenticated/withdrawal'
@@ -137,6 +138,11 @@ const LayoutFaqRoute = LayoutFaqRouteImport.update({
 const LayoutContactRoute = LayoutContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutBecomeAnAgentRoute = LayoutBecomeAnAgentRouteImport.update({
+  id: '/become-an-agent',
+  path: '/become-an-agent',
   getParentRoute: () => LayoutRoute,
 } as any)
 const LayoutAccumulatorRoute = LayoutAccumulatorRouteImport.update({
@@ -278,6 +284,7 @@ export interface FileRoutesByFullPath {
   '/withdrawal': typeof AuthenticatedWithdrawalRoute
   '/about': typeof LayoutAboutRoute
   '/accumulator': typeof LayoutAccumulatorRoute
+  '/become-an-agent': typeof LayoutBecomeAnAgentRoute
   '/contact': typeof LayoutContactRoute
   '/faq': typeof LayoutFaqRoute
   '/games': typeof LayoutGamesRoute
@@ -318,6 +325,7 @@ export interface FileRoutesByTo {
   '/withdrawal': typeof AuthenticatedWithdrawalRoute
   '/about': typeof LayoutAboutRoute
   '/accumulator': typeof LayoutAccumulatorRoute
+  '/become-an-agent': typeof LayoutBecomeAnAgentRoute
   '/contact': typeof LayoutContactRoute
   '/faq': typeof LayoutFaqRoute
   '/games': typeof LayoutGamesRoute
@@ -360,6 +368,7 @@ export interface FileRoutesById {
   '/_authenticated/withdrawal': typeof AuthenticatedWithdrawalRoute
   '/_layout/about': typeof LayoutAboutRoute
   '/_layout/accumulator': typeof LayoutAccumulatorRoute
+  '/_layout/become-an-agent': typeof LayoutBecomeAnAgentRoute
   '/_layout/contact': typeof LayoutContactRoute
   '/_layout/faq': typeof LayoutFaqRoute
   '/_layout/games': typeof LayoutGamesRoute
@@ -403,6 +412,7 @@ export interface FileRouteTypes {
     | '/withdrawal'
     | '/about'
     | '/accumulator'
+    | '/become-an-agent'
     | '/contact'
     | '/faq'
     | '/games'
@@ -443,6 +453,7 @@ export interface FileRouteTypes {
     | '/withdrawal'
     | '/about'
     | '/accumulator'
+    | '/become-an-agent'
     | '/contact'
     | '/faq'
     | '/games'
@@ -484,6 +495,7 @@ export interface FileRouteTypes {
     | '/_authenticated/withdrawal'
     | '/_layout/about'
     | '/_layout/accumulator'
+    | '/_layout/become-an-agent'
     | '/_layout/contact'
     | '/_layout/faq'
     | '/_layout/games'
@@ -648,6 +660,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof LayoutContactRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/become-an-agent': {
+      id: '/_layout/become-an-agent'
+      path: '/become-an-agent'
+      fullPath: '/become-an-agent'
+      preLoaderRoute: typeof LayoutBecomeAnAgentRouteImport
       parentRoute: typeof LayoutRoute
     }
     '/_layout/accumulator': {
@@ -863,6 +882,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 interface LayoutRouteChildren {
   LayoutAboutRoute: typeof LayoutAboutRoute
   LayoutAccumulatorRoute: typeof LayoutAccumulatorRoute
+  LayoutBecomeAnAgentRoute: typeof LayoutBecomeAnAgentRoute
   LayoutContactRoute: typeof LayoutContactRoute
   LayoutFaqRoute: typeof LayoutFaqRoute
   LayoutGamesRoute: typeof LayoutGamesRoute
@@ -879,6 +899,7 @@ interface LayoutRouteChildren {
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutAboutRoute: LayoutAboutRoute,
   LayoutAccumulatorRoute: LayoutAccumulatorRoute,
+  LayoutBecomeAnAgentRoute: LayoutBecomeAnAgentRoute,
   LayoutContactRoute: LayoutContactRoute,
   LayoutFaqRoute: LayoutFaqRoute,
   LayoutGamesRoute: LayoutGamesRoute,

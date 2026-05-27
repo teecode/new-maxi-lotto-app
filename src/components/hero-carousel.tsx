@@ -73,6 +73,22 @@ const slides: SlideData[] = [
     ctaText: "Start Playing",
     ctaLink: "/play",
   },
+  {
+    id: 7,
+    title: (
+      <>
+        Become a{" "}
+        <span className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
+          Maxilotto Agent
+        </span>{" "}
+        🤝
+      </>
+    ),
+    description: "Earn up to 35% commission on every ticket sold. Join our growing network of agents across Nigeria. Terms and conditions apply.",
+    image: "/slide-7.png",
+    ctaText: "Apply Now",
+    ctaLink: "/become-an-agent",
+  },
 ];
 
 export default function HeroCarousel() {
