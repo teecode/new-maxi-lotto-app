@@ -340,23 +340,23 @@ export default function BecomeAnAgent() {
   // ── Success screen
   if (success) {
     return (
-      <div className="min-h-screen bg-[#0f172a] flex items-center justify-center px-4 pt-24 pb-16">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center space-y-6">
+      <div className="dark min-h-screen bg-[#0f172a] flex items-center justify-center px-4 pt-24 pb-16">
+        <div className="bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl p-8 max-w-md w-full text-center space-y-6">
           <CheckCircle2 className="w-16 h-16 text-emerald-500 mx-auto" />
-          <h2 className="text-2xl font-bold text-gray-900">Application Submitted!</h2>
-          <p className="text-gray-600">
+          <h2 className="text-2xl font-bold text-white">Application Submitted!</h2>
+          <p className="text-gray-300">
             Your agency application has been received. Our team will review it and
             contact you within 3–5 business days.
           </p>
-          <div className="bg-gray-50 rounded-xl p-4 space-y-1">
-            <p className="text-sm text-gray-500">Reference Number</p>
-            <p className="font-bold text-lg text-[#0f172a]">{success.referenceNumber}</p>
+          <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-1">
+            <p className="text-sm text-gray-400">Reference Number</p>
+            <p className="font-bold text-lg text-white">{success.referenceNumber}</p>
           </div>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-gray-500">
             Save your reference number for follow-up inquiries.
           </p>
           <Button
-            className="w-full bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-3xl"
+            className="w-full bg-gradient-to-r from-yellow-400 to-orange-400 text-slate-900 font-semibold rounded-3xl"
             onClick={() => (window.location.href = "/")}
           >
             Back to Home
@@ -367,8 +367,8 @@ export default function BecomeAnAgent() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0f172a] px-4 pt-24 pb-16">
-      <div className="max-w-2xl mx-auto">
+    <div className="dark min-h-screen bg-[#0f172a] px-4 pt-24 pb-16">
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8 space-y-2">
           <h1 className="text-3xl sm:text-4xl font-bold text-white">
@@ -414,15 +414,15 @@ export default function BecomeAnAgent() {
 
         {/* Card */}
         <form onSubmit={handleSubmit} noValidate>
-          <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+          <div className="bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden">
             {/* Step header */}
-            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4">
+            <div className="bg-white/5 border-b border-white/10 px-8 py-5">
               <h2 className="text-white font-semibold text-lg">
                 Section {step}: {STEPS[step - 1].label}
               </h2>
             </div>
 
-            <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* ─── STEP 1 ─── */}
               {step === 1 && (
                 <>
@@ -824,13 +824,13 @@ function Field({
   return (
     <div className={cn("space-y-1.5", className)}>
       {label && (
-        <Label>
+        <Label className="text-gray-200">
           {label}
-          {required && <span className="text-destructive ml-1">*</span>}
+          {required && <span className="text-rose-500 ml-1">*</span>}
         </Label>
       )}
       {children}
-      {error && <p className="text-xs text-destructive">{error}</p>}
+      {error && <p className="text-xs text-rose-500">{error}</p>}
     </div>
   );
 }
