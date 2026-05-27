@@ -208,6 +208,34 @@ function RouteComponent() {
             </div>
           </div>
 
+          {/* Referral Guide Section */}
+          <div id="referrals" className="bg-gradient-to-br from-[#01B1A8]/10 to-blue-50/50 rounded-2xl p-6 shadow-sm border border-[#01B1A8]/20 mt-6 relative overflow-hidden">
+            <h2 className="text-xl md:text-2xl font-bold text-[#0A4B7F] mb-4 flex items-center gap-2">
+              <span className="text-2xl">🤝</span>
+              How to Refer & Earn 20% Commission
+            </h2>
+            <div className="space-y-4 text-gray-700 leading-relaxed">
+              <p>
+                MaxiLotto offers an incredibly lucrative <strong>Ambassador Program</strong> where you can earn passive income just by inviting your friends to play!
+              </p>
+
+              <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                <h3 className="font-bold text-[#0A4B7F] mb-2">Step-by-step Guide:</h3>
+                <ul className="list-disc list-inside space-y-2 ml-2">
+                  <li><strong>Step 1:</strong> Go to your <span className="font-semibold text-[#01B1A8]">Profile Settings</span> and click on the <strong>Referral</strong> tab.</li>
+                  <li><strong>Step 2:</strong> Copy your unique referral link or referral code.</li>
+                  <li><strong>Step 3:</strong> Share it with your friends via WhatsApp, Twitter, Facebook, or anywhere!</li>
+                  <li><strong>Step 4:</strong> When they sign up using your link, they become your <strong>downline</strong>.</li>
+                  <li><strong>Step 5:</strong> You instantly start earning up to <strong>20% commission</strong> on their activities!</li>
+                </ul>
+              </div>
+
+              <p className="font-medium">
+                You can track all your earnings, view your active network, and see your accumulated commissions in real-time from the <strong>Referral Dashboard</strong>.
+              </p>
+            </div>
+          </div>
+
           {/* Accumulator Rules Section */}
           <div className="bg-red-50/50 rounded-2xl p-6 shadow-sm border border-red-100 mt-6">
             <h2 className="text-xl md:text-2xl font-bold text-red-800 mb-4 flex items-center gap-2">

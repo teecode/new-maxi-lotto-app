@@ -39,6 +39,8 @@ export type User = {
 	accountType: string | null;
 	bank: number | null;
 	rank: string;
+	referralCode: string | null;
+	referralUrl: string | null;
 };
 
 export type MinimalUser = {

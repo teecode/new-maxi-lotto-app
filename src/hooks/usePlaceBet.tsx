@@ -1,5 +1,5 @@
 import { toast } from "sonner"
-import { placeBet } from "@/services/GameService"
+import { placeBet, bookBet } from "@/services/GameService"
 import { useState } from "react"
 import type { MinimalUser } from "@/types/user"
 import type { BetList } from "@/types/game"
@@ -24,6 +24,8 @@ export const usePlaceBet = ({
 }: PlaceBetProps) => {
 
   const [loading, setLoading] = useState(false)
+  const [bookingLoading, setBookingLoading] = useState(false)
+  const [bookedTicketId, setBookedTicketId] = useState<number | null>(null)
 
   const queryClient = useQueryClient();
 
@@ -105,6 +107,23 @@ export const usePlaceBet = ({
       if (response) {
         await queryClient.invalidateQueries({ queryKey: ['userProfile'] });
         toast.success("Bet placed successfully!")
+
+        const dateKey = `dailyStake_${new Date().toISOString().split('T')[0]}`
+        const localStake = Number(localStorage.getItem(dateKey)) || 0
+        
+        // For accumulators (ticketType === 2), the total stake is just the stake of the first leg
+        // since it represents one single combined bet. For regular bets, it's the sum of all bets.
+        const ticketTotal = ticketType === 2 
+          ? (betsList[0]?.stake || 0) 
+          : betsList.reduce((sum, bet) => sum + bet.stake, 0)
+          
+        const newTotal = localStake + ticketTotal
+        localStorage.setItem(dateKey, String(newTotal))
+
+        if (ticketType === 2 && newTotal >= 100000) {
+          toast.info(`Friendly Reminder: You have staked a total of ₦${newTotal.toLocaleString()} today. Please gamble safely.`, { duration: 5000 });
+        }
+
         resetAllGames()
         await syncUser()
       }
@@ -116,5 +135,65 @@ export const usePlaceBet = ({
     }
   }
 
-  return { handlePlaceBet, loading }
+  const handleBookBet = async () => {
+    if (!betsList.length) {
+      toast.error("No game played")
+      return
+    }
+
+    try {
+      setBookingLoading(true)
+
+      const payload = {
+        customerID: user?.customerId || 0,
+        dailyGameId: selectedGame?.gameID || 0,
+        ticketType: ticketType
+      }
+
+      const betSlips = betsList.map((value) => {
+        const code = value.betType.code.toUpperCase()
+
+        let bet1: number[] = []
+        let bet2: number[] = []
+        let numOfLines: number = value.numberOfLines
+
+        if (code.includes("BANKER")) {
+          bet1 = value.bankerBalls
+          bet2 = [1, 90]
+          numOfLines = 89
+        } else if (code.includes("AGAINST")) {
+          bet1 = value.selectedBalls
+          bet2 = value.againstBalls
+        } else {
+          bet1 = value.selectedBalls
+          bet2 = [0]
+        }
+
+        return {
+          bet1: bet1,
+          bet2: bet2,
+          betTypeId: value.betType.betTypeID,
+          stakeperline: value.amount,
+          lines: numOfLines,
+        }
+      })
+
+      const response = await bookBet(payload, betSlips)
+
+      if (response && response.ticketId) {
+        setBookedTicketId(response.ticketId)
+        toast.success(`Ticket Booked Successfully! ID: ${response.ticketId}`)
+        resetAllGames()
+        if (user) {
+          await syncUser()
+        }
+      }
+    } catch (error: any) {
+      toast.error(error.message || "An error occurred while booking your bet")
+    } finally {
+      setBookingLoading(false)
+    }
+  }
+
+  return { handlePlaceBet, loading, handleBookBet, bookingLoading, bookedTicketId, setBookedTicketId }
 }

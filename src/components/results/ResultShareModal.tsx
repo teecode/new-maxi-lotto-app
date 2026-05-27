@@ -95,12 +95,12 @@ export const ResultShareModal: React.FC<ResultShareModalProps> = ({ result, isOp
             >
               {/* Preview Header */}
               <div className="flex flex-col gap-6 text-center">
-                <div className="flex flex-col sm:flex-row items-center sm:items-start justify-between gap-4">
-                  <div className="flex items-center gap-2">
+                <div className="flex flex-col items-center justify-center gap-3">
+                  <div className="flex items-center justify-center gap-2">
                     <img src="/maxilotto-icon.png" alt="MaxiLotto Icon" className="h-12 md:h-16 object-contain" />
                     <img src={logo} alt="MaxiLotto" className="h-10 md:h-12 object-contain" />
                   </div>
-                  <div className="text-center sm:text-right text-[10px] md:text-xs text-muted-foreground leading-tight">
+                  <div className="text-center text-[10px] md:text-xs text-muted-foreground leading-none">
                     <p className="font-semibold uppercase tracking-wider">{fullDateFormat(result.endDateTime)}</p>
                   </div>
                 </div>

@@ -11,7 +11,11 @@ type PropType = {
 
 const TodayGameSlider = (props: PropType) => {
   const { slides, options } = props
-  const [emblaRef, emblaApi] = useEmblaCarousel(options)
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    watchDrag: true,
+    dragFree: true,
+    ...options
+  })
 
   const {
     prevBtnDisabled,

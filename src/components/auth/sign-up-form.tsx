@@ -12,7 +12,7 @@ import { registerUser } from '@/services/AuthService';
 import useAuthStore from '@/store/authStore';
 import { toast } from 'sonner';
 import {Link, useNavigate} from '@tanstack/react-router';
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {Spinner} from "@/components/ui/spinner.tsx";
 
 
@@ -27,6 +27,12 @@ const SignUpForm = () => {
 
   const toggleShowPassword = () => setShowPassword(!showPassword)
   const toggleShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword)
+
+  // Read the ?ref= query param from the current URL (set by referral links)
+  const referralCode = useMemo(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('ref') ?? undefined;
+  }, []);
 
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
@@ -44,7 +50,8 @@ const SignUpForm = () => {
 
       setLoading(true)
       const { username, password, email, phoneNumber } = values
-      const user = await registerUser(username, email, password, phoneNumber)
+      // Pass the referral code from the URL (if any) to the registration API
+      const user = await registerUser(username, email, password, phoneNumber, referralCode)
       // set Token
       setAccessToken(user.token)
       // set user
@@ -66,6 +73,7 @@ const SignUpForm = () => {
       setLoading(false)
     }
   }
+
 
   return (
     <Form {...form}>

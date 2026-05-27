@@ -123,12 +123,16 @@ const Footer = () => {
           <div className="flex mb-4 gap-4 justify-center sm:justify-center sm:mt-0">
             <Image src={"/payment-1.png"} width={118} height={21} className="h-auto object-contain" alt="Payment Method" />
             <Image src={"/gamify.png"} width={92} height={32} className="h-auto object-contain" alt="Gamify" />
+<div className="flex items-center gap-2">
   <Image src={"/18plus.png"} width={45} height={45} className="h-auto object-contain" alt="18+ Warning" />
           </div>
           <span className="text-sm flex justify-center text-muted-foreground text-center dark:text-gray-400">
             © {new Date().getFullYear()}{' '}
             <Link to="/" className="hover:underline ml-1">MaxiLotto</Link>. All Rights Reserved.
           </span>
+          <div className="mt-2 text-[10px] sm:text-xs flex justify-center text-muted-foreground/60 text-center uppercase tracking-widest">
+            Powered by <a href="http://www.gamifylabs.ng" target="_blank" rel="noreferrer" className="hover:text-[#0185B6] ml-1 font-bold transition-colors">GamifyLabs</a>
+          </div>
         </div>
       </div>
     </footer>

@@ -1,9 +1,14 @@
-import { Outlet } from '@tanstack/react-router'
+import { Outlet, useLocation } from '@tanstack/react-router'
 import Navbar from './navbar'
 import Footer from './footer'
 import PageLoader from "@/components/page-loader.tsx";
+import WhatsAppButton from "@/components/whatsapp-button";
 
 const MainLayout = () => {
+  const { pathname } = useLocation()
+  const isPlayPage = pathname === '/play'
+  const isAccumulatorPage = pathname === '/accumulator'
+
   return (
     <div className="min-h-screen flex flex-col bg-[#f8fffe]">
       <Navbar />
@@ -11,6 +16,7 @@ const MainLayout = () => {
         <PageLoader />
         <Outlet /> {/* Child routes render here */}
       </main>
+      {!isPlayPage && !isAccumulatorPage && <WhatsAppButton />}
       <Footer />
     </div>
   )

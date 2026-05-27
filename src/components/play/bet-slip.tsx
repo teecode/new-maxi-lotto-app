@@ -3,6 +3,7 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import type { BetList, BetType, Game } from '@/types/game'
 import { useEffect, useState } from 'react'
+import { fetchDailyStakeSum } from '@/services/GameService'
 import { toast } from 'sonner'
 
 interface BetSlipProps {
@@ -42,7 +43,8 @@ const BetSlip = ({
                    addBet,
                    selectedGame,
                    setAgainstBalls,
-                   setSelectedBalls
+                   setSelectedBalls,
+                   betLists
                  }: BetSlipProps) => {
 
   const [stake, setStake] = useState<number>(0)
@@ -144,7 +146,7 @@ const BetSlip = ({
     setMaxWinning(calculateMaxWinning())
   }, [selectedBalls, againstBalls, stake, selectedBetType])
 
-  const handleAddToBets = () => {
+  const handleAddToBets = async () => {
     if (!selectedGame) return toast.error("Please select a game first")
     if (!selectedBetType) return toast.error("Select a bet type first")
 
@@ -185,6 +187,28 @@ const BetSlip = ({
     addBet(newBet)
     resetBetSlip()
     toast.success("Bet added successfully!")
+
+    if (betLists.length === 0) {
+      try {
+        const dateKey = `dailyStake_${new Date().toISOString().split('T')[0]}`
+        const localStake = Number(localStorage.getItem(dateKey)) || 0
+
+        const result = await fetchDailyStakeSum();
+        
+        let currentStake = localStake
+        if (result && result.sum > localStake) {
+          localStorage.setItem(dateKey, String(result.sum))
+          currentStake = result.sum
+        }
+
+        if (currentStake >= 100000) {
+          toast.info(`Friendly Reminder: You have staked a total of ₦${currentStake.toLocaleString()} today. Please gamble safely.`, { duration: 5000 });
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+
 
     // Scroll to games list after adding
     setTimeout(() => {
