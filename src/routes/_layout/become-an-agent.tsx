@@ -366,7 +366,7 @@ export default function BecomeAnAgent() {
 
   return (
     <div className="dark text-foreground min-h-screen bg-[#0f172a] px-4 pt-24 pb-16">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8 space-y-2">
           <h1 className="text-3xl sm:text-4xl font-bold text-white">
