@@ -45,6 +45,7 @@ const ID_TYPES = [
   { value: "1", label: "Driver's License" },
   { value: "2", label: "Voter's Card" },
   { value: "3", label: "International Passport" },
+  { value: "4", label: "National Identity Number (NIN)" },
 ];
 
 const GENDER_OPTIONS = [
@@ -268,9 +269,6 @@ export default function BecomeAnAgent() {
       if (!form.nin.trim()) errs.nin = "NIN is required";
       if (!form.bvn.trim()) errs.bvn = "BVN is required";
       if (!form.idType) errs.idType = "ID type is required";
-      if (!form.idDocumentUrl) errs.idDocumentUrl = "Please upload your ID document";
-      if (!form.passportPhotoUrl) errs.passportPhotoUrl = "Please upload your passport photo";
-      if (!form.utilityBillUrl) errs.utilityBillUrl = "Please upload your utility bill";
     }
     if (s === 3) {
       if (!form.proposedAgencyName.trim()) errs.proposedAgencyName = "Agency name is required";
@@ -532,8 +530,7 @@ export default function BecomeAnAgent() {
                   {/* File uploads */}
                   <Field label="" error={errors.idDocumentUrl} className="md:col-span-2">
                     <FileUploadField
-                      label="Upload ID"
-                      required
+                      label="Upload ID (Optional)"
                       accept=".pdf,.jpg,.jpeg,.png"
                       file={form.idDocumentFile}
                       uploading={!!uploading.idDocumentFile}
@@ -545,8 +542,7 @@ export default function BecomeAnAgent() {
                   </Field>
                   <Field label="" error={errors.passportPhotoUrl} className="md:col-span-2">
                     <FileUploadField
-                      label="Upload Passport Photograph"
-                      required
+                      label="Upload Passport Photograph (Optional)"
                       accept=".jpg,.jpeg,.png,.pdf"
                       file={form.passportPhotoFile}
                       uploading={!!uploading.passportPhotoFile}
@@ -558,8 +554,7 @@ export default function BecomeAnAgent() {
                   </Field>
                   <Field label="" error={errors.utilityBillUrl} className="md:col-span-2">
                     <FileUploadField
-                      label="Upload Utility Bill"
-                      required
+                      label="Upload Utility Bill (Optional)"
                       accept=".jpg,.jpeg,.png,.pdf"
                       file={form.utilityBillFile}
                       uploading={!!uploading.utilityBillFile}
