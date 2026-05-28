@@ -56,7 +56,8 @@ const GENDER_OPTIONS = [
 
 interface FormData {
   // Step 1
-  fullName: string;
+  firstName: string;
+  lastName: string;
   dateOfBirth: string;
   gender: string;
   phoneNumber: string;
@@ -89,7 +90,8 @@ interface FormData {
 }
 
 const initialForm: FormData = {
-  fullName: "",
+  firstName: "",
+  lastName: "",
   dateOfBirth: "",
   gender: "",
   phoneNumber: "",
@@ -257,7 +259,8 @@ export default function BecomeAnAgent() {
   function validateStep(s: number): boolean {
     const errs: typeof errors = {};
     if (s === 1) {
-      if (!form.fullName.trim()) errs.fullName = "Full name is required";
+      if (!form.firstName.trim()) errs.firstName = "First name is required";
+      if (!form.lastName.trim()) errs.lastName = "Last name is required";
       if (!form.dateOfBirth) errs.dateOfBirth = "Date of birth is required";
       if (!form.gender) errs.gender = "Gender is required";
       if (!form.phoneNumber.trim()) errs.phoneNumber = "Phone number is required";
@@ -302,7 +305,7 @@ export default function BecomeAnAgent() {
     setSubmitError("");
     try {
       const payload: AgencyApplicationRequest = {
-        fullName: form.fullName,
+        fullName: `${form.firstName.trim()} ${form.lastName.trim()}`,
         dateOfBirth: form.dateOfBirth,
         gender: parseInt(form.gender),
         phoneNumber: form.phoneNumber,
@@ -424,13 +427,22 @@ export default function BecomeAnAgent() {
               {/* ─── STEP 1 ─── */}
               {step === 1 && (
                 <>
-                  <Field label="Full Name" required error={errors.fullName}>
-                    <Input
-                      value={form.fullName}
-                      onChange={(e) => set("fullName", e.target.value)}
-                      placeholder="Your full name"
-                    />
-                  </Field>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:col-span-2">
+                    <Field label="First Name" required error={errors.firstName}>
+                      <Input
+                        value={form.firstName}
+                        onChange={(e) => set("firstName", e.target.value)}
+                        placeholder="Your first name"
+                      />
+                    </Field>
+                    <Field label="Last Name" required error={errors.lastName}>
+                      <Input
+                        value={form.lastName}
+                        onChange={(e) => set("lastName", e.target.value)}
+                        placeholder="Your last name"
+                      />
+                    </Field>
+                  </div>
                   <Field label="Date of Birth" required error={errors.dateOfBirth}>
                     <Input
                       type="date"
