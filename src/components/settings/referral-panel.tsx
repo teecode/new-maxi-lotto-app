@@ -140,8 +140,8 @@ export function ReferralPanel({ user, refetchUser }: ReferralPanelProps) {
             <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">How it works</p>
             <ol className="space-y-2">
               {[
-                'Share your referral link with friends.',
-                'They sign up using your link.',
+                'Share your referral link or referral code with friends.',
+                'They sign up using your link or code.',
                 'When they place bets, you earn a commission on their activity.',
                 'Commissions are credited directly to your wallet.',
               ].map((step, i) => (

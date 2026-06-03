@@ -45,8 +45,7 @@ function AccumulatorPage() {
   const {selectedGame, setSelectedGame} = useBetStore()
 
   const MIN_STAKE = 50
-  const MAX_STAKE = 10000
-  const MAX_POTENTIAL_WIN = 2500000
+  const MAX_POTENTIAL_WIN = 500000
 
   const [accumulatorLegs, setAccumulatorLegs] = useState<{
     betType: BetType,
@@ -368,16 +367,15 @@ function AccumulatorPage() {
                         }}
                         className={cn(
                           "w-full p-2 border rounded focus:ring-1 outline-none font-bold",
-                          (stakeAmount < MIN_STAKE || stakeAmount > MAX_STAKE)
+                          (stakeAmount < MIN_STAKE)
                             ? "border-red-500 text-red-600 focus:border-red-500 focus:ring-red-500"
                             : "border-gray-300 text-[#0A4B7F] focus:border-[#0A4B7F] focus:ring-[#0A4B7F]"
                         )}
                         min={0}
-                        max={MAX_STAKE}
                       />
-                      {(stakeAmount < MIN_STAKE || stakeAmount > MAX_STAKE) && (
+                      {(stakeAmount < MIN_STAKE) && (
                         <p className="text-xs text-red-500">
-                          {stakeAmount < MIN_STAKE ? `Minimum stake is NGN ${MIN_STAKE}` : `Maximum stake is NGN ${MAX_STAKE.toLocaleString()}`}
+                          Minimum stake is NGN {MIN_STAKE}
                         </p>
                       )}
                     </div>
@@ -408,7 +406,6 @@ function AccumulatorPage() {
                           loading ||
                           bookingLoading ||
                           stakeAmount < MIN_STAKE ||
-                          stakeAmount > MAX_STAKE ||
                           potentialWin > MAX_POTENTIAL_WIN
                         }
                         onClick={handlePlaceBet}
@@ -423,7 +420,6 @@ function AccumulatorPage() {
                           loading ||
                           bookingLoading ||
                           stakeAmount < MIN_STAKE ||
-                          stakeAmount > MAX_STAKE ||
                           potentialWin > MAX_POTENTIAL_WIN
                         }
                         onClick={handleBookBet}

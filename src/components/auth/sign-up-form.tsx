@@ -42,6 +42,7 @@ const SignUpForm = () => {
       email: "",
       password: "",
       confirmPassword: "",
+      referralCode: referralCode || "",
     },
   });
 
@@ -49,9 +50,9 @@ const SignUpForm = () => {
     try {
 
       setLoading(true)
-      const { username, password, email, phoneNumber } = values
+      const { username, password, email, phoneNumber, referralCode: formReferralCode } = values
       // Pass the referral code from the URL (if any) to the registration API
-      const user = await registerUser(username, email, password, phoneNumber, referralCode)
+      const user = await registerUser(username, email, password, phoneNumber, formReferralCode)
       // set Token
       setAccessToken(user.token)
       // set user
@@ -204,6 +205,28 @@ const SignUpForm = () => {
                     ) : (
                       <EyeIcon size={18} />
                     )}
+                  </div>
+                </div>
+              </FormControl>
+              <FormMessage className="text-red-500 text-xs font-medium ml-1" />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="referralCode"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <div className="relative group">
+                  <Input
+                    placeholder="Referral Code (Optional)"
+                    className="pl-11 h-12 bg-white/[0.08] border-white/[0.12] text-white placeholder:text-slate-500 rounded-xl focus:bg-white/[0.12] focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20 transition-all duration-300"
+                    {...field}
+                  />
+                  <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 7h-9M14 17H5M17 17a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM7 7a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></svg>
                   </div>
                 </div>
               </FormControl>
