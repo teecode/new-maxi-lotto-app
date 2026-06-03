@@ -82,12 +82,12 @@ const Navbar = () => {
 
       <nav
         className="h-[70px] relative w-full px-4 md:px-8 lg:px-16 flex items-center justify-between z-20  text-gray-700 shadow-[0px_4px_25px_0px_#0000000D] transition-all">
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center gap-1.5 sm:gap-3">
           {/* Hamburger Icon (Mobile) */}
           <div className="lg:hidden">
             <MobileNav navGroups={navGroups}/>
           </div>
-          <Link to="/" className="flex items-center gap-1.5 sm:gap-2 group">
+          <Link to="/" className="flex items-center gap-1 sm:gap-2 group">
             <div className="relative">
               <Image priority src="/maxilotto-icon.png" alt="MaxiLotto Icon" width={40} height={40} className="h-9 sm:h-10 w-auto object-contain brightness-0 invert drop-shadow-md group-hover:scale-110 transition-transform duration-300" />
               <div className="absolute inset-0 bg-pink-500/20 blur-lg rounded-full -z-10 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -235,11 +235,11 @@ const Navbar = () => {
           ) : (
             <div className="flex items-center gap-2">
               <Button asChild
-                      className="bg-tertiary-900 px-6 h-8 text-sm uppercase font-semibold  rounded-full text-background hover:bg-primary-600">
+                      className="bg-tertiary-900 px-3 sm:px-6 h-8 text-xs sm:text-sm uppercase font-semibold rounded-full text-background hover:bg-primary-600">
                 <Link to="/auth/signup">Register</Link>
               </Button>
               <Button asChild variant={"ghost"}
-                      className="text-white hover:bg-primary-950 px-2 h-8 text-sm uppercase font-semibold hover:text-primary-600">
+                      className="text-white hover:bg-primary-950 px-1 sm:px-2 h-8 text-xs sm:text-sm uppercase font-semibold hover:text-primary-600">
                 <Link to="/auth/login">Login</Link>
               </Button>
             </div>
