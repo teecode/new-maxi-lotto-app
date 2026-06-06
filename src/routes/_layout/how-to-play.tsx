@@ -117,7 +117,33 @@ function RouteComponent() {
             </div>
           </div>
 
-          {/* Bet Types Explanation - Simple Terms */}
+          {/* Normal vs Machine Bets */}
+          <div className="bg-purple-50/50 rounded-2xl p-6 shadow-sm border border-purple-100 mt-8">
+            <h2 className="text-xl md:text-2xl font-bold text-purple-900 mb-4 flex items-center gap-2">
+              <span className="text-2xl">🤖</span>
+              Normal vs. Machine Numbers
+            </h2>
+            <div className="space-y-4 text-gray-700 leading-relaxed">
+              <p>
+                In standard lotteries, 5 numbers are drawn as the <strong>Winning Numbers</strong>, and another 5 numbers are drawn as the <strong>Machine Numbers</strong>.
+              </p>
+
+              <div className="grid md:grid-cols-2 gap-4 mt-4">
+                <div className="bg-white p-4 rounded-xl border border-purple-100 shadow-sm">
+                   <h3 className="font-bold text-[#0A4B7F] mb-2 flex items-center gap-2"><span className="text-lg">🎯</span> Normal Bet</h3>
+                   <p className="text-sm">This is the traditional way to play. Your selected numbers are validated against the 5 Winning Numbers drawn. If your numbers match, you win!</p>
+                </div>
+                <div className="bg-white p-4 rounded-xl border border-purple-100 shadow-sm">
+                   <h3 className="font-bold text-purple-700 mb-2 flex items-center gap-2"><span className="text-lg">⚙️</span> Machine Bet</h3>
+                   <p className="text-sm">For supported games, you can choose to validate your bet against the 5 Machine Numbers. If your numbers match the machine numbers, you win the same great odds!</p>
+                </div>
+              </div>
+
+              <p className="font-medium text-sm bg-white/50 p-2 rounded">
+                Look for the <strong>Normal Bet / Machine Bet</strong> toggle in your bet slip when playing supported games to switch between modes.
+              </p>
+            </div>
+          </div>
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mt-6">
             <h2 className="text-xl md:text-2xl font-bold text-[#0A4B7F] mb-6 flex items-center gap-2">
               <span className="text-2xl">🎲</span>

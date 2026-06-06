@@ -97,6 +97,7 @@ export const usePlaceBet = ({
           betTypeId: value.betType.betTypeID,
           stakeperline: value.amount,
           lines: numOfLines,
+          winningType: value.winningType,
         }
       })
 
@@ -175,6 +176,7 @@ export const usePlaceBet = ({
           betTypeId: value.betType.betTypeID,
           stakeperline: value.amount,
           lines: numOfLines,
+          winningType: value.winningType,
         }
       })
 

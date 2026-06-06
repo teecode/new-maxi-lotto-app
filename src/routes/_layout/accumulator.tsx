@@ -40,6 +40,7 @@ const MARKET_DESCRIPTIONS: Record<string, string> = {
 
 function AccumulatorPage() {
   const [stakeAmount, setStakeAmount] = useState<number>(100)
+  const [winningType, setWinningType] = useState<number>(1) // 1: Normal, 2: Machine
 
   // Use bet store for selected game to ensure carousel highlighting works
   const {selectedGame, setSelectedGame} = useBetStore()
@@ -163,9 +164,10 @@ function AccumulatorPage() {
       numberOfLines: 1,
       againstBalls: [],
       bankerBalls: [],
-      amount: stakeAmount
+      amount: stakeAmount,
+      winningType: winningType
     }))
-  }, [accumulatorLegs, stakeAmount])
+  }, [accumulatorLegs, stakeAmount, winningType])
 
   const {
     handlePlaceBet,
@@ -314,6 +316,26 @@ function AccumulatorPage() {
                   </div>
 
                   <div className="p-4 space-y-4 max-h-[60vh] overflow-y-auto">
+                    {/* Machine/Normal Toggle */}
+                    {selectedGame?.allowMachineNumberBet && (
+                      <div className="flex bg-gray-100 p-1 rounded-xl mb-4">
+                        <button
+                          type="button"
+                          className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${winningType === 1 ? 'bg-white text-[#0A4B7F] shadow' : 'text-gray-500 hover:text-gray-700'}`}
+                          onClick={(e) => { e.preventDefault(); setWinningType(1); }}
+                        >
+                          Normal Bet
+                        </button>
+                        <button
+                          type="button"
+                          className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${winningType === 2 ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow' : 'text-gray-500 hover:text-gray-700'}`}
+                          onClick={(e) => { e.preventDefault(); setWinningType(2); }}
+                        >
+                          Machine Bet
+                        </button>
+                      </div>
+                    )}
+
                     {accumulatorLegs.length === 0 ? (
                       <div className="text-center py-8 text-gray-400 text-sm">
                         <p>No bets selected.</p>

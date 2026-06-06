@@ -599,6 +599,11 @@ function RouteComponent() {
                                   <div className="inline-block bg-[#0185B6] text-white px-2 py-0.5 rounded-full text-xs font-bold">
                                     {bet.betType.code}
                                   </div>
+                                  {bet.winningType === 2 && (
+                                    <div className="inline-block bg-gradient-to-r from-purple-500 to-indigo-500 text-white px-2 py-0.5 rounded-full text-xs font-bold ml-2">
+                                      Machine Bet
+                                    </div>
+                                  )}
                                 </div>
                                 <Button
                                   type="button"

@@ -58,6 +58,11 @@ export const FAQ_DATA: FaqItem[] = [
 			'Buy as many tickets as you like—just follow the rules of each game and play responsibly.',
 	},
 	{
+		question: 'What is a Machine Number bet?',
+		answer:
+			'A Machine Number bet allows you to play against the non-winning numbers drawn by the machine. You will find a toggle to select between a Normal Bet (playing against winning numbers) and a Machine Bet (playing against the machine numbers) when selecting your games.',
+	},
+	{
 		question: 'How does the Ambassador (Referral) program work?',
 		answer:
 			'You can earn up to 20% commission by referring friends to MaxiLotto! Navigate to your Profile Settings, click on the Referral tab, and copy your unique link. When friends sign up using your link, they become your downline and you earn passive income on their activities. Terms and conditions apply.',

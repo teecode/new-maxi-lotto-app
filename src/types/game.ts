@@ -29,6 +29,7 @@ export type Game = {
 	isActive: boolean;
 	isGhanaGame: boolean;
 	result: string | null;
+	allowMachineNumberBet: boolean;
 };
 
 export type BetList = {
@@ -40,6 +41,7 @@ export type BetList = {
 	againstBalls: number[];
 	bankerBalls: number[];
 	amount: number;
+	winningType: number;
 };
 
 export interface GameTicket {
@@ -98,6 +100,7 @@ export interface BetSlip {
 		id: number;
 		name: string;
 	};
+	winningType: number;
 }
 
 export interface GameResult {

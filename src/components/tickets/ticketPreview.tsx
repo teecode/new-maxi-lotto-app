@@ -195,6 +195,9 @@ export function TicketPreview({ open, setOpen, ticket }: TicketPreviewProps) {
                         <div className="flex items-center gap-2">
                           <span className="font-bold text-[#0A4B7F] text-sm">{betslip.betType.code}</span>
                           {isAccumulator && <Badge variant="outline" className="text-xs bg-white text-gray-600 border-gray-200">Odds: {(betslip.betType.winFactor || 1).toFixed(2)}</Badge>}
+                          {betslip.winningType === 2 && (
+                            <Badge variant="outline" className="text-[10px] sm:text-xs bg-purple-50 text-purple-700 border-purple-200">Machine Bet</Badge>
+                          )}
                         </div>
                         <Badge
                           variant={betslip.status.name === 'Won' ? 'default' : 'secondary'}

@@ -50,6 +50,7 @@ const BetSlip = ({
   const [stake, setStake] = useState<number>(0)
   const [maxWinning, setMaxWinning] = useState<number>(0)
   const [numberOfLines, setNumberOfLines] = useState<number>(0)
+  const [winningType, setWinningType] = useState<number>(1) // 1: Normal, 2: Machine
 
   // Calculate collision count (following Vue logic)
   const collisionCount = () => {
@@ -182,6 +183,7 @@ const BetSlip = ({
       amount: stake,
       maxWinning,
       numberOfLines,
+      winningType,
     }
 
     addBet(newBet)
@@ -221,6 +223,7 @@ const BetSlip = ({
     setMaxWinning(0)
     setAgainstBalls([])
     setSelectedBalls([])
+    setWinningType(1)
     // Don't call handleResetBetSlips here to avoid scrolling to top
   }
 
@@ -304,6 +307,26 @@ const BetSlip = ({
                 <span className="text-green-600 font-bold text-lg">₦{maxWinning.toLocaleString()}</span>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Machine/Normal Toggle */}
+        {selectedGame?.allowMachineNumberBet && (
+          <div className="flex bg-gray-100 p-1 rounded-xl">
+            <button
+              type="button"
+              className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${winningType === 1 ? 'bg-white text-[#0A4B7F] shadow' : 'text-gray-500 hover:text-gray-700'}`}
+              onClick={(e) => { e.preventDefault(); setWinningType(1); }}
+            >
+              Normal Bet
+            </button>
+            <button
+              type="button"
+              className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${winningType === 2 ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow' : 'text-gray-500 hover:text-gray-700'}`}
+              onClick={(e) => { e.preventDefault(); setWinningType(2); }}
+            >
+              Machine Bet
+            </button>
           </div>
         )}
 
