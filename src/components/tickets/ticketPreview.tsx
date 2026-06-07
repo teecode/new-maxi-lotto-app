@@ -138,13 +138,26 @@ export function TicketPreview({ open, setOpen, ticket }: TicketPreviewProps) {
                     </Badge>
 
                     {gameResult && gameResult.result && (
-                      <div className="flex flex-col gap-1.5 mt-3 items-center animate-in fade-in slide-in-from-top-2 duration-500">
-                        <p className="text-[9px] sm:text-[10px] text-blue-200 font-bold uppercase tracking-widest leading-none">Winning Numbers</p>
-                        <div className="flex gap-1.5 sm:gap-2">
-                          {[gameResult.result.winningBall1, gameResult.result.winningBall2, gameResult.result.winningBall3, gameResult.result.winningBall4, gameResult.result.winningBall5].map((ball, i) => (
-                            <Ball key={i} value={ball} variant="winning" className="h-7 w-7 text-[9px] sm:h-8 sm:w-8 sm:text-[10px] md:h-10 md:w-10 md:text-xs shadow-lg border-white/10" />
-                          ))}
+                      <div className="flex flex-col gap-3 mt-3 items-center animate-in fade-in slide-in-from-top-2 duration-500 z-10 relative">
+                        <div className="flex flex-col items-center gap-1.5">
+                          <p className="text-[9px] sm:text-[10px] text-blue-200 font-bold uppercase tracking-widest leading-none">Winning Numbers</p>
+                          <div className="flex gap-1.5 sm:gap-2">
+                            {[gameResult.result.winningBall1, gameResult.result.winningBall2, gameResult.result.winningBall3, gameResult.result.winningBall4, gameResult.result.winningBall5].map((ball, i) => (
+                              <Ball key={i} value={ball} variant="winning" className="h-7 w-7 text-[9px] sm:h-8 sm:w-8 sm:text-[10px] md:h-10 md:w-10 md:text-xs shadow-lg border-white/10" />
+                            ))}
+                          </div>
                         </div>
+
+                        {gameResult.result.machineBall1 > 0 && (
+                          <div className="flex flex-col items-center gap-1.5">
+                            <p className="text-[9px] sm:text-[10px] text-yellow-300 font-bold uppercase tracking-widest leading-none">Machine Numbers</p>
+                            <div className="flex gap-1.5 sm:gap-2">
+                              {[gameResult.result.machineBall1, gameResult.result.machineBall2, gameResult.result.machineBall3, gameResult.result.machineBall4, gameResult.result.machineBall5].map((ball, i) => (
+                                <Ball key={i} value={ball} variant="machine" className="h-7 w-7 text-[9px] sm:h-8 sm:w-8 sm:text-[10px] md:h-10 md:w-10 md:text-xs shadow-lg border-white/10" />
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
