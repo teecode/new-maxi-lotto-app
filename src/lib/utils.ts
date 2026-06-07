@@ -134,8 +134,10 @@ export const maskAccountNumber = (accountNumber: string): string => {
 };
 
 export const getImageUrl = (name: string) => {
-	const path = 'data:image/jpeg;base64,' + name;
-	return name ? path : '/placeholder.png';
+	if (!name) return '/placeholder.png';
+	if (name.startsWith('data:image')) return name;
+	if (name.startsWith('http')) return name;
+	return name.startsWith('/') ? name : `/${name}`;
 };
 
 // const finalImagePath = image ? `/${image}` : '/placeholder.png';
