@@ -135,9 +135,17 @@ export const maskAccountNumber = (accountNumber: string): string => {
 
 export const getImageUrl = (name: string) => {
 	if (!name) return '/placeholder.png';
-	if (name.startsWith('data:image')) return name;
-	if (name.startsWith('http')) return name;
-	return name.startsWith('/') ? name : `/${name}`;
+	if (name.startsWith('data:image') && !name.includes('SlideImages/')) return name;
+	
+	let cleanName = name;
+	if (cleanName.includes('SlideImages/')) {
+		cleanName = cleanName.substring(cleanName.indexOf('SlideImages/'));
+	}
+	
+	if (cleanName.startsWith('http')) return cleanName;
+	
+	const path = cleanName.startsWith('/') ? cleanName : `/${cleanName}`;
+	return `https://maxilotto.ng${path}`;
 };
 
 // const finalImagePath = image ? `/${image}` : '/placeholder.png';
