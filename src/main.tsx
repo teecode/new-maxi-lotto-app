@@ -12,6 +12,7 @@ import { ThemeProvider } from './components/theme-provider.tsx'
 import { Provider } from './utils/Provider.tsx'
 import { Toaster } from './components/ui/sonner.tsx'
 import useAuthStore from './store/authStore.ts'
+import { PWAInstallPrompt } from './components/PWAInstallPrompt.tsx'
 
 // Create a new router instance
 const router = createRouter({
@@ -34,7 +35,12 @@ declare module '@tanstack/react-router' {
 
 function InnerApp() {
   const auth = useAuthStore()
-  return <RouterProvider router={router} context={{ auth }} />
+  return (
+    <>
+      <RouterProvider router={router} context={{ auth }} />
+      <PWAInstallPrompt />
+    </>
+  )
 }
 
 // Render the app
