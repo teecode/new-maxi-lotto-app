@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
-import { X } from 'lucide-react';
+import { X, Share } from 'lucide-react';
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -14,8 +14,25 @@ interface BeforeInstallPromptEvent extends Event {
 export function PWAInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
 
   useEffect(() => {
+    // Check if user has previously dismissed the prompt
+    if (localStorage.getItem('pwaPromptDismissed')) {
+      return;
+    }
+
+    // Detect iOS
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    const isIosDevice = /iphone|ipad|ipod/.test(userAgent);
+    
+    // Detect if already installed (standalone mode)
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || ('standalone' in window.navigator && (window.navigator as any).standalone);
+
+    if (isIosDevice && !isStandalone) {
+      setIsIOS(true);
+      setShowPrompt(true);
+    }
     const handler = (e: Event) => {
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
@@ -61,6 +78,11 @@ export function PWAInstallPrompt() {
     setShowPrompt(false);
   };
 
+  const handleDismiss = () => {
+    localStorage.setItem('pwaPromptDismissed', 'true');
+    setShowPrompt(false);
+  };
+
   if (!showPrompt) return null;
 
   return (
@@ -68,15 +90,28 @@ export function PWAInstallPrompt() {
       <div className="flex justify-between items-start">
         <div>
           <h3 className="font-semibold text-gray-900 dark:text-white">Install Maxi Lotto</h3>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Add our app to your home screen for a better experience.</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            {isIOS ? 'Install our app for a better experience.' : 'Add our app to your home screen for a better experience.'}
+          </p>
         </div>
-        <button onClick={() => setShowPrompt(false)} className="text-gray-400 hover:text-gray-600">
+        <button onClick={handleDismiss} className="text-gray-400 hover:text-gray-600">
           <X className="w-5 h-5" />
         </button>
       </div>
-      <Button onClick={handleInstallClick} className="w-full">
-        Add to Home Screen
-      </Button>
+      
+      {isIOS ? (
+        <div className="text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 p-3 rounded-lg flex flex-col gap-2">
+          <p>To install this app on your iOS device:</p>
+          <ol className="list-decimal pl-5 flex flex-col gap-1">
+            <li>Tap the <Share className="w-4 h-4 inline mx-1" /> <strong>Share</strong> button below.</li>
+            <li>Scroll down and tap <strong>Add to Home Screen</strong>.</li>
+          </ol>
+        </div>
+      ) : (
+        <Button onClick={handleInstallClick} className="w-full">
+          Add to Home Screen
+        </Button>
+      )}
     </div>
   );
 }
