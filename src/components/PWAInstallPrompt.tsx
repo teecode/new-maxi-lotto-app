@@ -102,8 +102,8 @@ export function PWAInstallPrompt() {
       {isIOS ? (
         <div className="text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 p-3 rounded-lg flex flex-col gap-2">
           <p>To install this app on your iOS device:</p>
-          <ol className="list-decimal pl-5 flex flex-col gap-1">
-            <li>Tap the <Share className="w-4 h-4 inline mx-1" /> <strong>Share</strong> button below.</li>
+          <ol className="list-decimal pl-5 flex flex-col gap-2">
+            <li>Tap the <Share className="w-4 h-4 inline mx-1" /> <strong>Share</strong> button in the Safari browser's menu bar (usually at the bottom or top of your screen).</li>
             <li>Scroll down and tap <strong>Add to Home Screen</strong>.</li>
           </ol>
         </div>
