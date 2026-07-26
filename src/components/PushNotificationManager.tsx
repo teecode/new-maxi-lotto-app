@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { Bell } from 'lucide-react';
+import useAuthStore from '../store/authStore';
 
 export function PushNotificationManager() {
   const [isSupported, setIsSupported] = useState(false);
@@ -43,8 +44,13 @@ export function PushNotificationManager() {
       setSubscription(sub);
       setPermission(Notification.permission);
       
-      // TODO: Send `sub` to your backend to save it
       console.log('Push subscription:', JSON.stringify(sub));
+      const minimalUser = useAuthStore.getState().minimalUser;
+      if (minimalUser?.customerId) {
+         import('../services/AuthService').then(({ updatePushSubscription }) => {
+             updatePushSubscription(minimalUser.customerId, JSON.stringify(sub));
+         });
+      }
     } catch (error) {
       console.error('Failed to subscribe to push notifications', error);
       setPermission(Notification.permission);

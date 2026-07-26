@@ -54,6 +54,21 @@ function RouteComponent() {
       setAccessToken(user.token)
       // set user
       setUser(user)
+      
+      // sync push subscription if it exists
+      if ('serviceWorker' in navigator && 'PushManager' in window) {
+        try {
+          const registration = await navigator.serviceWorker.ready;
+          const sub = await registration.pushManager.getSubscription();
+          if (sub && user.customerId) {
+              const { updatePushSubscription } = await import('@/services/AuthService');
+              await updatePushSubscription(user.customerId, JSON.stringify(sub));
+          }
+        } catch (e) {
+          console.error('Push sync error', e);
+        }
+      }
+
       // redirect
       await navigate({ to: search.redirect || fallback })
       // show toast

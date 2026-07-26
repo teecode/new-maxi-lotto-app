@@ -52,6 +52,21 @@ export async function login(
 	}
 }
 
+export const updatePushSubscription = async (
+	customerId: number,
+	endpointUrl: string
+): Promise<any> => {
+	try {
+		const response = await apiClient.post('authenticate/UpdatePushNotificationsEndpoint', {
+			customerId,
+			endpointUrl,
+		});
+		return response.data;
+	} catch (error: any) {
+		console.error('Failed to update push subscription', error);
+	}
+};
+
 export const requestForgotPassword = async (email: string): Promise<any> => {
 	try {
 		const response = await apiClient.post('User/ResetPassword', {
