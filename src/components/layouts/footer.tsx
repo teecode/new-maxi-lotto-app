@@ -69,14 +69,25 @@ const Footer = () => {
               </Link>
             </div>
 
-            {/* Legal Links */}
+            {/* Quick Links */}
             <div>
-              <h2 className="mb-2 text-lg font-bold text-[#fff100] capitalize dark:text-white">Legal Links</h2>
+              <h2 className="mb-2 text-lg font-bold text-[#fff100] capitalize dark:text-white">Quick Links</h2>
               <ul className="text-white text-sm font-medium space-y-3">
                 <li><Link to="/privacy-policy" className="hover:underline">Privacy Policy</Link></li>
                 <li><Link to="/terms-and-condition" className="hover:underline">Terms And Condition</Link></li>
                 <li><Link to="/responsible-gambling" className="hover:underline">Responsible Gambling</Link></li>
                 <li><Link to="/withdrawal-policy" className="hover:underline">Withdrawal Policy</Link></li>
+                <li>
+                  <button 
+                    onClick={() => {
+                      localStorage.removeItem('pwaPromptDismissed');
+                      window.location.reload();
+                    }}
+                    className="hover:underline flex items-center gap-1"
+                  >
+                    Install Mobile App
+                  </button>
+                </li>
               </ul>
             </div>
 

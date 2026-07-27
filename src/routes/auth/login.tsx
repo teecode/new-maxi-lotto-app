@@ -55,18 +55,20 @@ function RouteComponent() {
       // set user
       setUser(user)
       
-      // sync push subscription if it exists
+      // sync push subscription if it exists (run in background)
       if ('serviceWorker' in navigator && 'PushManager' in window) {
-        try {
-          const registration = await navigator.serviceWorker.ready;
-          const sub = await registration.pushManager.getSubscription();
-          if (sub && user.customerId) {
-              const { updatePushSubscription } = await import('@/services/AuthService');
-              await updatePushSubscription(user.customerId, JSON.stringify(sub));
+        (async () => {
+          try {
+            const registration = await navigator.serviceWorker.ready;
+            const sub = await registration.pushManager.getSubscription();
+            if (sub && user.customerId) {
+                const { updatePushSubscription } = await import('@/services/AuthService');
+                await updatePushSubscription(user.customerId, JSON.stringify(sub));
+            }
+          } catch (e) {
+            console.error('Push sync error', e);
           }
-        } catch (e) {
-          console.error('Push sync error', e);
-        }
+        })();
       }
 
       // redirect
