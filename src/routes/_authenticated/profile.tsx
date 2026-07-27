@@ -3,6 +3,7 @@ import ProfileNavigation from '@/components/user/profile-navigation'
 import ProfileSettingsMenu from '@/components/user/profile-settings-menu'
 import UserInfoCard from '@/components/user/user-info-card'
 import {useUserProfile} from '@/hooks/useUserProfile'
+import { PushNotificationManager } from '@/components/PushNotificationManager'
 import {createFileRoute} from '@tanstack/react-router'
 import PageHeader from "@/components/layouts/page-header.tsx";
 
@@ -38,6 +39,9 @@ function RouteComponent() {
                     avatar={"/avatar.jpg"}
                     rank={user.rank || "Newbie"}
                   />
+                  <div className="mt-4">
+                    <PushNotificationManager />
+                  </div>
                 </>
               )}
             </div>
