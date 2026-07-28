@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Outlet, createRootRouteWithContext } from '@tanstack/react-router'
-import { useAuthStore } from '@/store/authStore';
+import useAuthStore from '@/store/authStore';
 import MobileBottomNav from '@/components/layouts/mobile-bottom-nav'
 import type { AuthContext } from '@/store/authStore';
 import { LiveDrawOverlay } from '@/components/LiveDrawOverlay';
