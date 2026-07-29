@@ -11,8 +11,8 @@ self.addEventListener('push', (event) => {
 
   const options = {
     body: data.message || data.body,
-    icon: '/pwa-192x192.png',
-    badge: '/pwa-192x192.png',
+    icon: data.icon || '/maxilotto-icon.png',
+    badge: data.badge || '/maxilotto-icon.png',
     data: {
       url: data.url || '/'
     }

@@ -52,19 +52,78 @@ export async function login(
 	}
 }
 
+export const PUBLIC_VAPID_KEY =
+	'BGvj-Zh9pfncTH6GQA1Vap73ptpEw1xhWkOR4lsrpVeYCH8QAfd2oV8iuWcPf2g0t1f3XRamjGbDf1RXRyjvxiI';
+
+export function urlB64ToUint8Array(base64String: string): Uint8Array {
+	const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+	const base64 = (base64String + padding)
+		.replace(/-/g, '+')
+		.replace(/_/g, '/');
+
+	const rawData = window.atob(base64);
+	const outputArray = new Uint8Array(rawData.length);
+
+	for (let i = 0; i < rawData.length; ++i) {
+		outputArray[i] = rawData.charCodeAt(i);
+	}
+	return outputArray;
+}
+
 export const updatePushSubscription = async (
 	customerId: number,
 	endpointUrl: string
 ): Promise<any> => {
 	try {
-		const response = await apiClient.post('authenticate/UpdatePushNotificationsEndpoint', {
-			customerId,
-			endpointUrl,
-		});
+		const response = await apiClient.post(
+			'authenticate/UpdatePushNotificationsEndpoint',
+			{
+				customerId,
+				endpointUrl,
+			}
+		);
 		return response.data;
 	} catch (error: any) {
 		console.error('Failed to update push subscription', error);
+		throw error;
 	}
+};
+
+export const syncPushSubscription = async (
+	customerId: number
+): Promise<any> => {
+	if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+		console.warn('Push messaging is not supported in this browser.');
+		return null;
+	}
+
+	try {
+		const registration = await navigator.serviceWorker.ready;
+		let sub = await registration.pushManager.getSubscription();
+
+		// If no subscription exists, create one if permissions allow
+		if (!sub && Notification.permission !== 'denied') {
+			let perm: NotificationPermission = Notification.permission;
+			if (perm === 'default') {
+				perm = await Notification.requestPermission();
+			}
+			if (perm === 'granted') {
+				const applicationServerKey = urlB64ToUint8Array(PUBLIC_VAPID_KEY);
+				sub = await registration.pushManager.subscribe({
+					userVisibleOnly: true,
+					applicationServerKey: applicationServerKey.buffer as ArrayBuffer,
+				});
+			}
+		}
+
+		if (sub && customerId) {
+			console.log('[PushSync] Syncing push subscription to backend for customerId:', customerId);
+			return await updatePushSubscription(customerId, JSON.stringify(sub));
+		}
+	} catch (error) {
+		console.error('[PushSync] Error syncing push subscription:', error);
+	}
+	return null;
 };
 
 export const requestForgotPassword = async (email: string): Promise<any> => {

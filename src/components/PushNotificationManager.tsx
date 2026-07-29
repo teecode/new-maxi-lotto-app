@@ -2,6 +2,11 @@ import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { Bell } from 'lucide-react';
 import useAuthStore from '../store/authStore';
+import {
+  PUBLIC_VAPID_KEY,
+  urlB64ToUint8Array,
+  updatePushSubscription,
+} from '@/services/AuthService';
 
 export function PushNotificationManager() {
   const [isSupported, setIsSupported] = useState(false);
@@ -33,12 +38,11 @@ export function PushNotificationManager() {
         if (perm !== 'granted') return;
       }
 
-      const publicVapidKey = 'BGvj-Zh9pfncTH6GQA1Vap73ptpEw1xhWkOR4lsrpVeYCH8QAfd2oV8iuWcPf2g0t1f3XRamjGbDf1RXRyjvxiI';
-      const applicationServerKey = urlB64ToUint8Array(publicVapidKey); 
+      const applicationServerKey = urlB64ToUint8Array(PUBLIC_VAPID_KEY); 
       
       const sub = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey,
+        applicationServerKey: applicationServerKey.buffer as ArrayBuffer,
       });
       
       setSubscription(sub);
@@ -47,9 +51,7 @@ export function PushNotificationManager() {
       console.log('Push subscription:', JSON.stringify(sub));
       const minimalUser = useAuthStore.getState().minimalUser;
       if (minimalUser?.customerId) {
-         import('../services/AuthService').then(({ updatePushSubscription }) => {
-             updatePushSubscription(minimalUser.customerId, JSON.stringify(sub));
-         });
+        await updatePushSubscription(minimalUser.customerId, JSON.stringify(sub));
       }
     } catch (error) {
       console.error('Failed to subscribe to push notifications', error);
@@ -84,20 +86,4 @@ export function PushNotificationManager() {
       Enable Push Notifications
     </Button>
   );
-}
-
-// Utility function to convert VAPID key
-function urlB64ToUint8Array(base64String: string) {
-  const padding = '='.repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding)
-    .replace(/\-/g, '+')
-    .replace(/_/g, '/');
-
-  const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
-
-  for (let i = 0; i < rawData.length; ++i) {
-    outputArray[i] = rawData.charCodeAt(i);
-  }
-  return outputArray;
 }

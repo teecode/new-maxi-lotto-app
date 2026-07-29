@@ -13,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { toast } from "sonner";
-import { login } from '@/services/AuthService'
+import { login, syncPushSubscription } from '@/services/AuthService'
 import {Spinner} from "@/components/ui/spinner.tsx";
 
 const fallback = '/play' as const
@@ -55,20 +55,13 @@ function RouteComponent() {
       // set user
       setUser(user)
       
-      // sync push subscription if it exists (run in background)
-      if ('serviceWorker' in navigator && 'PushManager' in window) {
-        (async () => {
-          try {
-            const registration = await navigator.serviceWorker.ready;
-            const sub = await registration.pushManager.getSubscription();
-            if (sub && user.customerId) {
-                const { updatePushSubscription } = await import('@/services/AuthService');
-                await updatePushSubscription(user.customerId, JSON.stringify(sub));
-            }
-          } catch (e) {
-            console.error('Push sync error', e);
-          }
-        })();
+      // sync push subscription if customerId is present
+      if (user?.customerId) {
+        try {
+          await syncPushSubscription(user.customerId);
+        } catch (e) {
+          console.error('Push sync error on login', e);
+        }
       }
 
       // redirect
