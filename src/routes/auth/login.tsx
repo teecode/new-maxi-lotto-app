@@ -15,6 +15,7 @@ import z from "zod";
 import { toast } from "sonner";
 import { login, syncPushSubscription } from '@/services/AuthService'
 import {Spinner} from "@/components/ui/spinner.tsx";
+import { normalizeRedirectTarget } from '@/utils/redirect';
 
 const fallback = '/play' as const
 
@@ -54,18 +55,18 @@ function RouteComponent() {
       setAccessToken(user.token)
       // set user
       setUser(user)
-      
-      // sync push subscription if customerId is present
+
+      const redirectTarget = normalizeRedirectTarget(search.redirect, fallback)
+
+      // sync push subscription if customerId is present, but don't block the redirect
       if (user?.customerId) {
-        try {
-          await syncPushSubscription(user.customerId);
-        } catch (e) {
+        void syncPushSubscription(user.customerId).catch((e) => {
           console.error('Push sync error on login', e);
-        }
+        })
       }
 
       // redirect
-      await navigate({ to: search.redirect || fallback })
+      await navigate({ to: redirectTarget })
       // show toast
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
