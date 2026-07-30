@@ -1,4 +1,7 @@
-export function normalizeRedirectTarget(input: string | null | undefined, fallback: string): string {
+export function normalizeRedirectTarget(
+  input: string | null | undefined,
+  fallback: string,
+): string {
   if (!input) return fallback;
 
   const trimmed = input.trim();
@@ -6,7 +9,8 @@ export function normalizeRedirectTarget(input: string | null | undefined, fallba
 
   try {
     const parsed = new URL(trimmed);
-    const currentOrigin = typeof window !== 'undefined' ? window.location.origin : null;
+    const currentOrigin =
+      typeof window !== "undefined" ? window.location.origin : null;
     const isSameOrigin = currentOrigin ? parsed.origin === currentOrigin : true;
 
     if (isSameOrigin) {
@@ -16,5 +20,5 @@ export function normalizeRedirectTarget(input: string | null | undefined, fallba
     // fall through to the relative-path handling below
   }
 
-  return trimmed.startsWith('/') ? trimmed : fallback;
+  return trimmed.startsWith("/") ? trimmed : fallback;
 }
