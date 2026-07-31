@@ -22,7 +22,7 @@ interface GameResultResponse extends dataApiResponse {
 // {{base_url}}/api/user/my/earnings
 export const fetchBetTypes = async (gameType?: number): Promise<BetType[]> => {
 	try {
-        const url = gameType ? `v1/betType/byGameType/${gameType}` : 'v1/betType';
+        const url = gameType ? `v1/stakeType/byGameType/${gameType}` : 'v1/stakeType';
 		const response = await apiClient.get<BetType[]>(url);
 		return response.data;
 	} catch (error: any) {
@@ -38,7 +38,7 @@ export const fetchBetTypes = async (gameType?: number): Promise<BetType[]> => {
 export const fetchDailyGames = async (): Promise<Game[]> => {
 	try {
 		// v1 / dailygame / get;
-		const response = await apiClient.get<Game[]>('v1/dailygame/get');
+		const response = await apiClient.get<Game[]>('v1/draw/get');
 		return response.data;
 	} catch (error: any) {
 		if (error.response && error.response.data) {
@@ -79,7 +79,7 @@ export const placeBet = async (
 ) => {
 	try {
 		// v1 / dailygame / get;
-		const response = await apiClient.post<GameTicket>('Ticket', {
+		const response = await apiClient.post<GameTicket>('Wager', {
 			...payload,
 			betslips: betSlips,
 			requestId: generateUUID(), // generate a random string for requestId,
@@ -106,7 +106,7 @@ export const bookBet = async (
 	betSlips: any
 ) => {
 	try {
-		const response = await apiClient.post<{ ticketId: number }>('Ticket/BookTicket', {
+		const response = await apiClient.post<{ ticketId: number }>('Wager/BookTicket', {
 			...payload,
 			betslips: betSlips,
 			requestId: generateUUID(),
@@ -127,7 +127,7 @@ export const bookBet = async (
 export const fetchGameTicketById = async (id: number): Promise<GameTicket> => {
 	try {
 		// v1 / dailygame / get;
-		const response = await apiClient.get<GameTicket>(`Ticket/byid/${id}`);
+		const response = await apiClient.get<GameTicket>(`Wager/byid/${id}`);
 		return response.data;
 	} catch (error: any) {
 		if (error.response) {
@@ -148,7 +148,7 @@ export const fetchUserTickets = async (pagination: {
 }): Promise<GameTicketsResponse> => {
 
 	try {
-		const response = await apiClient.get<GameTicketsResponse>('Ticket', {
+		const response = await apiClient.get<GameTicketsResponse>('Wager', {
 			params: {
 				pageSize: pagination.pageSize,
 				page: pagination.pageIndex + 1,
@@ -204,7 +204,7 @@ export const fetchGameResults = async (pagination: {
 export const fetchLastFourWinner = async (): Promise<WinnerTicket[]> => {
 	try {
 		const response = await apiClient.get<WinnerTicket[]>(
-			'/Ticket/LatestWon?count=4'
+			'/Wager/LatestWon?count=4'
 		);
 		return response.data;
 	} catch (error: any) {
@@ -220,7 +220,7 @@ export const fetchLastFourWinner = async (): Promise<WinnerTicket[]> => {
 export const fetchTicketById = async (id: number): Promise<GameTicket> => {
 	try {
 		const response = await apiClient.get<GameTicket>(
-			`Ticket/byid/${id}`
+			`Wager/byid/${id}`
 		);
 		return response.data;
 	} catch (error: any) {
@@ -239,7 +239,7 @@ export const fetchBlockingRules = async (): Promise<
 	try {
 		const response = await apiClient.get<
 			import('@/types/game').BettingRulesConfig
-		>('v1/betType/blocking-rules');
+		>('v1/stakeType/blocking-rules');
 		return response.data;
 	} catch (error: any) {
 		console.error('Failed to fetch blocking rules', error);
@@ -265,7 +265,7 @@ export const fetchGameResultByDailyGameId = async (id: number): Promise<GameResu
 export const fetchDailyStakeSum = async (): Promise<{ sum: number }> => {
 	try {
 		const response = await apiClient.get<{ sum: number }>(
-			'Ticket/daily-stake-sum'
+			'Wager/daily-stake-sum'
 		);
 		return response.data;
 	} catch (error: any) {

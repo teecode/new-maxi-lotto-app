@@ -36,7 +36,7 @@ export async function login(
 	password: string
 ): Promise<User> {
 	try {
-		const response = await apiClient.post<User>('authenticate', {
+		const response = await apiClient.post<User>('session', {
 			usernameOrEmail,
 			password,
 		});
@@ -76,7 +76,7 @@ export const updatePushSubscription = async (
 ): Promise<any> => {
 	try {
 		const response = await apiClient.post(
-			'authenticate/UpdatePushNotificationsEndpoint',
+			'session/UpdatePushNotificationsEndpoint',
 			{
 				customerId,
 				endpointUrl,
@@ -179,7 +179,7 @@ export const verifyEmailToken = async (token: string): Promise<any> => {
 export const logout = async () => {
 	try {
 		const response = await apiClient.post<defaultApiResponse>(
-			'authenticate/Logout'
+			'session/Logout'
 		);
 		return response.data;
 	} catch (error: any) {

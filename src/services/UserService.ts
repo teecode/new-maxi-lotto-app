@@ -176,7 +176,7 @@ export const sendContactUsMessage = async (
 export const fetchFavouriteBalls = async (): Promise<number[]> => {
 	try {
 		const response = await apiClient.get<FavouriteBallsResponse>(
-			'/Ticket/favouriteball'
+			'/Wager/favouriteball'
 		);
 		return response.data.balls;
 	} catch (error: any) {
@@ -195,7 +195,7 @@ export const updateFavouriteBall = async (
 	balls: number[]
 ): Promise<any> => {
 	try {
-		const response = await apiClient.post<any>('/Ticket/favouriteball', {
+		const response = await apiClient.post<any>('/Wager/favouriteball', {
 			customerID,
 			balls,
 		});
