@@ -63,7 +63,7 @@ const slides: SlideData[] = [
     description: "Boost Your Odds: Play Accumulators on your lotto and watch your potential winnings skyrocket!",
     image: "/slide-5.png",
     ctaText: "Play Accumulator",
-    ctaLink: "/maxi-special-combo",
+    ctaLink: "/accumulator",
   },
   {
     id: 6,
