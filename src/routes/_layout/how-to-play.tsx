@@ -64,7 +64,7 @@ function RouteComponent() {
 
   return (
     <>
-      <PageHeader title="Maxi Derive & How to Play" />
+      <PageHeader title="Maxi Drive — How to Play" />
 
       <section className="py-8 sm:py-12 bg-slate-50/50">
         <div className="container space-y-10">
