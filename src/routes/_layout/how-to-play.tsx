@@ -1,47 +1,54 @@
 import {createFileRoute} from '@tanstack/react-router'
 import {Alert, AlertContent, AlertDescription, AlertIcon} from '@/components/ui/alert'
-import {AlertCircle, Loader2} from 'lucide-react'; // Added Loader2
-import {useGetBetTypes, useGetBlockingRules} from '@/hooks/useGames'; // Added hooks
+import {AlertCircle, Loader2} from 'lucide-react';
+import {useGetBetTypes, useGetBlockingRules} from '@/hooks/useGames';
 import {useMemo} from 'react';
 import PageHeader from "@/components/layouts/page-header.tsx";
 
 const HOW_TO_PLAY_STEPS: string[] = [
   'Create an account and complete quick KYC when required for withdrawals.',
-  'Fund your wallet via any supported method.',
-  'Pick your game (5/90, 2-Direct, Banker, Perm, and more).',
-  'Choose your numbers and set your stake.',
-  'Confirm your ticket and follow the draw on the Results page.',
-  'Get paid automatically into your wallet when you win.',
-  'Tip: You can combine strategies across Banker, Perms, and 2-Direct to match your risk preference.',
+  'Fund your wallet via Instant Bank Transfer, Card, or USSD in Nigerian Naira (₦).',
+  'Pick your game mode (5/90, 1-Direct, 2-Direct, Banker, Perms, or Maxi Derive).',
+  'Choose your numbers and set your stake in Naira (e.g. ₦100 per line).',
+  'Confirm your ticket and track live draw results on the Results page.',
+  'Get paid automatically into your Naira wallet as soon as the draw completes.',
+  'Tip: You can combine strategies across Single bets and Accumulators to customize your risk preference.',
 ];
-
 
 export const Route = createFileRoute('/_layout/how-to-play')({
   component: RouteComponent,
 })
 
+function LottoBall({ number, color = 'gold', highlighted = false }: { number: string | number; color?: 'gold' | 'blue' | 'purple' | 'emerald'; highlighted?: boolean }) {
+  const colorStyles = {
+    gold: 'from-amber-400 via-amber-500 to-amber-700 text-white shadow-amber-300/50',
+    blue: 'from-blue-400 via-blue-600 to-blue-800 text-white shadow-blue-300/50',
+    purple: 'from-purple-400 via-purple-600 to-purple-800 text-white shadow-purple-300/50',
+    emerald: 'from-emerald-400 via-emerald-600 to-emerald-800 text-white shadow-emerald-300/50',
+  };
+
+  return (
+    <div
+      className={`inline-flex items-center justify-center rounded-full bg-gradient-to-b ${colorStyles[color]} font-extrabold shadow-md transition-transform ${
+        highlighted ? 'scale-110 ring-2 ring-yellow-400 ring-offset-2 w-9 h-9 text-sm' : 'w-8 h-8 text-xs'
+      }`}
+    >
+      {number}
+    </div>
+  );
+}
+
 function RouteComponent() {
   const {data: blockingRules, isLoading: isLoadingRules} = useGetBlockingRules();
-  const {data: betTypes, isLoading: isLoadingBetTypes} = useGetBetTypes(2); // GameType 2 = Accumulator
+  const {data: betTypes, isLoading: isLoadingBetTypes} = useGetBetTypes(2);
 
   const rulesList = useMemo(() => {
     if (!blockingRules || !blockingRules.groups || !betTypes) return [];
 
     return blockingRules.groups.map(group => {
-      // Find the bet types that belong to this group
       const groupBetTypes = betTypes.filter(bt => group.codes.includes(bt.quickPlayCode));
-
-      // Create a human readable list of what is in this group
-      // If they share a common prefix description, use that.
-      // Or just list a few examples.
-
-      // Group by common description if possible?
-      // Let's just take the first one's description or NAP description as the Title?
       const firstBet = groupBetTypes[0];
       const title = firstBet?.napDescription || firstBet?.nap || group.groupId;
-
-      // Summary of codes? e.g. "First Ball High 10, 20..."
-      // Actually, better to say "You can only pick X outcome from: ..."
 
       return {
         id: group.groupId,
@@ -57,251 +64,399 @@ function RouteComponent() {
 
   return (
     <>
-      <PageHeader title="How to play" />
+      <PageHeader title="Maxi Derive & How to Play" />
 
-      <section className="py-8 sm:py-12">
-        <div className="container space-y-6">
-          <ul className="space-y-4">
-            {HOW_TO_PLAY_STEPS.map((step, index) => (
-              <li key={index} className="flex items-start gap-4">
-                <div
-                  className="flex w-7 h-7 shrink-0 items-center justify-center rounded-full bg-accent-1-900 text-primary-900 font-medium">
-                  {index + 1}
-                </div>
-                <p className="text-slate-700">{step}</p>
-              </li>
-            ))}
-          </ul>
-          <Alert variant="info" appearance="light">
-            <AlertIcon>
-              <AlertCircle/>
-            </AlertIcon>
-            <AlertContent>
-              <AlertDescription>
-                <strong>Tip:</strong> You can combine strategies across Banker, Perms, and 2-Direct
-                to match your risk preference.
-              </AlertDescription>
-            </AlertContent>
-          </Alert>
+      <section className="py-8 sm:py-12 bg-slate-50/50">
+        <div className="container space-y-10">
 
-          {/* Accumulator Bets Explanation */}
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mt-8">
-            <h2 className="text-xl md:text-2xl font-bold text-[#0A4B7F] mb-4 flex items-center gap-2">
+          {/* Quick 7-Step Start */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 space-y-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-[#0A4B7F] flex items-center gap-2">
               <span className="text-2xl">🚀</span>
-              What is an Accumulator Bet?
+              Get Started in 7 Easy Steps
             </h2>
-            <div className="space-y-4 text-gray-700 leading-relaxed">
-              <p>
-                Imagine you want to bet on a football match, but instead of just betting on <strong>one team</strong> to
-                win,
-                you bet on <strong>3 or 4 teams</strong> all at once in a single ticket.
-              </p>
+            <ul className="grid md:grid-cols-2 gap-4">
+              {HOW_TO_PLAY_STEPS.map((step, index) => (
+                <li key={index} className="flex items-start gap-4 p-3.5 rounded-2xl bg-slate-50 border border-slate-100">
+                  <div className="flex w-8 h-8 shrink-0 items-center justify-center rounded-full bg-[#0A4B7F] text-white font-bold text-sm shadow-sm">
+                    {index + 1}
+                  </div>
+                  <p className="text-sm text-slate-700 leading-relaxed font-medium">{step}</p>
+                </li>
+              ))}
+            </ul>
+            <Alert variant="info" appearance="light" className="bg-blue-50/60 border-blue-100">
+              <AlertIcon>
+                <AlertCircle className="text-[#0A4B7F]" />
+              </AlertIcon>
+              <AlertContent>
+                <AlertDescription className="text-sm text-[#0A4B7F]">
+                  <strong>Pro Tip:</strong> All bets and payouts are processed instantly in Nigerian Naira (₦). You can combine Single Bets and Accumulators to customize your payout returns!
+                </AlertDescription>
+              </AlertContent>
+            </Alert>
+          </div>
 
-              <div className="bg-blue-50/50 p-4 rounded-xl border border-blue-100">
-                <h3 className="font-bold text-[#0A4B7F] mb-2">Here is how it works:</h3>
-                <ul className="list-disc list-inside space-y-2 ml-2">
-                  <li>You pick multiple games (like a "combo").</li>
-                  <li><strong>The Good News:</strong> If they all win, you win a <strong>HUGE</strong> amount of money
-                    because the winnings multiply each other! 💰
-                  </li>
-                  <li><strong>The Catch:</strong> All your picks must be correct. If even one game loses, the whole
-                    ticket loses.
-                  </li>
-                </ul>
+          {/* Single Bets Explanation with Inline Image */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 space-y-6">
+            <div className="flex flex-col lg:flex-row gap-8 items-center">
+              <div className="space-y-4 lg:w-3/5">
+                <span className="text-xs font-bold bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full uppercase tracking-wider">
+                  Independent Payouts
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0A4B7F] flex items-center gap-2">
+                  <span>🎯</span> What is a Single Bet?
+                </h2>
+                <p className="text-slate-600 leading-relaxed">
+                  A <strong>Single Bet</strong> is the simplest and safest way to play MaxiLotto. Every line you select on your ticket stands <strong>100% independently</strong>.
+                </p>
+
+                <div className="bg-emerald-50/60 p-4 rounded-2xl border border-emerald-100 space-y-3">
+                  <h3 className="font-bold text-emerald-900 flex items-center gap-2">
+                    <span>💡</span> How Single Bet Payouts Work:
+                  </h3>
+                  <ul className="text-xs text-slate-700 space-y-2 list-disc list-inside">
+                    <li>You can place one or multiple picks on a single ticket.</li>
+                    <li><strong>Line-by-Line Payouts:</strong> If you place 3 picks and 2 win while 1 loses, you get paid cash for both winning picks! 💰</li>
+                    <li><strong>Naira Payout Formula:</strong> <code className="bg-white px-2 py-0.5 rounded text-emerald-800 font-mono font-bold">Line Return (₦) = Lines Won × Stake per Line (₦) × Odds</code></li>
+                  </ul>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700">
+                  <strong className="text-[#0A4B7F]">Example:</strong> Stake ₦100 per line on 3 Single Bets. If 2 lines win at 240x odds, you collect <span className="font-bold text-emerald-700">₦48,000</span> directly in your wallet!
+                </div>
               </div>
 
-              <p className="font-medium">
-                It is high risk, but <strong>very high reward</strong>. Perfect if you have a few lucky numbers across
-                different games!
-              </p>
+              <div className="lg:w-2/5 w-full flex justify-center">
+                <div className="relative rounded-2xl overflow-hidden shadow-md border border-slate-200 bg-slate-900 max-w-sm w-full">
+                  <img
+                    src="/single-bet-naira.png"
+                    alt="Single Bet Naira Payout Illustration"
+                    className="w-full h-auto object-cover"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Normal vs Machine Bets */}
-          <div className="bg-purple-50/50 rounded-2xl p-6 shadow-sm border border-purple-100 mt-8">
-            <h2 className="text-xl md:text-2xl font-bold text-purple-900 mb-4 flex items-center gap-2">
+          {/* Accumulator Bets Explanation with Inline Image */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 space-y-6">
+            <div className="flex flex-col lg:flex-row gap-8 items-center">
+              <div className="lg:w-2/5 w-full order-2 lg:order-1 flex justify-center">
+                <div className="relative rounded-2xl overflow-hidden shadow-md border border-slate-200 bg-slate-900 max-w-sm w-full">
+                  <img
+                    src="/accumulator-naira.png"
+                    alt="Accumulator Bet Naira Multiplier Illustration"
+                    className="w-full h-auto object-cover"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-4 lg:w-3/5 order-1 lg:order-2">
+                <span className="text-xs font-bold bg-blue-100 text-blue-800 px-3 py-1 rounded-full uppercase tracking-wider">
+                  Combo Multipliers
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0A4B7F] flex items-center gap-2">
+                  <span>🚀</span> What is an Accumulator Bet?
+                </h2>
+                <p className="text-slate-600 leading-relaxed">
+                  An <strong>Accumulator</strong> combines multiple selections into 1 mega ticket where odds multiply together for massive cash returns!
+                </p>
+
+                <div className="bg-blue-50/60 p-4 rounded-2xl border border-blue-100 space-y-3">
+                  <h3 className="font-bold text-blue-900 flex items-center gap-2">
+                    <span>⚡</span> High Risk, Massive Naira Rewards:
+                  </h3>
+                  <ul className="text-xs text-slate-700 space-y-2 list-disc list-inside">
+                    <li>Select picks across different games or markets into one accumulator.</li>
+                    <li><strong>Multiplier Magic:</strong> Odds multiply together (e.g. 5x × 10x × 20x = <strong>1,000x multiplier!</strong>).</li>
+                    <li><strong>All-or-Nothing:</strong> All picks must win. If 1 game loses, the ticket loses.</li>
+                  </ul>
+                </div>
+
+                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700">
+                  <strong className="text-[#0A4B7F]">Example:</strong> A ₦500 stake on a 4-leg accumulator with combined odds of 500x pays out <span className="font-bold text-blue-700">₦250,000</span> in Naira cash!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Core Bet Types (Direct & Perm) with Inline Image */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 space-y-6">
+            <div className="flex flex-col lg:flex-row gap-8 items-center">
+              <div className="space-y-4 lg:w-3/5">
+                <span className="text-xs font-bold bg-amber-100 text-amber-800 px-3 py-1 rounded-full uppercase tracking-wider">
+                  Game Modes
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0A4B7F] flex items-center gap-2">
+                  <span>🎟️</span> Direct Bets (1-Direct, 2-Direct & Direct 3–5)
+                </h2>
+                <p className="text-slate-600 leading-relaxed">
+                  In 5/90 lotteries, 5 winning balls are drawn out of 90. Direct bets require your chosen numbers to drop in the draw:
+                </p>
+              </div>
+
+              <div className="lg:w-2/5 w-full flex justify-center">
+                <div className="relative rounded-2xl overflow-hidden shadow-md border border-slate-200 bg-slate-900 max-w-sm w-full">
+                  <img
+                    src="/direct-bets-naira.png"
+                    alt="Direct Bets Naira Draw Illustration"
+                    className="w-full h-auto object-cover"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6 pt-2">
+
+              {/* 1-Direct */}
+              <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3 hover:border-blue-300 transition-colors">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-lg text-[#0A4B7F] flex items-center gap-2">
+                    <span>🎯</span> 1-Direct (First Ball)
+                  </h3>
+                  <span className="text-xs font-bold bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full">NAP 1</span>
+                </div>
+                <p className="text-sm text-slate-600">Pick 1 lucky number. It must drop as the <strong>very 1st ball</strong> drawn!</p>
+
+                <div className="bg-white p-3 rounded-xl border border-slate-200 text-xs space-y-2">
+                  <div className="text-slate-500 font-semibold">Draw Result Example:</div>
+                  <div className="flex items-center gap-2">
+                    <LottoBall number="45" color="gold" highlighted={true} />
+                    <LottoBall number="12" color="blue" />
+                    <LottoBall number="34" color="blue" />
+                    <LottoBall number="88" color="blue" />
+                    <LottoBall number="71" color="blue" />
+                  </div>
+                  <p className="text-emerald-700 font-semibold pt-1">
+                    ✓ You picked <span className="underline">#45</span>. 1st Ball was 45 → Pays <span className="font-bold text-emerald-800">₦24,000</span> on ₦100 stake!
+                  </p>
+                </div>
+              </div>
+
+              {/* 2-Direct */}
+              <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3 hover:border-blue-300 transition-colors">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-lg text-[#0A4B7F] flex items-center gap-2">
+                    <span>✌️</span> 2-Direct (NAP 2) & Direct 3–5
+                  </h3>
+                  <span className="text-xs font-bold bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full">NAP 2–5</span>
+                </div>
+                <p className="text-sm text-slate-600">Pick 2, 3, 4, or 5 numbers. <strong>ALL</strong> of your chosen numbers must drop anywhere in the draw.</p>
+
+                <div className="bg-white p-3 rounded-xl border border-slate-200 text-xs space-y-2">
+                  <div className="text-slate-500 font-semibold">Draw Result Example:</div>
+                  <div className="flex items-center gap-2">
+                    <LottoBall number="05" color="blue" />
+                    <LottoBall number="12" color="gold" highlighted={true} />
+                    <LottoBall number="34" color="blue" />
+                    <LottoBall number="88" color="gold" highlighted={true} />
+                    <LottoBall number="71" color="blue" />
+                  </div>
+                  <p className="text-emerald-700 font-semibold pt-1">
+                    ✓ You picked <span className="underline">#12 & #88</span>. Both hit → Pays <span className="font-bold text-emerald-800">₦24,000</span> on ₦100 stake!
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {/* Permutation & Banker/Against Section with Inline Image */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 space-y-6">
+            <div className="flex flex-col lg:flex-row gap-8 items-center">
+              <div className="lg:w-2/5 w-full order-2 lg:order-1 flex justify-center">
+                <div className="relative rounded-2xl overflow-hidden shadow-md border border-slate-200 bg-slate-900 max-w-sm w-full">
+                  <img
+                    src="/banker-against-naira.png"
+                    alt="Banker & Against Bet Payout Illustration"
+                    className="w-full h-auto object-cover"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-4 lg:w-3/5 order-1 lg:order-2">
+                <span className="text-xs font-bold bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full uppercase tracking-wider">
+                  Advanced Strategies
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0A4B7F] flex items-center gap-2">
+                  <span>🔄</span> Permutations & Banker Bets
+                </h2>
+                <p className="text-slate-600 leading-relaxed">
+                  Permutations and Banker Against bets let you cover multiple winning number combinations on a single ticket:
+                </p>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6 pt-2">
+
+              {/* Permutation */}
+              <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3 hover:border-amber-300 transition-colors">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-lg text-amber-900 flex items-center gap-2">
+                    <span>🔄</span> Permutation (Perm 2 to 5)
+                  </h3>
+                  <span className="text-xs font-bold bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full">Perm</span>
+                </div>
+                <p className="text-sm text-slate-600">Select a group of numbers (e.g. 4 numbers in Perm 2). The system generates all possible pairs for you!</p>
+
+                <div className="bg-white p-3 rounded-xl border border-slate-200 text-xs space-y-2">
+                  <div className="text-slate-500 font-semibold">Your Picks: #10, #20, #30, #40 (₦100 per line)</div>
+                  <p className="text-slate-700">If 3 numbers drop (#10, #30, #40), you win on <strong>3 winning pairs</strong> for a total payout of <span className="font-bold text-amber-800">₦72,000</span>!</p>
+                </div>
+              </div>
+
+              {/* Banker & Against */}
+              <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3 hover:border-indigo-300 transition-colors">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-lg text-indigo-900 flex items-center gap-2">
+                    <span>🏦</span> Banker & Against (AGS)
+                  </h3>
+                  <span className="text-xs font-bold bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-full">AGS</span>
+                </div>
+                <p className="text-sm text-slate-600">Pick 1 key <strong>Banker</strong> number paired <em>against</em> secondary numbers.</p>
+
+                <div className="bg-white p-3 rounded-xl border border-slate-200 text-xs space-y-2">
+                  <div className="text-slate-500 font-semibold">Banker #7 vs Against #15, #23, #42</div>
+                  <p className="text-slate-700">You win whenever <strong>#7</strong> drops alongside any against number! Pays cash in Naira per matching pair.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {/* Normal vs Machine Numbers */}
+          <div className="bg-purple-50/60 rounded-3xl p-6 sm:p-8 shadow-sm border border-purple-100 space-y-4">
+            <h2 className="text-xl sm:text-2xl font-bold text-purple-900 flex items-center gap-2">
               <span className="text-2xl">🤖</span>
               Normal vs. Machine Numbers
             </h2>
-            <div className="space-y-4 text-gray-700 leading-relaxed">
-              <p>
-                In standard lotteries, 5 numbers are drawn as the <strong>Winning Numbers</strong>, and another 5 numbers are drawn as the <strong>Machine Numbers</strong>.
-              </p>
+            <p className="text-slate-700 leading-relaxed">
+              In standard lotteries, 5 numbers are drawn as the <strong>Winning Numbers</strong>, and another 5 numbers are drawn as the <strong>Machine Numbers</strong>.
+            </p>
 
-              <div className="grid md:grid-cols-2 gap-4 mt-4">
-                <div className="bg-white p-4 rounded-xl border border-purple-100 shadow-sm">
-                   <h3 className="font-bold text-[#0A4B7F] mb-2 flex items-center gap-2"><span className="text-lg">🎯</span> Normal Bet</h3>
-                   <p className="text-sm">This is the traditional way to play. Your selected numbers are validated against the 5 Winning Numbers drawn. If your numbers match, you win!</p>
-                </div>
-                <div className="bg-white p-4 rounded-xl border border-purple-100 shadow-sm">
-                   <h3 className="font-bold text-purple-700 mb-2 flex items-center gap-2"><span className="text-lg">⚙️</span> Machine Bet</h3>
-                   <p className="text-sm">For supported games, you can choose to validate your bet against the 5 Machine Numbers. If your numbers match the machine numbers, you win the same great odds!</p>
-                </div>
+            <div className="grid md:grid-cols-2 gap-4 pt-2">
+              <div className="bg-white p-4 rounded-2xl border border-purple-100 shadow-sm space-y-1">
+                <h3 className="font-bold text-[#0A4B7F] flex items-center gap-2">
+                  <span className="text-lg">🎯</span> Normal Bet
+                </h3>
+                <p className="text-xs text-slate-600">Your selections are checked against the 5 Winning Numbers drawn. Standard payout mode in Naira (₦).</p>
               </div>
 
-              <p className="font-medium text-sm bg-white/50 p-2 rounded">
-                Look for the <strong>Normal Bet / Machine Bet</strong> toggle in your bet slip when playing supported games to switch between modes.
-              </p>
+              <div className="bg-white p-4 rounded-2xl border border-purple-100 shadow-sm space-y-1">
+                <h3 className="font-bold text-purple-700 flex items-center gap-2">
+                  <span className="text-lg">⚙️</span> Machine Bet
+                </h3>
+                <p className="text-xs text-slate-600">Your selections are checked against the 5 Machine Numbers drawn. Switch modes in your bet slip anytime!</p>
+              </div>
             </div>
           </div>
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mt-6">
-            <h2 className="text-xl md:text-2xl font-bold text-[#0A4B7F] mb-6 flex items-center gap-2">
+
+          {/* Maxi Derive & Fun Proposition Markets */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 space-y-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-[#0A4B7F] flex items-center gap-2">
               <span className="text-2xl">🎲</span>
-              Fun Ways to Bet
+              Maxi Derive & Proposition Markets
             </h2>
 
             <div className="grid md:grid-cols-2 gap-6">
 
               {/* High / Low */}
-              <div className="space-y-3">
-                <h3 className="font-bold text-lg text-[#01B1A8] flex items-center gap-2">
+              <div className="space-y-3 bg-slate-50 p-4.5 rounded-2xl border border-slate-100">
+                <h3 className="font-bold text-base text-[#01B1A8] flex items-center gap-2">
                   <span>📈</span> High or Low?
                 </h3>
-                <p className="text-sm text-gray-600">Guess if a number will be bigger or smaller than a target.</p>
-                <ul className="space-y-2 text-sm text-gray-700 bg-gray-50 p-3 rounded-xl">
-                  <li><strong>First Ball High/Low:</strong> Will the 1st ball be &gt; 40? or &lt; 40?</li>
-                  <li><strong>Last Ball High/Low:</strong> Will the 5th ball be &gt; 80?</li>
-                  <li className="text-xs text-gray-500 italic">Example: "FB_HI_50" means "First Ball Higher than 50"
-                  </li>
+                <p className="text-xs text-slate-600">Predict if a ball will be bigger or smaller than a threshold.</p>
+                <ul className="space-y-1.5 text-xs text-slate-700">
+                  <li>• <strong>First Ball High/Low:</strong> Will 1st ball be &gt; 40 or &lt; 40?</li>
+                  <li>• <strong>Last Ball High/Low:</strong> Will 5th ball be &gt; 80?</li>
                 </ul>
               </div>
 
               {/* Comparisons */}
-              <div className="space-y-3">
-                <h3 className="font-bold text-lg text-[#01B1A8] flex items-center gap-2">
-                  <span>🆚</span> Who is Bigger?
+              <div className="space-y-3 bg-slate-50 p-4.5 rounded-2xl border border-slate-100">
+                <h3 className="font-bold text-base text-[#01B1A8] flex items-center gap-2">
+                  <span>🆚</span> Ball Comparisons
                 </h3>
-                <p className="text-sm text-gray-600">Compare two balls against each other.</p>
-                <ul className="space-y-2 text-sm text-gray-700 bg-gray-50 p-3 rounded-xl">
-                  <li><strong>First vs Last:</strong> Is the 1st ball bigger than the Last ball?</li>
-                  <li><strong>First vs Second:</strong> Is the 1st ball bigger than the 2nd ball?</li>
-                  <li className="text-xs text-gray-500 italic">Example: "F_GT_L" means "First Greater Than Last"</li>
+                <p className="text-xs text-slate-600">Compare drawn balls against each other.</p>
+                <ul className="space-y-1.5 text-xs text-slate-700">
+                  <li>• <strong>First vs Last:</strong> Is 1st ball greater than 5th ball?</li>
+                  <li>• <strong>First 2 vs Last 2:</strong> Is sum of first 2 greater than sum of last 2?</li>
                 </ul>
               </div>
 
               {/* Odd / Even */}
-              <div className="space-y-3">
-                <h3 className="font-bold text-lg text-[#01B1A8] flex items-center gap-2">
+              <div className="space-y-3 bg-slate-50 p-4.5 rounded-2xl border border-slate-100">
+                <h3 className="font-bold text-base text-[#01B1A8] flex items-center gap-2">
                   <span>1️⃣</span> Odd or Even?
                 </h3>
-                <p className="text-sm text-gray-600">Guess if a ball is Odd (1, 3, 5...) or Even (2, 4, 6...).</p>
-                <ul className="space-y-2 text-sm text-gray-700 bg-gray-50 p-3 rounded-xl">
-                  <li><strong>First Odd/Even:</strong> Is the 1st ball Odd or Even?</li>
-                  <li><strong>Last Odd/Even:</strong> Is the last ball Odd or Even?</li>
+                <p className="text-xs text-slate-600">Bet on parity of drawn balls.</p>
+                <ul className="space-y-1.5 text-xs text-slate-700">
+                  <li>• <strong>First Odd/Even:</strong> Is 1st ball Odd or Even?</li>
+                  <li>• <strong>Last Odd/Even:</strong> Is last ball Odd or Even?</li>
                 </ul>
               </div>
 
               {/* Sums */}
-              <div className="space-y-3">
-                <h3 className="font-bold text-lg text-[#01B1A8] flex items-center gap-2">
-                  <span>➕</span> Total Sum
+              <div className="space-y-3 bg-slate-50 p-4.5 rounded-2xl border border-slate-100">
+                <h3 className="font-bold text-base text-[#01B1A8] flex items-center gap-2">
+                  <span>➕</span> Total Ball Sum
                 </h3>
-                <p className="text-sm text-gray-600">Add up all 5 winning numbers. What is the total?</p>
-                <ul className="space-y-2 text-sm text-gray-700 bg-gray-50 p-3 rounded-xl">
-                  <li><strong>Sum High:</strong> Is the total &gt; 200?</li>
-                  <li><strong>Sum Low:</strong> Is the total &lt; 100?</li>
-                  <li><strong>Sum Range:</strong> Is the total between 100 and 150?</li>
-                </ul>
-              </div>
-
-              {/* Primes & Squares */}
-              <div className="space-y-3">
-                <h3 className="font-bold text-lg text-[#01B1A8] flex items-center gap-2">
-                  <span>🔢</span> Specialized Math
-                </h3>
-                <p className="text-sm text-gray-600">Bet on mathematical properties of the numbers.</p>
-                <ul className="space-y-2 text-sm text-gray-700 bg-gray-50 p-3 rounded-xl">
-                  <li><strong>Primes:</strong> Is the First or Last ball a Prime Number? (e.g. 2, 3, 5, 7, 11...)</li>
-                  <li><strong>Perfect Squares:</strong> Is the First or Last ball a Perfect Square? (e.g. 1, 4, 9,
-                    16...)
-                  </li>
-                  <li><strong>Modulo 3:</strong> Bet on the remainder when the First Ball is divided by 3.</li>
-                </ul>
-              </div>
-
-              {/* Sequences */}
-              <div className="space-y-3">
-                <h3 className="font-bold text-lg text-[#01B1A8] flex items-center gap-2">
-                  <span>📉</span> Sequences
-                </h3>
-                <p className="text-sm text-gray-600">Predict the order of the drawn balls.</p>
-                <ul className="space-y-2 text-sm text-gray-700 bg-gray-50 p-3 rounded-xl">
-                  <li><strong>Increasing:</strong> Are the 5 balls strictly increasing? (e.g. 5, 12, 34, 55, 89)</li>
-                  <li><strong>Decreasing:</strong> Are the 5 balls strictly decreasing? (e.g. 89, 55, 34, 12, 5)</li>
+                <p className="text-xs text-slate-600">Add up all 5 drawn numbers.</p>
+                <ul className="space-y-1.5 text-xs text-slate-700">
+                  <li>• <strong>Sum High:</strong> Is total &gt; 200?</li>
+                  <li>• <strong>Sum Low:</strong> Is total &lt; 100?</li>
                 </ul>
               </div>
 
             </div>
           </div>
 
-          {/* Referral Guide Section */}
-          <div id="referrals" className="bg-gradient-to-br from-[#01B1A8]/10 to-blue-50/50 rounded-2xl p-6 shadow-sm border border-[#01B1A8]/20 mt-6 relative overflow-hidden">
-            <h2 className="text-xl md:text-2xl font-bold text-[#0A4B7F] mb-4 flex items-center gap-2">
+          {/* Referral Ambassador Program Guide */}
+          <div id="referrals" className="bg-gradient-to-br from-[#01B1A8]/10 to-blue-50/50 rounded-3xl p-6 sm:p-8 shadow-sm border border-[#01B1A8]/20 space-y-4">
+            <h2 className="text-xl sm:text-2xl font-bold text-[#0A4B7F] flex items-center gap-2">
               <span className="text-2xl">🤝</span>
-              How to Refer & Earn 20% Commission
+              Ambassador Program — Earn 20% Commission
             </h2>
-            <div className="space-y-4 text-gray-700 leading-relaxed">
-              <p>
-                MaxiLotto offers an incredibly lucrative <strong>Ambassador Program</strong> where you can earn passive income just by inviting your friends to play!
-              </p>
-
-              <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
-                <h3 className="font-bold text-[#0A4B7F] mb-2">Step-by-step Guide:</h3>
-                <ul className="list-disc list-inside space-y-2 ml-2">
-                  <li><strong>Step 1:</strong> Go to your <span className="font-semibold text-[#01B1A8]">Profile Settings</span> and click on the <strong>Referral</strong> tab.</li>
-                  <li><strong>Step 2:</strong> Copy your unique referral link or referral code.</li>
-                  <li><strong>Step 3:</strong> Share it with your friends via WhatsApp, Twitter, Facebook, or anywhere!</li>
-                  <li><strong>Step 4:</strong> When they sign up using your link, they become your <strong>downline</strong>.</li>
-                  <li><strong>Step 5:</strong> You instantly start earning up to <strong>20% commission</strong> on their activities!</li>
-                </ul>
-              </div>
-
-              <p className="font-medium">
-                You can track all your earnings, view your active network, and see your accumulated commissions in real-time from the <strong>Referral Dashboard</strong>.
-              </p>
+            <p className="text-sm text-slate-700 leading-relaxed">
+              Earn passive income in Nigerian Naira (₦) by inviting friends! You instantly receive up to <strong>20% commission</strong> on your downline's activity.
+            </p>
+            <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm space-y-2 text-xs text-slate-700">
+              <p>1. Go to Profile Settings → Referral tab.</p>
+              <p>2. Share your unique referral link via WhatsApp, Twitter, or Facebook.</p>
+              <p>3. Track your real-time Naira earnings on your Referral Dashboard!</p>
             </div>
           </div>
 
-          {/* Accumulator Rules Section */}
-          <div className="bg-red-50/50 rounded-2xl p-6 shadow-sm border border-red-100 mt-6">
-            <h2 className="text-xl md:text-2xl font-bold text-red-800 mb-4 flex items-center gap-2">
+          {/* Accumulator Restrictions */}
+          <div className="bg-red-50/50 rounded-3xl p-6 sm:p-8 shadow-sm border border-red-100 space-y-4">
+            <h2 className="text-xl sm:text-2xl font-bold text-red-800 flex items-center gap-2">
               <span className="text-2xl">⚠️</span>
               Accumulator Rules & Restrictions
             </h2>
-            <div className="space-y-4">
-              <p className="text-gray-700">
-                To keep the game fair and manageable, some combinations of bets are restricted within the same ticket.
-                Specifically, you cannot stack too many similar or correlated outcomes (like multiple "First Ball High"
-                bets) in one accumulator.
-              </p>
+            <p className="text-sm text-slate-700">
+              To maintain fair play, correlated outcomes cannot be stacked excessively within a single accumulator ticket.
+            </p>
 
-              {isLoading ? (
-                <div className="flex justify-center items-center py-8 text-gray-500">
-                  <Loader2 className="animate-spin mr-2"/> Loading rules...
-                </div>
-              ) : (
-                <div className="grid md:grid-cols-2 gap-4 mt-4">
-                  {rulesList.map(rule => (
-                    <div key={rule.id} className="bg-white p-4 rounded-xl border border-red-100 shadow-sm">
-                      <h4 className="font-bold text-[#0A4B7F]">{rule.title}</h4>
-                      <div className="flex items-center gap-2 mt-1 mb-2">
-                                    <span
-                                      className={`text-xs font-bold px-2 py-0.5 rounded-full ${rule.maxSelections === 1 ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}`}>
-                                        Max {rule.maxSelections} Selection{rule.maxSelections !== 1 ? 's' : ''}
-                                    </span>
-                      </div>
-                      <p className="text-sm text-gray-500 italic">
-                        Examples: {rule.examples}
-                      </p>
-                    </div>
-                  ))}
-                  {rulesList.length === 0 && (
-                    <p className="text-gray-500 italic col-span-2 text-center">No specific restrictions currently
-                      active.</p>
-                  )}
-                </div>
-              )}
-            </div>
+            {isLoading ? (
+              <div className="flex justify-center items-center py-8 text-slate-500">
+                <Loader2 className="animate-spin mr-2"/> Loading rules...
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-2 gap-4">
+                {rulesList.map(rule => (
+                  <div key={rule.id} className="bg-white p-4 rounded-2xl border border-red-100 shadow-sm space-y-1">
+                    <h4 className="font-bold text-[#0A4B7F] text-sm">{rule.title}</h4>
+                    <span className={`inline-block text-xs font-bold px-2 py-0.5 rounded-full ${rule.maxSelections === 1 ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}`}>
+                      Max {rule.maxSelections} Selection{rule.maxSelections !== 1 ? 's' : ''}
+                    </span>
+                    <p className="text-xs text-slate-500 italic pt-1">
+                      Examples: {rule.examples}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
         </div>
@@ -309,4 +464,3 @@ function RouteComponent() {
     </>
   )
 }
-
