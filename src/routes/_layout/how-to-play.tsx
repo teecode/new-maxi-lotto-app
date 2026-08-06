@@ -118,12 +118,12 @@ function RouteComponent() {
                   <ul className="text-xs text-slate-700 space-y-2 list-disc list-inside">
                     <li>You can place one or multiple picks on a single ticket.</li>
                     <li><strong>Line-by-Line Payouts:</strong> If you place 3 picks and 2 win while 1 loses, you get paid cash for both winning picks! 💰</li>
-                    <li><strong>Naira Payout Formula:</strong> <code className="bg-white px-2 py-0.5 rounded text-emerald-800 font-mono font-bold">Line Return (₦) = Lines Won × Stake per Line (₦) × Odds</code></li>
+                    <li><strong>Naira Payout Formula:</strong> <code className="bg-white px-2 py-0.5 rounded text-emerald-800 font-mono font-bold">Line Return (₦) = Stake per Line (₦) × Odds Factor</code></li>
                   </ul>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700">
-                  <strong className="text-[#0A4B7F]">Example:</strong> Stake ₦100 per line on 3 Single Bets. If 2 lines win at 240x odds, you collect <span className="font-bold text-emerald-700">₦48,000</span> directly in your wallet!
+                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700">
+                  <strong className="text-[#0A4B7F]">Example:</strong> Stake ₦100 per line on 2-Direct (240x odds). If your line hits, you win <span className="font-bold text-emerald-700 font-mono text-sm">₦24,000</span> directly in your wallet!
                 </div>
               </div>
 
@@ -174,8 +174,8 @@ function RouteComponent() {
                   </ul>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700">
-                  <strong className="text-[#0A4B7F]">Example:</strong> A ₦500 stake on a 4-leg accumulator with combined odds of 500x pays out <span className="font-bold text-blue-700">₦250,000</span> in Naira cash!
+                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-700">
+                  <strong className="text-[#0A4B7F]">Example:</strong> A ₦500 stake on a 4-leg accumulator with combined odds of 500x pays out <span className="font-bold text-blue-700 font-mono text-sm">₦250,000</span> in Naira cash!
                 </div>
               </div>
             </div>
@@ -186,13 +186,13 @@ function RouteComponent() {
             <div className="flex flex-col lg:flex-row gap-8 items-center">
               <div className="space-y-4 lg:w-3/5">
                 <span className="text-xs font-bold bg-amber-100 text-amber-800 px-3 py-1 rounded-full uppercase tracking-wider">
-                  Game Modes
+                  Official Game Odds
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0A4B7F] flex items-center gap-2">
                   <span>🎟️</span> Direct Bets (1-Direct, 2-Direct & Direct 3–5)
                 </h2>
                 <p className="text-slate-600 leading-relaxed">
-                  In 5/90 lotteries, 5 winning balls are drawn out of 90. Direct bets require your chosen numbers to drop in the draw:
+                  In 5/90 lotteries, 5 winning balls are drawn out of 90. Here are the exact official win factors (odds) for Direct bets:
                 </p>
               </div>
 
@@ -215,7 +215,7 @@ function RouteComponent() {
                   <h3 className="font-bold text-lg text-[#0A4B7F] flex items-center gap-2">
                     <span>🎯</span> 1-Direct (First Ball)
                   </h3>
-                  <span className="text-xs font-bold bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full">NAP 1</span>
+                  <span className="text-xs font-bold bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full font-mono">40x Odds</span>
                 </div>
                 <p className="text-sm text-slate-600">Pick 1 lucky number. It must drop as the <strong>very 1st ball</strong> drawn!</p>
 
@@ -229,7 +229,7 @@ function RouteComponent() {
                     <LottoBall number="71" color="blue" />
                   </div>
                   <p className="text-emerald-700 font-semibold pt-1">
-                    ✓ You picked <span className="underline">#45</span>. 1st Ball was 45 → Pays <span className="font-bold text-emerald-800">₦24,000</span> on ₦100 stake!
+                    ✓ You picked <span className="underline">#45</span>. 1st Ball was 45 → Pays <span className="font-bold text-emerald-800 font-mono text-sm">₦4,000</span> on ₦100 stake! (₦100 × 40x)
                   </p>
                 </div>
               </div>
@@ -238,11 +238,11 @@ function RouteComponent() {
               <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3 hover:border-blue-300 transition-colors">
                 <div className="flex items-center justify-between">
                   <h3 className="font-bold text-lg text-[#0A4B7F] flex items-center gap-2">
-                    <span>✌️</span> 2-Direct (NAP 2) & Direct 3–5
+                    <span>✌️</span> 2-Direct (NAP 2)
                   </h3>
-                  <span className="text-xs font-bold bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full">NAP 2–5</span>
+                  <span className="text-xs font-bold bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full font-mono">240x Odds</span>
                 </div>
-                <p className="text-sm text-slate-600">Pick 2, 3, 4, or 5 numbers. <strong>ALL</strong> of your chosen numbers must drop anywhere in the draw.</p>
+                <p className="text-sm text-slate-600">Pick 2 numbers. <strong>BOTH</strong> numbers must drop anywhere among the 5 winning balls.</p>
 
                 <div className="bg-white p-3 rounded-xl border border-slate-200 text-xs space-y-2">
                   <div className="text-slate-500 font-semibold">Draw Result Example:</div>
@@ -254,8 +254,38 @@ function RouteComponent() {
                     <LottoBall number="71" color="blue" />
                   </div>
                   <p className="text-emerald-700 font-semibold pt-1">
-                    ✓ You picked <span className="underline">#12 & #88</span>. Both hit → Pays <span className="font-bold text-emerald-800">₦24,000</span> on ₦100 stake!
+                    ✓ You picked <span className="underline">#12 & #88</span>. Both hit → Pays <span className="font-bold text-emerald-800 font-mono text-sm">₦24,000</span> on ₦100 stake! (₦100 × 240x)
                   </p>
+                </div>
+              </div>
+
+              {/* 3-Direct */}
+              <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3 hover:border-blue-300 transition-colors">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-lg text-[#0A4B7F] flex items-center gap-2">
+                    <span>🔥</span> 3-Direct (NAP 3)
+                  </h3>
+                  <span className="text-xs font-bold bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full font-mono">2,100x Odds</span>
+                </div>
+                <p className="text-sm text-slate-600">Pick 3 numbers. All 3 must drop among the 5 winning numbers drawn.</p>
+                <div className="bg-white p-3 rounded-xl border border-slate-200 text-xs text-slate-700">
+                  <strong className="text-[#0A4B7F]">Payout Example:</strong> Stake ₦100 → Pays <span className="font-bold text-emerald-800 font-mono text-sm">₦210,000</span> cash! (₦100 × 2,100x)
+                </div>
+              </div>
+
+              {/* 4-Direct & 5-Direct */}
+              <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3 hover:border-blue-300 transition-colors">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-lg text-[#0A4B7F] flex items-center gap-2">
+                    <span>💎</span> 4-Direct & 5-Direct
+                  </h3>
+                  <span className="text-xs font-bold bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full font-mono">4,000x - 44,000x</span>
+                </div>
+                <p className="text-sm text-slate-600">Match 4 or 5 numbers drawn for giant jackpots!</p>
+                <div className="bg-white p-3 rounded-xl border border-slate-200 text-xs text-slate-700">
+                  <strong className="text-[#0A4B7F]">Payout Examples:</strong><br />
+                  • 4-Direct (4,000x): ₦100 stake → <span className="font-bold text-emerald-800 font-mono">₦400,000</span><br />
+                  • 5-Direct (44,000x): ₦100 stake → <span className="font-bold text-emerald-800 font-mono">₦4,400,000</span>
                 </div>
               </div>
 
@@ -277,13 +307,13 @@ function RouteComponent() {
 
               <div className="space-y-4 lg:w-3/5 order-1 lg:order-2">
                 <span className="text-xs font-bold bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full uppercase tracking-wider">
-                  Advanced Strategies
+                  Multiple Line Coverage
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0A4B7F] flex items-center gap-2">
                   <span>🔄</span> Permutations & Banker Bets
                 </h2>
                 <p className="text-slate-600 leading-relaxed">
-                  Permutations and Banker Against bets let you cover multiple winning number combinations on a single ticket:
+                  Permutations and Banker Against bets let you cover multiple winning combinations on a single ticket:
                 </p>
               </div>
             </div>
@@ -296,13 +326,13 @@ function RouteComponent() {
                   <h3 className="font-bold text-lg text-amber-900 flex items-center gap-2">
                     <span>🔄</span> Permutation (Perm 2 to 5)
                   </h3>
-                  <span className="text-xs font-bold bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full">Perm</span>
+                  <span className="text-xs font-bold bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full font-mono">Perm 2 = 240x</span>
                 </div>
-                <p className="text-sm text-slate-600">Select a group of numbers (e.g. 4 numbers in Perm 2). The system generates all possible pairs for you!</p>
+                <p className="text-sm text-slate-600">Select a pool of numbers (e.g. 4 numbers in Perm 2). The system generates all possible pairs for you!</p>
 
                 <div className="bg-white p-3 rounded-xl border border-slate-200 text-xs space-y-2">
                   <div className="text-slate-500 font-semibold">Your Picks: #10, #20, #30, #40 (₦100 per line)</div>
-                  <p className="text-slate-700">If 3 numbers drop (#10, #30, #40), you win on <strong>3 winning pairs</strong> for a total payout of <span className="font-bold text-amber-800">₦72,000</span>!</p>
+                  <p className="text-slate-700">If 3 numbers drop (#10, #30, #40), you hit <strong>3 winning pairs</strong>: 3 × (₦100 × 240x) = <span className="font-bold text-amber-800 font-mono text-sm">₦72,000</span> total payout!</p>
                 </div>
               </div>
 
@@ -312,16 +342,78 @@ function RouteComponent() {
                   <h3 className="font-bold text-lg text-indigo-900 flex items-center gap-2">
                     <span>🏦</span> Banker & Against (AGS)
                   </h3>
-                  <span className="text-xs font-bold bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-full">AGS</span>
+                  <span className="text-xs font-bold bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-full font-mono">240x Odds</span>
                 </div>
                 <p className="text-sm text-slate-600">Pick 1 key <strong>Banker</strong> number paired <em>against</em> secondary numbers.</p>
 
                 <div className="bg-white p-3 rounded-xl border border-slate-200 text-xs space-y-2">
-                  <div className="text-slate-500 font-semibold">Banker #7 vs Against #15, #23, #42</div>
-                  <p className="text-slate-700">You win whenever <strong>#7</strong> drops alongside any against number! Pays cash in Naira per matching pair.</p>
+                  <div className="text-slate-500 font-semibold">Banker #7 vs Against #15, #23, #42 (₦100 per pair)</div>
+                  <p className="text-slate-700">You win whenever <strong>#7</strong> drops alongside any against number! Each matching pair pays <span className="font-bold text-indigo-800 font-mono text-sm">₦24,000</span> (₦100 × 240x).</p>
                 </div>
               </div>
 
+            </div>
+          </div>
+
+          {/* Quick Odds & Win Factors Table */}
+          <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 space-y-4">
+            <h2 className="text-xl sm:text-2xl font-bold text-[#0A4B7F] flex items-center gap-2">
+              <span>📊</span>
+              Official MaxiLotto Win Factors (Odds Table)
+            </h2>
+            <p className="text-xs text-slate-600">
+              Reference table showing official payout multiplier factors per ₦100 stake:
+            </p>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="bg-slate-100 text-[#0A4B7F] border-b border-slate-200">
+                    <th className="p-3 font-bold">Bet Type</th>
+                    <th className="p-3 font-bold">Code</th>
+                    <th className="p-3 font-bold">Win Factor (Odds)</th>
+                    <th className="p-3 font-bold">Payout on ₦100 Stake</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 text-slate-700">
+                  <tr className="hover:bg-slate-50">
+                    <td className="p-3 font-semibold text-blue-900">1 DIRECT (First Ball)</td>
+                    <td className="p-3 font-mono">D1</td>
+                    <td className="p-3 font-bold text-emerald-700 font-mono">40.00x</td>
+                    <td className="p-3 font-bold font-mono">₦4,000</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50">
+                    <td className="p-3 font-semibold text-blue-900">2 DIRECT / PERM 2</td>
+                    <td className="p-3 font-mono">D2 / P2</td>
+                    <td className="p-3 font-bold text-emerald-700 font-mono">240.00x</td>
+                    <td className="p-3 font-bold font-mono">₦24,000</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50">
+                    <td className="p-3 font-semibold text-blue-900">3 DIRECT / PERM 3</td>
+                    <td className="p-3 font-mono">D3 / P3</td>
+                    <td className="p-3 font-bold text-emerald-700 font-mono">2,100.00x</td>
+                    <td className="p-3 font-bold font-mono">₦210,000</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50">
+                    <td className="p-3 font-semibold text-blue-900">4 DIRECT / PERM 4</td>
+                    <td className="p-3 font-mono">D4 / P4</td>
+                    <td className="p-3 font-bold text-emerald-700 font-mono">4,000.00x</td>
+                    <td className="p-3 font-bold font-mono">₦400,000</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50">
+                    <td className="p-3 font-semibold text-blue-900">5 DIRECT / PERM 5</td>
+                    <td className="p-3 font-mono">D5 / P5</td>
+                    <td className="p-3 font-bold text-emerald-700 font-mono">44,000.00x</td>
+                    <td className="p-3 font-bold font-mono">₦4,400,000</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50">
+                    <td className="p-3 font-semibold text-indigo-900">BANKER / AGAINST SINGLES</td>
+                    <td className="p-3 font-mono">AG / AGS</td>
+                    <td className="p-3 font-bold text-indigo-700 font-mono">240.00x</td>
+                    <td className="p-3 font-bold font-mono">₦24,000 per match</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
 
