@@ -8,7 +8,7 @@ import PageHeader from "@/components/layouts/page-header.tsx";
 const HOW_TO_PLAY_STEPS: string[] = [
   'Create an account and complete quick KYC when required for withdrawals.',
   'Fund your wallet via Instant Bank Transfer, Card, or USSD in Nigerian Naira (₦).',
-  'Pick your game mode (5/90, 1-Direct, 2-Direct, Banker, Perms, or Maxi Derive).',
+  'Pick your game mode (5/90, 1-Direct, 2-Direct, Banker, Against Singles, Perms, or Maxi Derive).',
   'Choose your numbers and set your stake in Naira (e.g. ₦100 per line).',
   'Confirm your ticket and track live draw results on the Results page.',
   'Get paid automatically into your Naira wallet as soon as the draw completes.',
@@ -292,7 +292,7 @@ function RouteComponent() {
             </div>
           </div>
 
-          {/* Permutation & Banker/Against Section with Inline Image */}
+          {/* Permutations, Banker & Against Singles Section with Inline Image */}
           <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-100 space-y-6">
             <div className="flex flex-col lg:flex-row gap-8 items-center">
               <div className="lg:w-2/5 w-full order-2 lg:order-1 flex justify-center">
@@ -307,48 +307,64 @@ function RouteComponent() {
 
               <div className="space-y-4 lg:w-3/5 order-1 lg:order-2">
                 <span className="text-xs font-bold bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full uppercase tracking-wider">
-                  Multiple Line Coverage
+                  Advanced Combinations
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0A4B7F] flex items-center gap-2">
-                  <span>🔄</span> Permutations & Banker Bets
+                  <span>🔄</span> Permutations, Banker & Against Singles
                 </h2>
                 <p className="text-slate-600 leading-relaxed">
-                  Permutations and Banker Against bets let you cover multiple winning combinations on a single ticket:
+                  Learn how Permutations, Single-Ball Banker, and Multiple vs. Multiple Against Singles work:
                 </p>
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6 pt-2">
+            <div className="grid md:grid-cols-3 gap-6 pt-2">
 
               {/* Permutation */}
               <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3 hover:border-amber-300 transition-colors">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-bold text-lg text-amber-900 flex items-center gap-2">
-                    <span>🔄</span> Permutation (Perm 2 to 5)
+                  <h3 className="font-bold text-base text-amber-900 flex items-center gap-1.5">
+                    <span>🔄</span> Permutation (Perm)
                   </h3>
-                  <span className="text-xs font-bold bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full font-mono">Perm 2 = 240x</span>
+                  <span className="text-xs font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-mono">240x</span>
                 </div>
-                <p className="text-sm text-slate-600">Select a pool of numbers (e.g. 4 numbers in Perm 2). The system generates all possible pairs for you!</p>
+                <p className="text-xs text-slate-600">Pick a pool of numbers (e.g. 4 numbers in Perm 2). The system generates all possible pair combinations for you.</p>
 
-                <div className="bg-white p-3 rounded-xl border border-slate-200 text-xs space-y-2">
-                  <div className="text-slate-500 font-semibold">Your Picks: #10, #20, #30, #40 (₦100 per line)</div>
-                  <p className="text-slate-700">If 3 numbers drop (#10, #30, #40), you hit <strong>3 winning pairs</strong>: 3 × (₦100 × 240x) = <span className="font-bold text-amber-800 font-mono text-sm">₦72,000</span> total payout!</p>
+                <div className="bg-white p-3 rounded-xl border border-slate-200 text-xs space-y-1.5">
+                  <div className="text-slate-500 font-semibold">Example Picks: #10, #20, #30, #40</div>
+                  <p className="text-slate-700">If 3 numbers drop (#10, #30, #40), you win on <strong>3 pairs</strong>: 3 × (₦100 × 240x) = <span className="font-bold text-amber-800 font-mono">₦72,000</span>!</p>
                 </div>
               </div>
 
-              {/* Banker & Against */}
+              {/* Banker (Single Ball vs 1-90) */}
               <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3 hover:border-indigo-300 transition-colors">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-bold text-lg text-indigo-900 flex items-center gap-2">
-                    <span>🏦</span> Banker & Against (AGS)
+                  <h3 className="font-bold text-base text-indigo-900 flex items-center gap-1.5">
+                    <span>🏦</span> Banker (AG)
                   </h3>
-                  <span className="text-xs font-bold bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-full font-mono">240x Odds</span>
+                  <span className="text-xs font-bold bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full font-mono">240x</span>
                 </div>
-                <p className="text-sm text-slate-600">Pick 1 key <strong>Banker</strong> number paired <em>against</em> secondary numbers.</p>
+                <p className="text-xs text-slate-600"><strong>Single Ball vs 1–90 / Against:</strong> Pick 1 strong "Banker" ball. It is paired against target numbers.</p>
 
-                <div className="bg-white p-3 rounded-xl border border-slate-200 text-xs space-y-2">
-                  <div className="text-slate-500 font-semibold">Banker #7 vs Against #15, #23, #42 (₦100 per pair)</div>
-                  <p className="text-slate-700">You win whenever <strong>#7</strong> drops alongside any against number! Each matching pair pays <span className="font-bold text-indigo-800 font-mono text-sm">₦24,000</span> (₦100 × 240x).</p>
+                <div className="bg-white p-3 rounded-xl border border-slate-200 text-xs space-y-1.5">
+                  <div className="text-slate-500 font-semibold">Banker #7 vs Against #15, #23, #42</div>
+                  <p className="text-slate-700">You win whenever <strong>#7</strong> drops alongside any against number! Each match pays <span className="font-bold text-indigo-800 font-mono">₦24,000</span> (₦100 × 240x).</p>
+                </div>
+              </div>
+
+              {/* Against Singles (AGS - Multiple vs Multiple) */}
+              <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3 hover:border-purple-300 transition-colors">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-base text-purple-900 flex items-center gap-1.5">
+                    <span>⚔️</span> Against Singles (AGS)
+                  </h3>
+                  <span className="text-xs font-bold bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full font-mono">240x</span>
+                </div>
+                <p className="text-xs text-slate-600"><strong>Multiple vs. Multiple:</strong> Pick Group A (multiple numbers) vs. Group B (multiple numbers).</p>
+
+                <div className="bg-white p-3 rounded-xl border border-slate-200 text-xs space-y-1.5">
+                  <div className="text-slate-500 font-semibold">Group A (#7, #15) vs Group B (#33, #48, #89)</div>
+                  <p className="text-slate-700">Whenever any number from Group A AND Group B drop together, you win <span className="font-bold text-purple-800 font-mono">₦24,000</span> per pair match!</p>
                 </div>
               </div>
 
@@ -407,10 +423,16 @@ function RouteComponent() {
                     <td className="p-3 font-bold font-mono">₦4,400,000</td>
                   </tr>
                   <tr className="hover:bg-slate-50">
-                    <td className="p-3 font-semibold text-indigo-900">BANKER / AGAINST SINGLES</td>
-                    <td className="p-3 font-mono">AG / AGS</td>
+                    <td className="p-3 font-semibold text-indigo-900">BANKER (Single Ball vs 1-90)</td>
+                    <td className="p-3 font-mono">AG</td>
                     <td className="p-3 font-bold text-indigo-700 font-mono">240.00x</td>
                     <td className="p-3 font-bold font-mono">₦24,000 per match</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50">
+                    <td className="p-3 font-semibold text-purple-900">AGAINST SINGLES (Multiple vs Multiple)</td>
+                    <td className="p-3 font-mono">AGS</td>
+                    <td className="p-3 font-bold text-purple-700 font-mono">240.00x</td>
+                    <td className="p-3 font-bold font-mono">₦24,000 per pair match</td>
                   </tr>
                 </tbody>
               </table>
