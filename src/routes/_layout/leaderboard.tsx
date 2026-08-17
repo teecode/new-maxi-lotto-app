@@ -339,7 +339,7 @@ function LeaderboardPage() {
                       className={cn(
                         "rounded-2xl p-4 border transition-all duration-300 bg-slate-900/80 backdrop-blur-md relative overflow-hidden",
                         isUserHighlighted
-                          ? "bg-gradient-to-r from-amber-500/20 via-yellow-500/15 to-amber-500/20 border-amber-400/80 ring-2 ring-amber-400/60 shadow-[0_0_20px_rgba(251,191,36,0.3)] animate-pulse"
+                          ? "bg-gradient-to-r from-amber-500/20 via-yellow-500/15 to-amber-500/20 border-amber-400/80 ring-2 ring-amber-400/60 shadow-[0_0_20px_rgba(251,191,36,0.3)] animate-pulse-3"
                           : "border-slate-800 hover:border-slate-700"
                       )}
                     >
@@ -484,7 +484,7 @@ function LeaderboardPage() {
                             className={cn(
                               "transition-all duration-500 group hover:bg-slate-800/40",
                               isUserHighlighted
-                                ? "bg-gradient-to-r from-amber-500/20 via-yellow-500/15 to-amber-500/20 border-y-2 border-amber-400/80 shadow-[0_0_25px_rgba(251,191,36,0.35)] ring-2 ring-amber-400/60 animate-pulse"
+                                ? "bg-gradient-to-r from-amber-500/20 via-yellow-500/15 to-amber-500/20 border-y-2 border-amber-400/80 shadow-[0_0_25px_rgba(251,191,36,0.35)] ring-2 ring-amber-400/60 animate-pulse-3"
                                 : index % 2 === 0
                                 ? "bg-slate-900/30"
                                 : "bg-slate-950/30"

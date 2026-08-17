@@ -475,3 +475,16 @@ html {
 	background-position: center;
 	background-size: cover;
 }
+
+@keyframes pulse3 {
+	0%, 100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.35;
+	}
+}
+
+.animate-pulse-3 {
+	animation: pulse3 0.8s ease-in-out 3;
+}
