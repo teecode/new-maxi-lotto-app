@@ -151,3 +151,19 @@ export const getImageUrl = (name: string) => {
 // const finalImagePath = image ? `/${image}` : '/placeholder.png';
 export const finalImagePath = (image: string) =>
 	image ? `/${image}` : '/placeholder.png';
+
+export const maskUsernameIfPhoneNumber = (username?: string): string => {
+	if (!username) return 'Anonymous';
+	const clean = username.trim();
+	const digitsOnly = clean.replace(/\D/g, '');
+	
+	// Check if string represents a phone number (10 to 14 digits, optional leading +)
+	const isPhone = digitsOnly.length >= 10 && digitsOnly.length <= 14 && (clean.startsWith('+') || /^\d+$/.test(clean) || clean.startsWith('0') || clean.startsWith('234'));
+	
+	if (isPhone) {
+		const prefix = clean.slice(0, 3);
+		const suffix = clean.slice(-4);
+		return `${prefix}****${suffix}`;
+	}
+	return clean;
+};

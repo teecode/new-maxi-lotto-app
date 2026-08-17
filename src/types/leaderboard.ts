@@ -1,7 +1,7 @@
 export interface LeaderboardUser {
   customerId: number;
   username: string;
-  displayName: string;
+  displayName?: string;
   avatarUrl?: string;
   rankName: string;       // e.g. "GOAT", "Legend", "Champion"
   rankLevel: number;      // 1 to 15 matching RANKS in ranks.ts

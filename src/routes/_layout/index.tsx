@@ -5,7 +5,7 @@ import {Marquee} from '@/components/ui/marquee'
 import GameCard from '@/components/game-card'
 import {Spinner} from '@/components/ui/spinner'
 import LatestDrawTicket from '@/components/latest-draw-ticket'
-import {cn, formatCurrency} from '@/lib/utils'
+import {cn, formatCurrency, maskUsernameIfPhoneNumber} from '@/lib/utils'
 import TodayGameSlider from "@/components/today-games-slider.tsx";
 import type {EmblaOptionsType} from "embla-carousel";
 import {ChevronRight, Gamepad2, Star, Trophy, UserPlus, Wallet, BadgePercent, MapPin, Clock, ArrowRight} from "lucide-react";
@@ -307,7 +307,7 @@ function App() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <h4 className="font-semibold text-sm text-gray-900 truncate">
-                      {winner.username || winner.name || "Anonymous"}
+                      @{maskUsernameIfPhoneNumber(winner.username || winner.name)}
                     </h4>
                     {/* Rank star */}
                     {winner.rank && (

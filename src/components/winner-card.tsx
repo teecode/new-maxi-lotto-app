@@ -1,5 +1,5 @@
 import { Separator } from "@/components/ui/separator";
-import { formattedDate } from "@/lib/utils";
+import { formattedDate, maskUsernameIfPhoneNumber } from "@/lib/utils";
 import type { WinnerTicket } from "@/types/game";
 import { Image } from "@unpic/react";
 import { useState } from "react";
@@ -36,7 +36,7 @@ const WinnerCard = ({ ticket }: WinnerCardProps) => {
         </h3>
         <Separator />
         <p className="text-xl font-semibold py-4 text-background ">
-          {ticket?.username || ticket?.name}
+          @{maskUsernameIfPhoneNumber(ticket?.username || ticket?.name)}
         </p>
         <Separator />
         <div className="space-y-1 py-4 text-lg">
