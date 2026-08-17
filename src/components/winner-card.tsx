@@ -36,7 +36,7 @@ const WinnerCard = ({ ticket }: WinnerCardProps) => {
         </h3>
         <Separator />
         <p className="text-xl font-semibold py-4 text-background ">
-          {ticket?.name}
+          {ticket?.username || ticket?.name}
         </p>
         <Separator />
         <div className="space-y-1 py-4 text-lg">

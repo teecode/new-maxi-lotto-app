@@ -9,51 +9,55 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AppRouteImport } from './routes/app'
-import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
-import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
-import { Route as AuthSignupRouteImport } from './routes/auth/signup'
-import { Route as AuthLoginRouteImport } from './routes/auth/login'
-import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
-import { Route as LayoutWithdrawalPolicyRouteImport } from './routes/_layout/withdrawal-policy'
-import { Route as LayoutTermsAndConditionRouteImport } from './routes/_layout/terms-and-condition'
-import { Route as LayoutResultsRouteImport } from './routes/_layout/results'
-import { Route as LayoutResponsibleGamblingRouteImport } from './routes/_layout/responsible-gambling'
-import { Route as LayoutPrivacyPolicyRouteImport } from './routes/_layout/privacy-policy'
-import { Route as LayoutPlayRouteImport } from './routes/_layout/play'
-import { Route as LayoutHowToPlayRouteImport } from './routes/_layout/how-to-play'
-import { Route as LayoutGamesRouteImport } from './routes/_layout/games'
-import { Route as LayoutFaqRouteImport } from './routes/_layout/faq'
-import { Route as LayoutContactRouteImport } from './routes/_layout/contact'
-import { Route as LayoutBecomeAnAgentRouteImport } from './routes/_layout/become-an-agent'
-import { Route as LayoutAccumulatorRouteImport } from './routes/_layout/accumulator'
-import { Route as LayoutAboutRouteImport } from './routes/_layout/about'
-import { Route as AuthenticatedWithdrawalRouteImport } from './routes/_authenticated/withdrawal'
-import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
-import { Route as AuthenticatedTransactionsRouteImport } from './routes/_authenticated/transactions'
-import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as LayoutRouteImport } from './routes/_layout'
+import { Route as AppRouteImport } from './routes/app'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedFavouriteBallsRouteImport } from './routes/_authenticated/favourite-balls'
-import { Route as AuthenticatedTicketsIndexRouteImport } from './routes/_authenticated/tickets/index'
-import { Route as AuthenticatedReferralsIndexRouteImport } from './routes/_authenticated/referrals/index'
-import { Route as AuthenticatedPayoutsIndexRouteImport } from './routes/_authenticated/payouts/index'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedTransactionsRouteImport } from './routes/_authenticated/transactions'
+import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
+import { Route as AuthenticatedWithdrawalRouteImport } from './routes/_authenticated/withdrawal'
+import { Route as LayoutIndexRouteImport } from './routes/_layout/index'
+import { Route as LayoutAboutRouteImport } from './routes/_layout/about'
+import { Route as LayoutAccumulatorRouteImport } from './routes/_layout/accumulator'
+import { Route as LayoutBecomeAnAgentRouteImport } from './routes/_layout/become-an-agent'
+import { Route as LayoutContactRouteImport } from './routes/_layout/contact'
+import { Route as LayoutFaqRouteImport } from './routes/_layout/faq'
+import { Route as LayoutGamesRouteImport } from './routes/_layout/games'
+import { Route as LayoutHowToPlayRouteImport } from './routes/_layout/how-to-play'
+import { Route as LayoutLeaderboardRouteImport } from './routes/_layout/leaderboard'
+import { Route as LayoutPlayRouteImport } from './routes/_layout/play'
+import { Route as LayoutPrivacyPolicyRouteImport } from './routes/_layout/privacy-policy'
+import { Route as LayoutResponsibleGamblingRouteImport } from './routes/_layout/responsible-gambling'
+import { Route as LayoutResultsRouteImport } from './routes/_layout/results'
+import { Route as LayoutTermsAndConditionRouteImport } from './routes/_layout/terms-and-condition'
+import { Route as LayoutWithdrawalPolicyRouteImport } from './routes/_layout/withdrawal-policy'
+import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
+import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as AuthenticatedDepositIndexRouteImport } from './routes/_authenticated/deposit/index'
-import { Route as AuthenticatedTicketsTicketIdRouteImport } from './routes/_authenticated/tickets/$ticketId'
-import { Route as AuthenticatedSettingsVerifyEmailRouteImport } from './routes/_authenticated/settings/verify-email'
-import { Route as AuthenticatedSettingsReferralRouteImport } from './routes/_authenticated/settings/referral'
-import { Route as AuthenticatedSettingsProfileRouteImport } from './routes/_authenticated/settings/profile'
-import { Route as AuthenticatedSettingsEmailRouteImport } from './routes/_authenticated/settings/email'
-import { Route as AuthenticatedSettingsChangePasswordRouteImport } from './routes/_authenticated/settings/change-password'
-import { Route as AuthenticatedSettingsBankRouteImport } from './routes/_authenticated/settings/bank'
-import { Route as AuthenticatedReferralsEarningsRouteImport } from './routes/_authenticated/referrals/earnings'
-import { Route as AuthenticatedPayoutsPayoutIdRouteImport } from './routes/_authenticated/payouts/$payoutId'
 import { Route as AuthenticatedDepositSarepayTransferRouteImport } from './routes/_authenticated/deposit/sarepay-transfer'
+import { Route as AuthenticatedPayoutsIndexRouteImport } from './routes/_authenticated/payouts/index'
+import { Route as AuthenticatedPayoutsPayoutIdRouteImport } from './routes/_authenticated/payouts/$payoutId'
+import { Route as AuthenticatedReferralsIndexRouteImport } from './routes/_authenticated/referrals/index'
+import { Route as AuthenticatedReferralsEarningsRouteImport } from './routes/_authenticated/referrals/earnings'
+import { Route as AuthenticatedSettingsBankRouteImport } from './routes/_authenticated/settings/bank'
+import { Route as AuthenticatedSettingsChangePasswordRouteImport } from './routes/_authenticated/settings/change-password'
+import { Route as AuthenticatedSettingsEmailRouteImport } from './routes/_authenticated/settings/email'
+import { Route as AuthenticatedSettingsProfileRouteImport } from './routes/_authenticated/settings/profile'
+import { Route as AuthenticatedSettingsReferralRouteImport } from './routes/_authenticated/settings/referral'
+import { Route as AuthenticatedSettingsVerifyEmailRouteImport } from './routes/_authenticated/settings/verify-email'
+import { Route as AuthenticatedTicketsIndexRouteImport } from './routes/_authenticated/tickets/index'
+import { Route as AuthenticatedTicketsTicketIdRouteImport } from './routes/_authenticated/tickets/$ticketId'
 import { Route as AuthenticatedDepositVerifyDepositIdRouteImport } from './routes/_authenticated/deposit/verify/$depositId'
 
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LayoutRoute = LayoutRouteImport.update({
+  id: '/_layout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRoute = AppRouteImport.update({
@@ -61,108 +65,20 @@ const AppRoute = AppRouteImport.update({
   path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LayoutRoute = LayoutRouteImport.update({
-  id: '/_layout',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRoute = AuthenticatedRouteImport.update({
-  id: '/_authenticated',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LayoutIndexRoute = LayoutIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => LayoutRoute,
-} as any)
-const AuthSignupRoute = AuthSignupRouteImport.update({
-  id: '/signup',
-  path: '/signup',
-  getParentRoute: () => AuthRoute,
-} as any)
-const AuthLoginRoute = AuthLoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => AuthRoute,
-} as any)
-const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
-  id: '/forgot-password',
-  path: '/forgot-password',
-  getParentRoute: () => AuthRoute,
-} as any)
-const LayoutWithdrawalPolicyRoute = LayoutWithdrawalPolicyRouteImport.update({
-  id: '/withdrawal-policy',
-  path: '/withdrawal-policy',
-  getParentRoute: () => LayoutRoute,
-} as any)
-const LayoutTermsAndConditionRoute = LayoutTermsAndConditionRouteImport.update({
-  id: '/terms-and-condition',
-  path: '/terms-and-condition',
-  getParentRoute: () => LayoutRoute,
-} as any)
-const LayoutResultsRoute = LayoutResultsRouteImport.update({
-  id: '/results',
-  path: '/results',
-  getParentRoute: () => LayoutRoute,
-} as any)
-const LayoutResponsibleGamblingRoute =
-  LayoutResponsibleGamblingRouteImport.update({
-    id: '/responsible-gambling',
-    path: '/responsible-gambling',
-    getParentRoute: () => LayoutRoute,
+const AuthenticatedFavouriteBallsRoute =
+  AuthenticatedFavouriteBallsRouteImport.update({
+    id: '/favourite-balls',
+    path: '/favourite-balls',
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
-const LayoutPrivacyPolicyRoute = LayoutPrivacyPolicyRouteImport.update({
-  id: '/privacy-policy',
-  path: '/privacy-policy',
-  getParentRoute: () => LayoutRoute,
-} as any)
-const LayoutPlayRoute = LayoutPlayRouteImport.update({
-  id: '/play',
-  path: '/play',
-  getParentRoute: () => LayoutRoute,
-} as any)
-const LayoutHowToPlayRoute = LayoutHowToPlayRouteImport.update({
-  id: '/how-to-play',
-  path: '/how-to-play',
-  getParentRoute: () => LayoutRoute,
-} as any)
-const LayoutGamesRoute = LayoutGamesRouteImport.update({
-  id: '/games',
-  path: '/games',
-  getParentRoute: () => LayoutRoute,
-} as any)
-const LayoutFaqRoute = LayoutFaqRouteImport.update({
-  id: '/faq',
-  path: '/faq',
-  getParentRoute: () => LayoutRoute,
-} as any)
-const LayoutContactRoute = LayoutContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => LayoutRoute,
-} as any)
-const LayoutBecomeAnAgentRoute = LayoutBecomeAnAgentRouteImport.update({
-  id: '/become-an-agent',
-  path: '/become-an-agent',
-  getParentRoute: () => LayoutRoute,
-} as any)
-const LayoutAccumulatorRoute = LayoutAccumulatorRouteImport.update({
-  id: '/accumulator',
-  path: '/accumulator',
-  getParentRoute: () => LayoutRoute,
-} as any)
-const LayoutAboutRoute = LayoutAboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => LayoutRoute,
-} as any)
-const AuthenticatedWithdrawalRoute = AuthenticatedWithdrawalRouteImport.update({
-  id: '/withdrawal',
-  path: '/withdrawal',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedWalletRoute = AuthenticatedWalletRouteImport.update({
-  id: '/wallet',
-  path: '/wallet',
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedTransactionsRoute =
@@ -171,27 +87,117 @@ const AuthenticatedTransactionsRoute =
     path: '/transactions',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
+const AuthenticatedWalletRoute = AuthenticatedWalletRouteImport.update({
+  id: '/wallet',
+  path: '/wallet',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedFavouriteBallsRoute =
-  AuthenticatedFavouriteBallsRouteImport.update({
-    id: '/favourite-balls',
-    path: '/favourite-balls',
+const AuthenticatedWithdrawalRoute = AuthenticatedWithdrawalRouteImport.update({
+  id: '/withdrawal',
+  path: '/withdrawal',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const LayoutIndexRoute = LayoutIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutAboutRoute = LayoutAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutAccumulatorRoute = LayoutAccumulatorRouteImport.update({
+  id: '/accumulator',
+  path: '/accumulator',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutBecomeAnAgentRoute = LayoutBecomeAnAgentRouteImport.update({
+  id: '/become-an-agent',
+  path: '/become-an-agent',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutContactRoute = LayoutContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutFaqRoute = LayoutFaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutGamesRoute = LayoutGamesRouteImport.update({
+  id: '/games',
+  path: '/games',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutHowToPlayRoute = LayoutHowToPlayRouteImport.update({
+  id: '/how-to-play',
+  path: '/how-to-play',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutLeaderboardRoute = LayoutLeaderboardRouteImport.update({
+  id: '/leaderboard',
+  path: '/leaderboard',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutPlayRoute = LayoutPlayRouteImport.update({
+  id: '/play',
+  path: '/play',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutPrivacyPolicyRoute = LayoutPrivacyPolicyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutResponsibleGamblingRoute =
+  LayoutResponsibleGamblingRouteImport.update({
+    id: '/responsible-gambling',
+    path: '/responsible-gambling',
+    getParentRoute: () => LayoutRoute,
+  } as any)
+const LayoutResultsRoute = LayoutResultsRouteImport.update({
+  id: '/results',
+  path: '/results',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutTermsAndConditionRoute = LayoutTermsAndConditionRouteImport.update({
+  id: '/terms-and-condition',
+  path: '/terms-and-condition',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutWithdrawalPolicyRoute = LayoutWithdrawalPolicyRouteImport.update({
+  id: '/withdrawal-policy',
+  path: '/withdrawal-policy',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthSignupRoute = AuthSignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthenticatedDepositIndexRoute =
+  AuthenticatedDepositIndexRouteImport.update({
+    id: '/deposit/',
+    path: '/deposit/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedTicketsIndexRoute =
-  AuthenticatedTicketsIndexRouteImport.update({
-    id: '/tickets/',
-    path: '/tickets/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedReferralsIndexRoute =
-  AuthenticatedReferralsIndexRouteImport.update({
-    id: '/referrals/',
-    path: '/referrals/',
+const AuthenticatedDepositSarepayTransferRoute =
+  AuthenticatedDepositSarepayTransferRouteImport.update({
+    id: '/deposit/sarepay-transfer',
+    path: '/deposit/sarepay-transfer',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedPayoutsIndexRoute =
@@ -200,52 +206,16 @@ const AuthenticatedPayoutsIndexRoute =
     path: '/payouts/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedDepositIndexRoute =
-  AuthenticatedDepositIndexRouteImport.update({
-    id: '/deposit/',
-    path: '/deposit/',
+const AuthenticatedPayoutsPayoutIdRoute =
+  AuthenticatedPayoutsPayoutIdRouteImport.update({
+    id: '/payouts/$payoutId',
+    path: '/payouts/$payoutId',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedTicketsTicketIdRoute =
-  AuthenticatedTicketsTicketIdRouteImport.update({
-    id: '/tickets/$ticketId',
-    path: '/tickets/$ticketId',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedSettingsVerifyEmailRoute =
-  AuthenticatedSettingsVerifyEmailRouteImport.update({
-    id: '/settings/verify-email',
-    path: '/settings/verify-email',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedSettingsReferralRoute =
-  AuthenticatedSettingsReferralRouteImport.update({
-    id: '/settings/referral',
-    path: '/settings/referral',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedSettingsProfileRoute =
-  AuthenticatedSettingsProfileRouteImport.update({
-    id: '/settings/profile',
-    path: '/settings/profile',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedSettingsEmailRoute =
-  AuthenticatedSettingsEmailRouteImport.update({
-    id: '/settings/email',
-    path: '/settings/email',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedSettingsChangePasswordRoute =
-  AuthenticatedSettingsChangePasswordRouteImport.update({
-    id: '/settings/change-password',
-    path: '/settings/change-password',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedSettingsBankRoute =
-  AuthenticatedSettingsBankRouteImport.update({
-    id: '/settings/bank',
-    path: '/settings/bank',
+const AuthenticatedReferralsIndexRoute =
+  AuthenticatedReferralsIndexRouteImport.update({
+    id: '/referrals/',
+    path: '/referrals/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedReferralsEarningsRoute =
@@ -254,16 +224,52 @@ const AuthenticatedReferralsEarningsRoute =
     path: '/referrals/earnings',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedPayoutsPayoutIdRoute =
-  AuthenticatedPayoutsPayoutIdRouteImport.update({
-    id: '/payouts/$payoutId',
-    path: '/payouts/$payoutId',
+const AuthenticatedSettingsBankRoute =
+  AuthenticatedSettingsBankRouteImport.update({
+    id: '/settings/bank',
+    path: '/settings/bank',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedDepositSarepayTransferRoute =
-  AuthenticatedDepositSarepayTransferRouteImport.update({
-    id: '/deposit/sarepay-transfer',
-    path: '/deposit/sarepay-transfer',
+const AuthenticatedSettingsChangePasswordRoute =
+  AuthenticatedSettingsChangePasswordRouteImport.update({
+    id: '/settings/change-password',
+    path: '/settings/change-password',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedSettingsEmailRoute =
+  AuthenticatedSettingsEmailRouteImport.update({
+    id: '/settings/email',
+    path: '/settings/email',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedSettingsProfileRoute =
+  AuthenticatedSettingsProfileRouteImport.update({
+    id: '/settings/profile',
+    path: '/settings/profile',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedSettingsReferralRoute =
+  AuthenticatedSettingsReferralRouteImport.update({
+    id: '/settings/referral',
+    path: '/settings/referral',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedSettingsVerifyEmailRoute =
+  AuthenticatedSettingsVerifyEmailRouteImport.update({
+    id: '/settings/verify-email',
+    path: '/settings/verify-email',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedTicketsIndexRoute =
+  AuthenticatedTicketsIndexRouteImport.update({
+    id: '/tickets/',
+    path: '/tickets/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedTicketsTicketIdRoute =
+  AuthenticatedTicketsTicketIdRouteImport.update({
+    id: '/tickets/$ticketId',
+    path: '/tickets/$ticketId',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedDepositVerifyDepositIdRoute =
@@ -289,6 +295,7 @@ export interface FileRoutesByFullPath {
   '/faq': typeof LayoutFaqRoute
   '/games': typeof LayoutGamesRoute
   '/how-to-play': typeof LayoutHowToPlayRoute
+  '/leaderboard': typeof LayoutLeaderboardRoute
   '/play': typeof LayoutPlayRoute
   '/privacy-policy': typeof LayoutPrivacyPolicyRoute
   '/responsible-gambling': typeof LayoutResponsibleGamblingRoute
@@ -330,6 +337,7 @@ export interface FileRoutesByTo {
   '/faq': typeof LayoutFaqRoute
   '/games': typeof LayoutGamesRoute
   '/how-to-play': typeof LayoutHowToPlayRoute
+  '/leaderboard': typeof LayoutLeaderboardRoute
   '/play': typeof LayoutPlayRoute
   '/privacy-policy': typeof LayoutPrivacyPolicyRoute
   '/responsible-gambling': typeof LayoutResponsibleGamblingRoute
@@ -373,6 +381,7 @@ export interface FileRoutesById {
   '/_layout/faq': typeof LayoutFaqRoute
   '/_layout/games': typeof LayoutGamesRoute
   '/_layout/how-to-play': typeof LayoutHowToPlayRoute
+  '/_layout/leaderboard': typeof LayoutLeaderboardRoute
   '/_layout/play': typeof LayoutPlayRoute
   '/_layout/privacy-policy': typeof LayoutPrivacyPolicyRoute
   '/_layout/responsible-gambling': typeof LayoutResponsibleGamblingRoute
@@ -417,6 +426,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/games'
     | '/how-to-play'
+    | '/leaderboard'
     | '/play'
     | '/privacy-policy'
     | '/responsible-gambling'
@@ -458,6 +468,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/games'
     | '/how-to-play'
+    | '/leaderboard'
     | '/play'
     | '/privacy-policy'
     | '/responsible-gambling'
@@ -500,6 +511,7 @@ export interface FileRouteTypes {
     | '/_layout/faq'
     | '/_layout/games'
     | '/_layout/how-to-play'
+    | '/_layout/leaderboard'
     | '/_layout/play'
     | '/_layout/privacy-policy'
     | '/_layout/responsible-gambling'
@@ -536,18 +548,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/app': {
-      id: '/app'
-      path: '/app'
-      fullPath: '/app'
-      preLoaderRoute: typeof AppRouteImport
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_layout': {
@@ -557,151 +562,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated': {
-      id: '/_authenticated'
-      path: ''
-      fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedRouteImport
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_layout/': {
-      id: '/_layout/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof LayoutIndexRouteImport
-      parentRoute: typeof LayoutRoute
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/auth/signup': {
-      id: '/auth/signup'
-      path: '/signup'
-      fullPath: '/auth/signup'
-      preLoaderRoute: typeof AuthSignupRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/auth/login': {
-      id: '/auth/login'
-      path: '/login'
-      fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthLoginRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/auth/forgot-password': {
-      id: '/auth/forgot-password'
-      path: '/forgot-password'
-      fullPath: '/auth/forgot-password'
-      preLoaderRoute: typeof AuthForgotPasswordRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_layout/withdrawal-policy': {
-      id: '/_layout/withdrawal-policy'
-      path: '/withdrawal-policy'
-      fullPath: '/withdrawal-policy'
-      preLoaderRoute: typeof LayoutWithdrawalPolicyRouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/_layout/terms-and-condition': {
-      id: '/_layout/terms-and-condition'
-      path: '/terms-and-condition'
-      fullPath: '/terms-and-condition'
-      preLoaderRoute: typeof LayoutTermsAndConditionRouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/_layout/results': {
-      id: '/_layout/results'
-      path: '/results'
-      fullPath: '/results'
-      preLoaderRoute: typeof LayoutResultsRouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/_layout/responsible-gambling': {
-      id: '/_layout/responsible-gambling'
-      path: '/responsible-gambling'
-      fullPath: '/responsible-gambling'
-      preLoaderRoute: typeof LayoutResponsibleGamblingRouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/_layout/privacy-policy': {
-      id: '/_layout/privacy-policy'
-      path: '/privacy-policy'
-      fullPath: '/privacy-policy'
-      preLoaderRoute: typeof LayoutPrivacyPolicyRouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/_layout/play': {
-      id: '/_layout/play'
-      path: '/play'
-      fullPath: '/play'
-      preLoaderRoute: typeof LayoutPlayRouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/_layout/how-to-play': {
-      id: '/_layout/how-to-play'
-      path: '/how-to-play'
-      fullPath: '/how-to-play'
-      preLoaderRoute: typeof LayoutHowToPlayRouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/_layout/games': {
-      id: '/_layout/games'
-      path: '/games'
-      fullPath: '/games'
-      preLoaderRoute: typeof LayoutGamesRouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/_layout/faq': {
-      id: '/_layout/faq'
-      path: '/faq'
-      fullPath: '/faq'
-      preLoaderRoute: typeof LayoutFaqRouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/_layout/contact': {
-      id: '/_layout/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof LayoutContactRouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/_layout/become-an-agent': {
-      id: '/_layout/become-an-agent'
-      path: '/become-an-agent'
-      fullPath: '/become-an-agent'
-      preLoaderRoute: typeof LayoutBecomeAnAgentRouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/_layout/accumulator': {
-      id: '/_layout/accumulator'
-      path: '/accumulator'
-      fullPath: '/accumulator'
-      preLoaderRoute: typeof LayoutAccumulatorRouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/_layout/about': {
-      id: '/_layout/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof LayoutAboutRouteImport
-      parentRoute: typeof LayoutRoute
-    }
-    '/_authenticated/withdrawal': {
-      id: '/_authenticated/withdrawal'
-      path: '/withdrawal'
-      fullPath: '/withdrawal'
-      preLoaderRoute: typeof AuthenticatedWithdrawalRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/wallet': {
-      id: '/_authenticated/wallet'
-      path: '/wallet'
-      fullPath: '/wallet'
-      preLoaderRoute: typeof AuthenticatedWalletRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/transactions': {
-      id: '/_authenticated/transactions'
-      path: '/transactions'
-      fullPath: '/transactions'
-      preLoaderRoute: typeof AuthenticatedTransactionsRouteImport
+    '/_authenticated/favourite-balls': {
+      id: '/_authenticated/favourite-balls'
+      path: '/favourite-balls'
+      fullPath: '/favourite-balls'
+      preLoaderRoute: typeof AuthenticatedFavouriteBallsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/profile': {
@@ -711,25 +590,165 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/favourite-balls': {
-      id: '/_authenticated/favourite-balls'
-      path: '/favourite-balls'
-      fullPath: '/favourite-balls'
-      preLoaderRoute: typeof AuthenticatedFavouriteBallsRouteImport
+    '/_authenticated/transactions': {
+      id: '/_authenticated/transactions'
+      path: '/transactions'
+      fullPath: '/transactions'
+      preLoaderRoute: typeof AuthenticatedTransactionsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/tickets/': {
-      id: '/_authenticated/tickets/'
-      path: '/tickets'
-      fullPath: '/tickets/'
-      preLoaderRoute: typeof AuthenticatedTicketsIndexRouteImport
+    '/_authenticated/wallet': {
+      id: '/_authenticated/wallet'
+      path: '/wallet'
+      fullPath: '/wallet'
+      preLoaderRoute: typeof AuthenticatedWalletRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/referrals/': {
-      id: '/_authenticated/referrals/'
-      path: '/referrals'
-      fullPath: '/referrals/'
-      preLoaderRoute: typeof AuthenticatedReferralsIndexRouteImport
+    '/_authenticated/withdrawal': {
+      id: '/_authenticated/withdrawal'
+      path: '/withdrawal'
+      fullPath: '/withdrawal'
+      preLoaderRoute: typeof AuthenticatedWithdrawalRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_layout/': {
+      id: '/_layout/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof LayoutIndexRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/about': {
+      id: '/_layout/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof LayoutAboutRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/accumulator': {
+      id: '/_layout/accumulator'
+      path: '/accumulator'
+      fullPath: '/accumulator'
+      preLoaderRoute: typeof LayoutAccumulatorRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/become-an-agent': {
+      id: '/_layout/become-an-agent'
+      path: '/become-an-agent'
+      fullPath: '/become-an-agent'
+      preLoaderRoute: typeof LayoutBecomeAnAgentRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/contact': {
+      id: '/_layout/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof LayoutContactRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/faq': {
+      id: '/_layout/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof LayoutFaqRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/games': {
+      id: '/_layout/games'
+      path: '/games'
+      fullPath: '/games'
+      preLoaderRoute: typeof LayoutGamesRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/how-to-play': {
+      id: '/_layout/how-to-play'
+      path: '/how-to-play'
+      fullPath: '/how-to-play'
+      preLoaderRoute: typeof LayoutHowToPlayRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/leaderboard': {
+      id: '/_layout/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/leaderboard'
+      preLoaderRoute: typeof LayoutLeaderboardRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/play': {
+      id: '/_layout/play'
+      path: '/play'
+      fullPath: '/play'
+      preLoaderRoute: typeof LayoutPlayRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/privacy-policy': {
+      id: '/_layout/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof LayoutPrivacyPolicyRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/responsible-gambling': {
+      id: '/_layout/responsible-gambling'
+      path: '/responsible-gambling'
+      fullPath: '/responsible-gambling'
+      preLoaderRoute: typeof LayoutResponsibleGamblingRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/results': {
+      id: '/_layout/results'
+      path: '/results'
+      fullPath: '/results'
+      preLoaderRoute: typeof LayoutResultsRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/terms-and-condition': {
+      id: '/_layout/terms-and-condition'
+      path: '/terms-and-condition'
+      fullPath: '/terms-and-condition'
+      preLoaderRoute: typeof LayoutTermsAndConditionRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/withdrawal-policy': {
+      id: '/_layout/withdrawal-policy'
+      path: '/withdrawal-policy'
+      fullPath: '/withdrawal-policy'
+      preLoaderRoute: typeof LayoutWithdrawalPolicyRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/auth/forgot-password': {
+      id: '/auth/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/auth/forgot-password'
+      preLoaderRoute: typeof AuthForgotPasswordRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/auth/signup': {
+      id: '/auth/signup'
+      path: '/signup'
+      fullPath: '/auth/signup'
+      preLoaderRoute: typeof AuthSignupRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_authenticated/deposit/': {
+      id: '/_authenticated/deposit/'
+      path: '/deposit'
+      fullPath: '/deposit/'
+      preLoaderRoute: typeof AuthenticatedDepositIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/deposit/sarepay-transfer': {
+      id: '/_authenticated/deposit/sarepay-transfer'
+      path: '/deposit/sarepay-transfer'
+      fullPath: '/deposit/sarepay-transfer'
+      preLoaderRoute: typeof AuthenticatedDepositSarepayTransferRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/payouts/': {
@@ -739,60 +758,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPayoutsIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/deposit/': {
-      id: '/_authenticated/deposit/'
-      path: '/deposit'
-      fullPath: '/deposit/'
-      preLoaderRoute: typeof AuthenticatedDepositIndexRouteImport
+    '/_authenticated/payouts/$payoutId': {
+      id: '/_authenticated/payouts/$payoutId'
+      path: '/payouts/$payoutId'
+      fullPath: '/payouts/$payoutId'
+      preLoaderRoute: typeof AuthenticatedPayoutsPayoutIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/tickets/$ticketId': {
-      id: '/_authenticated/tickets/$ticketId'
-      path: '/tickets/$ticketId'
-      fullPath: '/tickets/$ticketId'
-      preLoaderRoute: typeof AuthenticatedTicketsTicketIdRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/settings/verify-email': {
-      id: '/_authenticated/settings/verify-email'
-      path: '/settings/verify-email'
-      fullPath: '/settings/verify-email'
-      preLoaderRoute: typeof AuthenticatedSettingsVerifyEmailRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/settings/referral': {
-      id: '/_authenticated/settings/referral'
-      path: '/settings/referral'
-      fullPath: '/settings/referral'
-      preLoaderRoute: typeof AuthenticatedSettingsReferralRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/settings/profile': {
-      id: '/_authenticated/settings/profile'
-      path: '/settings/profile'
-      fullPath: '/settings/profile'
-      preLoaderRoute: typeof AuthenticatedSettingsProfileRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/settings/email': {
-      id: '/_authenticated/settings/email'
-      path: '/settings/email'
-      fullPath: '/settings/email'
-      preLoaderRoute: typeof AuthenticatedSettingsEmailRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/settings/change-password': {
-      id: '/_authenticated/settings/change-password'
-      path: '/settings/change-password'
-      fullPath: '/settings/change-password'
-      preLoaderRoute: typeof AuthenticatedSettingsChangePasswordRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/settings/bank': {
-      id: '/_authenticated/settings/bank'
-      path: '/settings/bank'
-      fullPath: '/settings/bank'
-      preLoaderRoute: typeof AuthenticatedSettingsBankRouteImport
+    '/_authenticated/referrals/': {
+      id: '/_authenticated/referrals/'
+      path: '/referrals'
+      fullPath: '/referrals/'
+      preLoaderRoute: typeof AuthenticatedReferralsIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/referrals/earnings': {
@@ -802,18 +779,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedReferralsEarningsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/payouts/$payoutId': {
-      id: '/_authenticated/payouts/$payoutId'
-      path: '/payouts/$payoutId'
-      fullPath: '/payouts/$payoutId'
-      preLoaderRoute: typeof AuthenticatedPayoutsPayoutIdRouteImport
+    '/_authenticated/settings/bank': {
+      id: '/_authenticated/settings/bank'
+      path: '/settings/bank'
+      fullPath: '/settings/bank'
+      preLoaderRoute: typeof AuthenticatedSettingsBankRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/deposit/sarepay-transfer': {
-      id: '/_authenticated/deposit/sarepay-transfer'
-      path: '/deposit/sarepay-transfer'
-      fullPath: '/deposit/sarepay-transfer'
-      preLoaderRoute: typeof AuthenticatedDepositSarepayTransferRouteImport
+    '/_authenticated/settings/change-password': {
+      id: '/_authenticated/settings/change-password'
+      path: '/settings/change-password'
+      fullPath: '/settings/change-password'
+      preLoaderRoute: typeof AuthenticatedSettingsChangePasswordRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/settings/email': {
+      id: '/_authenticated/settings/email'
+      path: '/settings/email'
+      fullPath: '/settings/email'
+      preLoaderRoute: typeof AuthenticatedSettingsEmailRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/settings/profile': {
+      id: '/_authenticated/settings/profile'
+      path: '/settings/profile'
+      fullPath: '/settings/profile'
+      preLoaderRoute: typeof AuthenticatedSettingsProfileRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/settings/referral': {
+      id: '/_authenticated/settings/referral'
+      path: '/settings/referral'
+      fullPath: '/settings/referral'
+      preLoaderRoute: typeof AuthenticatedSettingsReferralRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/settings/verify-email': {
+      id: '/_authenticated/settings/verify-email'
+      path: '/settings/verify-email'
+      fullPath: '/settings/verify-email'
+      preLoaderRoute: typeof AuthenticatedSettingsVerifyEmailRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/tickets/': {
+      id: '/_authenticated/tickets/'
+      path: '/tickets'
+      fullPath: '/tickets/'
+      preLoaderRoute: typeof AuthenticatedTicketsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/tickets/$ticketId': {
+      id: '/_authenticated/tickets/$ticketId'
+      path: '/tickets/$ticketId'
+      fullPath: '/tickets/$ticketId'
+      preLoaderRoute: typeof AuthenticatedTicketsTicketIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/deposit/verify/$depositId': {
@@ -887,6 +906,7 @@ interface LayoutRouteChildren {
   LayoutFaqRoute: typeof LayoutFaqRoute
   LayoutGamesRoute: typeof LayoutGamesRoute
   LayoutHowToPlayRoute: typeof LayoutHowToPlayRoute
+  LayoutLeaderboardRoute: typeof LayoutLeaderboardRoute
   LayoutPlayRoute: typeof LayoutPlayRoute
   LayoutPrivacyPolicyRoute: typeof LayoutPrivacyPolicyRoute
   LayoutResponsibleGamblingRoute: typeof LayoutResponsibleGamblingRoute
@@ -904,6 +924,7 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutFaqRoute: LayoutFaqRoute,
   LayoutGamesRoute: LayoutGamesRoute,
   LayoutHowToPlayRoute: LayoutHowToPlayRoute,
+  LayoutLeaderboardRoute: LayoutLeaderboardRoute,
   LayoutPlayRoute: LayoutPlayRoute,
   LayoutPrivacyPolicyRoute: LayoutPrivacyPolicyRoute,
   LayoutResponsibleGamblingRoute: LayoutResponsibleGamblingRoute,

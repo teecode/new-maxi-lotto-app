@@ -42,6 +42,7 @@ const navGroups: Array<navGroupProps> = [
     children: [
       {title: "Maxi Games", url: "/games"},
       {title: "Maxi Results", url: "/results"},
+      {title: "Leaderboard", url: "/leaderboard"},
     ],
   },
   {

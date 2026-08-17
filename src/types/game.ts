@@ -137,6 +137,7 @@ export interface GameResultType {
 export interface WinnerTicket {
 	date: string; // ISO date string
 	name: string;
+	username?: string;
 	game: {
 		id: number;
 		name: string;

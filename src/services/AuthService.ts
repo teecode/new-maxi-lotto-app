@@ -143,19 +143,19 @@ export const requestForgotPassword = async (email: string): Promise<any> => {
 	}
 };
 
-export const resetForgotPassword = async (
-	token: string,
-	newPassword: string
+export const confirmForgotPassword = async (
+	email: string,
+	otp: string
 ): Promise<any> => {
 	try {
-		const response = await apiClient.post('auth/reset-password', {
-			token,
-			newPassword,
+		const response = await apiClient.post('User/ConfirmResetPassword', {
+			email,
+			otp,
 		});
 		return response.data;
 	} catch (error: any) {
 		if (error.response && error.response.data) {
-			throw new Error(error.response.data.error || 'Failed to reset password.');
+			throw new Error(error.response.data || 'Failed to reset password.');
 		}
 		throw new Error('Network error, please check your connection.');
 	}

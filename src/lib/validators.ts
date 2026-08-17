@@ -33,3 +33,10 @@ export const forgotPasswordSchema = z
 	.refine((data) => data.email.includes('@'), {
 		message: 'Please enter a valid email address',
 	});
+
+export const resetPasswordOtpSchema = z.object({
+	otp: z
+		.string()
+		.min(6, 'Enter the 6-digit code sent to your email')
+		.max(6, 'Enter the 6-digit code sent to your email'),
+});

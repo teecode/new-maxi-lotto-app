@@ -277,15 +277,18 @@ function App() {
       {/* === Recent Winners === */}
       <section className="py-12 sm:py-16 bg-gray-50">
         <div className="container">
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
               <h2 className="text-2xl sm:text-3xl font-bold text-bgColor">Recent Winners</h2>
               <p className="text-sm text-slate-500 mt-1">Our latest lucky players</p>
             </div>
-            <Link to="/" className="text-sm text-primary-900 font-medium hover:underline flex items-center gap-1">
-              See All
-              <ChevronRight className="w-4 h-4"/>
-            </Link>
+            <div className="flex items-center gap-3">
+              <Link to="/leaderboard" className="inline-flex items-center gap-2 px-4.5 py-2 rounded-full bg-gradient-to-r from-amber-500 via-amber-600 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white font-bold text-xs sm:text-sm shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300">
+                <Trophy className="w-4 h-4 text-white fill-white" />
+                <span>View Leaderboard</span>
+                <ChevronRight className="w-4 h-4 text-white" />
+              </Link>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -304,7 +307,7 @@ function App() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <h4 className="font-semibold text-sm text-gray-900 truncate">
-                      {winner.name || "Anonymous"}
+                      {winner.username || winner.name || "Anonymous"}
                     </h4>
                     {/* Rank star */}
                     {winner.rank && (
