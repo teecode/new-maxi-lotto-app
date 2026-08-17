@@ -24,6 +24,12 @@ export const Route = createFileRoute('/_layout/leaderboard')({
   component: LeaderboardPage,
 });
 
+/**
+ * Feature Toggle: Set to `true` when marketing is ready to display total accrued winnings amount publicly.
+ * When `false`, total winnings values are hidden from the Leaderboard UI while preserving underlying rank calculations.
+ */
+export const SHOW_TOTAL_WINNINGS = false;
+
 function LeaderboardPage() {
   const { data: leaderboard, isLoading } = useLeaderboard();
   const { isAuthenticated, user: fullUser, minimalUser } = useAuthStore();
@@ -107,28 +113,33 @@ function LeaderboardPage() {
           </h1>
 
           <p className="text-slate-400 text-xs sm:text-base max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-8 px-2">
-            Celebrating MaxiLotto's most formidable players ranked by tier achievement and accrued winnings. Place your bets and climb to the top!
+            Celebrating MaxiLotto's most formidable players ranked by tier achievement and performance. Place your bets and climb to the top!
           </p>
 
           {/* Quick stats summary */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 max-w-3xl mx-auto">
+          <div className={cn("grid gap-2.5 sm:gap-4 mx-auto", SHOW_TOTAL_WINNINGS ? "grid-cols-2 sm:grid-cols-4 max-w-3xl" : "grid-cols-3 max-w-2xl")}>
             <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 text-center backdrop-blur-md">
               <p className="text-[11px] sm:text-xs text-slate-400 font-medium">Top Rank</p>
               <p className="text-base sm:text-2xl font-black text-amber-400 mt-0.5 sm:mt-1">G.O.A.T 👑</p>
             </div>
-            <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 text-center backdrop-blur-md">
-              <p className="text-[11px] sm:text-xs text-slate-400 font-medium">Top Winnings</p>
-              <p className="text-base sm:text-2xl font-black text-teal-400 mt-0.5 sm:mt-1">
-                {top3[0] ? formatCurrency(top3[0].totalAmountWon) : '₦0'}
-              </p>
-            </div>
+
+            {SHOW_TOTAL_WINNINGS && (
+              <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 text-center backdrop-blur-md">
+                <p className="text-[11px] sm:text-xs text-slate-400 font-medium">Top Winnings</p>
+                <p className="text-base sm:text-2xl font-black text-teal-400 mt-0.5 sm:mt-1">
+                  {top3[0] ? formatCurrency(top3[0].totalAmountWon) : '₦0'}
+                </p>
+              </div>
+            )}
+
             <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 text-center backdrop-blur-md">
               <p className="text-[11px] sm:text-xs text-slate-400 font-medium">Active Contenders</p>
               <p className="text-base sm:text-2xl font-black text-cyan-400 mt-0.5 sm:mt-1">Top 20</p>
             </div>
+            
             <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 text-center backdrop-blur-md">
-              <p className="text-[11px] sm:text-xs text-slate-400 font-medium">Tie-Breaker</p>
-              <p className="text-xs sm:text-sm font-bold text-slate-200 mt-1">Accrued Winnings</p>
+              <p className="text-[11px] sm:text-xs text-slate-400 font-medium">Rank Standard</p>
+              <p className="text-xs sm:text-sm font-bold text-slate-200 mt-1 sm:mt-2">Tier &amp; Wins</p>
             </div>
           </div>
         </div>
@@ -248,13 +259,15 @@ function LeaderboardPage() {
                           <RankStar rankName={player.rankName} count={player.rankStar} size="md" showCount />
                         </div>
 
-                        {/* Winnings accrued */}
-                        <div className="w-full pt-3 border-t border-slate-800/80 flex flex-col items-center">
-                          <span className="text-[10px] sm:text-[11px] text-slate-400 uppercase tracking-wider font-semibold">Total Winnings</span>
-                          <span className="text-base sm:text-lg font-black text-teal-400 mt-0.5">
-                            {formatCurrency(player.totalAmountWon)}
-                          </span>
-                        </div>
+                        {/* Winnings accrued (Conditional) */}
+                        {SHOW_TOTAL_WINNINGS && (
+                          <div className="w-full pt-3 border-t border-slate-800/80 flex flex-col items-center">
+                            <span className="text-[10px] sm:text-[11px] text-slate-400 uppercase tracking-wider font-semibold">Total Winnings</span>
+                            <span className="text-base sm:text-lg font-black text-teal-400 mt-0.5">
+                              {formatCurrency(player.totalAmountWon)}
+                            </span>
+                          </div>
+                        )}
                       </div>
                     );
                   })}
@@ -368,7 +381,7 @@ function LeaderboardPage() {
                       </div>
 
                       {/* Middle Profile Row */}
-                      <div className="flex items-center justify-between gap-3 mb-3">
+                      <div className="flex items-center justify-between gap-3 mb-1">
                         <div className="flex items-center gap-3 min-w-0">
                           <div
                             className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0 border"
@@ -407,18 +420,20 @@ function LeaderboardPage() {
                           </div>
                         </div>
 
-                        <span className="px-2 py-1 rounded bg-slate-800/80 text-slate-300 font-semibold text-[11px] shrink-0">
+                        <span className="px-2.5 py-1 rounded bg-slate-800/80 text-slate-300 font-semibold text-[11px] shrink-0">
                           {userItem.totalWins} wins
                         </span>
                       </div>
 
-                      {/* Bottom Footer Row */}
-                      <div className="pt-2 border-t border-slate-800/60 flex items-center justify-between">
-                        <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">Total Winnings</span>
-                        <span className="font-black text-sm text-teal-400">
-                          {formatCurrency(userItem.totalAmountWon)}
-                        </span>
-                      </div>
+                      {/* Bottom Footer Row (Conditional) */}
+                      {SHOW_TOTAL_WINNINGS && (
+                        <div className="pt-2 mt-3 border-t border-slate-800/60 flex items-center justify-between">
+                          <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">Total Winnings</span>
+                          <span className="font-black text-sm text-teal-400">
+                            {formatCurrency(userItem.totalAmountWon)}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   );
                 })
@@ -440,7 +455,7 @@ function LeaderboardPage() {
                       <th className="py-4 px-6">Rank Name</th>
                       <th className="py-4 px-6 text-center">RankStar</th>
                       <th className="py-4 px-6 text-center">Wins</th>
-                      <th className="py-4 px-6 text-right">Total Winnings</th>
+                      {SHOW_TOTAL_WINNINGS && <th className="py-4 px-6 text-right">Total Winnings</th>}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800/60">
@@ -562,16 +577,18 @@ function LeaderboardPage() {
                               </span>
                             </td>
 
-                            {/* Total Winnings */}
-                            <td className="py-4 px-6 text-right font-black text-sm sm:text-base text-teal-400">
-                              {formatCurrency(userItem.totalAmountWon)}
-                            </td>
+                            {/* Total Winnings (Conditional) */}
+                            {SHOW_TOTAL_WINNINGS && (
+                              <td className="py-4 px-6 text-right font-black text-sm sm:text-base text-teal-400">
+                                {formatCurrency(userItem.totalAmountWon)}
+                              </td>
+                            )}
                           </tr>
                         );
                       })
                     ) : (
                       <tr>
-                        <td colSpan={6} className="py-12 text-center text-slate-400 text-sm">
+                        <td colSpan={SHOW_TOTAL_WINNINGS ? 6 : 5} className="py-12 text-center text-slate-400 text-sm">
                           No ranked players matched your search.
                         </td>
                       </tr>

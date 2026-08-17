@@ -152,7 +152,7 @@ export const getImageUrl = (name: string) => {
 export const finalImagePath = (image: string) =>
 	image ? `/${image}` : '/placeholder.png';
 
-export const maskUsernameIfPhoneNumber = (username?: string): string => {
+export const maskUsername = (username?: string): string => {
 	if (!username) return 'Anonymous';
 	const clean = username.trim();
 	const digitsOnly = clean.replace(/\D/g, '');
@@ -165,5 +165,17 @@ export const maskUsernameIfPhoneNumber = (username?: string): string => {
 		const suffix = clean.slice(-4);
 		return `${prefix}****${suffix}`;
 	}
-	return clean;
+
+	// For standard text / alphanumeric usernames
+	if (clean.length <= 3) {
+		return `${clean.charAt(0)}*${clean.slice(-1)}`;
+	} else if (clean.length <= 5) {
+		return `${clean.slice(0, 2)}**${clean.slice(-1)}`;
+	} else if (clean.length <= 8) {
+		return `${clean.slice(0, 2)}***${clean.slice(-2)}`;
+	} else {
+		return `${clean.slice(0, 3)}***${clean.slice(-3)}`;
+	}
 };
+
+export const maskUsernameIfPhoneNumber = maskUsername;
