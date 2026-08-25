@@ -41,9 +41,10 @@ export const updatePassword = async (
 		return response.data;
 	} catch (error: any) {
 		if (error.response && error.response.data) {
-			throw new Error(
-				error.response.data.error || 'Failed to update password.'
-			);
+			const errorMsg = typeof error.response.data === 'string'
+				? error.response.data
+				: error.response.data.error || error.response.data.message || 'Failed to update password.';
+			throw new Error(errorMsg);
 		}
 		throw new Error('Network error, please try again.');
 	}
