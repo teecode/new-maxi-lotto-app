@@ -34,7 +34,7 @@ export const updatePassword = async (
 	newPassword: string
 ): Promise<defaultApiResponse> => {
 	try {
-		const response = await apiClient.put<defaultApiResponse>(
+		const response = await apiClient.post<defaultApiResponse>(
 			'User/UpdatePassword',
 			{ oldPassword, newPassword }
 		);
