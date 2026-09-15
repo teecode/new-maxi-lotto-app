@@ -34,6 +34,19 @@ const slides: SlideData[] = [
     ctaLink: "/play",
   },
   {
+    id: 15,
+    title: (
+      <>
+        Transform your <span className="bg-gradient-to-r from-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">Sports Shop</span>
+        <br />into a Lotto Hub 🎰
+      </>
+    ),
+    description: "Offer MaxiLotto to your customers using our new PC-friendly Web POS. Earn massive commissions on every ticket sold.",
+    image: "/retail_pos_banner.jpg",
+    ctaText: "Become a Partner",
+    ctaLink: "/become-an-agent",
+  },
+  {
     id: 2,
     title: "Double Your Luck! 🎁",
     description: "Get a massive 50% bonus on your very first deposit. More funds, more chances to win big!",
