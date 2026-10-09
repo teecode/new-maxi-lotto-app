@@ -449,7 +449,7 @@ function RouteComponent() {
               In standard lotteries, 5 numbers are drawn as the <strong>Winning Numbers</strong>, and another 5 numbers are drawn as the <strong>Machine Numbers</strong>.
             </p>
 
-            <div className="grid md:grid-cols-2 gap-4 pt-2">
+            <div className="grid md:grid-cols-3 gap-4 pt-2">
               <div className="bg-white p-4 rounded-2xl border border-purple-100 shadow-sm space-y-1">
                 <h3 className="font-bold text-[#0A4B7F] flex items-center gap-2">
                   <span className="text-lg">🎯</span> Normal Bet
@@ -462,6 +462,13 @@ function RouteComponent() {
                   <span className="text-lg">⚙️</span> Machine Bet
                 </h3>
                 <p className="text-xs text-slate-600">Your selections are checked against the 5 Machine Numbers drawn. Switch modes in your bet slip anytime!</p>
+              </div>
+
+              <div className="bg-white p-4 rounded-2xl border border-purple-100 shadow-sm space-y-1">
+                <h3 className="font-bold text-[#0185B6] flex items-center gap-2">
+                  <span className="text-lg">✌️</span> Double Chance
+                </h3>
+                <p className="text-xs text-slate-600">One bet played both ways. Half your stake goes on the Winning Numbers and half on the Machine Numbers, and each half is checked on its own. Numbers from the two sets are never combined.</p>
               </div>
             </div>
           </div>

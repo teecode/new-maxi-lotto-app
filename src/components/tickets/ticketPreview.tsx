@@ -211,6 +211,9 @@ export function TicketPreview({ open, setOpen, ticket }: TicketPreviewProps) {
                           {betslip.winningType === 2 && (
                             <Badge variant="outline" className="text-[10px] sm:text-xs bg-purple-50 text-purple-700 border-purple-200">Machine Bet</Badge>
                           )}
+                          {betslip.winningType === 3 && (
+                            <Badge variant="outline" className="text-[10px] sm:text-xs bg-cyan-50 text-cyan-700 border-cyan-200">Double Chance</Badge>
+                          )}
                         </div>
                         <Badge
                           variant={betslip.status.name === 'Won' ? 'default' : 'secondary'}

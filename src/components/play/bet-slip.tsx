@@ -50,7 +50,10 @@ const BetSlip = ({
   const [stake, setStake] = useState<number>(0)
   const [maxWinning, setMaxWinning] = useState<number>(0)
   const [numberOfLines, setNumberOfLines] = useState<number>(0)
-  const [winningType, setWinningType] = useState<number>(1) // 1: Normal, 2: Machine
+  const [winningType, setWinningType] = useState<number>(1) // 1: Normal, 2: Machine, 3: Double Chance
+  // Double Chance is one bet played on both sets of numbers: half the stake on the winning
+  // numbers, half on the machine numbers, each settled on its own.
+  const isDoubleChance = winningType === 3
 
   // Calculate collision count (following Vue logic)
   const collisionCount = () => {
@@ -144,8 +147,8 @@ const BetSlip = ({
     }
 
     setNumberOfLines(lines)
-    setMaxWinning(calculateMaxWinning())
-  }, [selectedBalls, againstBalls, stake, selectedBetType])
+    setMaxWinning(isDoubleChance ? calculateMaxWinning() / 2 : calculateMaxWinning())
+  }, [selectedBalls, againstBalls, stake, selectedBetType, winningType])
 
   const handleAddToBets = async () => {
     if (!selectedGame) return toast.error("Please select a game first")
@@ -327,7 +330,19 @@ const BetSlip = ({
             >
               Machine Bet
             </button>
+            <button
+              type="button"
+              className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${isDoubleChance ? 'bg-gradient-to-r from-[#0185B6] to-[#01B1A8] text-white shadow' : 'text-gray-500 hover:text-gray-700'}`}
+              onClick={(e) => { e.preventDefault(); setWinningType(3); }}
+            >
+              Double Chance
+            </button>
           </div>
+        )}
+        {selectedGame?.allowMachineNumberBet && isDoubleChance && (
+          <p className="text-xs text-gray-500">
+            Your stake is split in two: ₦{((numberOfLines * stake) / 2).toLocaleString()} on the winning numbers and ₦{((numberOfLines * stake) / 2).toLocaleString()} on the machine numbers. Each is settled on its own; possible winning is for a win on one of them.
+          </p>
         )}
 
         {/* Input Field for Stake */}

@@ -171,6 +171,9 @@ function RouteComponent() {
                         {betslip.winningType === 2 && (
                           <Badge variant="outline" className="text-xs bg-purple-50 text-purple-700 border-purple-200">Machine Bet</Badge>
                         )}
+                        {betslip.winningType === 3 && (
+                          <Badge variant="outline" className="text-xs bg-cyan-50 text-cyan-700 border-cyan-200">Double Chance</Badge>
+                        )}
                       </div>
                       <Badge variant={betslip.status.name === 'Won' ? 'default' : 'secondary'} className={betslip.status.name === 'Won' ? 'bg-teal-100 text-teal-700 hover:bg-teal-100' : 'bg-gray-100 text-gray-600 hover:bg-gray-100'}>
                          {betslip.status.name}

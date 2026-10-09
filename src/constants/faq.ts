@@ -63,6 +63,11 @@ export const FAQ_DATA: FaqItem[] = [
 			'A Machine Number bet allows you to play against the non-winning numbers drawn by the machine. You will find a toggle to select between a Normal Bet (playing against winning numbers) and a Machine Bet (playing against the machine numbers) when selecting your games.',
 	},
 	{
+		question: 'What is a Double Chance bet?',
+		answer:
+			'Double Chance plays the same selection as a Normal Bet and a Machine Bet in one go. Your stake is split in two: half is played against the winning numbers and half against the machine numbers. Each half is checked on its own, so a win on either set pays on half of your stake, and numbers from the two sets are never combined to make a win. It is available on games that allow Machine Bets, for single bets only.',
+	},
+	{
 		question: 'How does the Ambassador (Referral) program work?',
 		answer:
 			'You can earn up to 20% commission by referring friends to MaxiLotto! Navigate to your Profile Settings, click on the Referral tab, and copy your unique link. When friends sign up using your link, they become your downline and you earn passive income on their activities. Terms and conditions apply.',

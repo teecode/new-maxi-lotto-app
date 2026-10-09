@@ -88,6 +88,11 @@ const Footer = () => {
                     Install Mobile App
                   </button>
                 </li>
+                <li>
+                  <a href="/downloads/maxilotto.apk" download className="hover:underline">
+                    Download Android App
+                  </a>
+                </li>
               </ul>
             </div>
 

@@ -604,6 +604,11 @@ function RouteComponent() {
                                       Machine Bet
                                     </div>
                                   )}
+                                  {bet.winningType === 3 && (
+                                    <div className="inline-block bg-gradient-to-r from-[#0185B6] to-[#01B1A8] text-white px-2 py-0.5 rounded-full text-xs font-bold ml-2">
+                                      Double Chance
+                                    </div>
+                                  )}
                                 </div>
                                 <Button
                                   type="button"
