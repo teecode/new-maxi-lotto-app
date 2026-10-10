@@ -6,15 +6,17 @@ interface BallProps {
   onClick?: (value: number) => void
   className?: string
   variant?: 'default' | 'winning' | 'machine'
+  title?: string
 }
 
-const Ball = ({ value, isSelected = false, onClick, className, variant = 'default' }: BallProps) => {
+const Ball = ({ value, isSelected = false, onClick, className, variant = 'default', title }: BallProps) => {
   const isGlossy = variant === 'winning' || variant === 'machine';
   
   return (
     <button
       type="button"
       onClick={() => onClick?.(value)}
+      title={title}
       className={cn(
         "relative flex justify-center items-center size-11 md:size-12 rounded-full font-bold text-sm md:text-base",
         "transition-all duration-200 ease-out",

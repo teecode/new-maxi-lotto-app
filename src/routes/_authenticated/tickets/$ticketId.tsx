@@ -1,12 +1,14 @@
 import {createFileRoute, Link} from '@tanstack/react-router'
-import {fetchTicketById} from "@/services/GameService.ts";
+import {fetchGameResultByDailyGameId, fetchTicketById} from "@/services/GameService.ts";
 import {Card, CardContent, CardFooter, CardHeader} from "@/components/ui/card.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {DownloadIcon, Share2, Loader2} from "lucide-react";
 import {formatCurrency, fullDateTimeFormat} from "@/lib/utils.ts";
-import Ball from "@/components/ball.tsx";
+import {TicketBall, TicketHitLegend} from "@/components/tickets/ticket-ball.tsx";
+import {drawnBalls, hitKind} from "@/lib/ticketHits";
 import {Badge} from "@/components/ui/badge.tsx";
 import {useRef, useCallback, useState} from "react";
+import {useQuery} from "@tanstack/react-query";
 import {toast} from "sonner";
 
 export const Route = createFileRoute('/_authenticated/tickets/$ticketId')({
@@ -26,6 +28,18 @@ function RouteComponent() {
   const totalOdds = isAccumulator 
     ? ticket.betslips.reduce((acc, slip) => acc * (slip.betType.winFactor || 1), 1)
     : 0;
+
+  const { data: gameResult } = useQuery({
+    queryKey: ['gameResult', ticket.game.id],
+    queryFn: () => fetchGameResultByDailyGameId(ticket.game.id),
+    enabled: ticket.status.name === 'Won' || ticket.status.name === 'Lost',
+  });
+
+  // A picked number that came up is drawn as the result ball it matched, on the set(s) its bet is settled on
+  const winningBalls = drawnBalls(gameResult?.result, 'winning');
+  const machineBalls = drawnBalls(gameResult?.result, 'machine');
+  const hasWinningBets = ticket.betslips.some((slip) => slip.winningType !== 2);
+  const hasMachineBets = ticket.betslips.some((slip) => slip.winningType === 2 || slip.winningType === 3);
 
   const handleDownload = useCallback(async () => {
     if (!ticketCardRef.current) return;
@@ -155,10 +169,15 @@ function RouteComponent() {
             </div>
 
             <CardContent className="p-6">
-              <h4 className="flex items-center gap-2 font-bold text-[#0A4B7F] mb-4">
-                <span className="w-1 h-6 bg-[#FFF100] rounded-full block"></span>
-                {isAccumulator ? 'Accumulator Legs' : 'Bet Slips'}
-              </h4>
+              <div className="flex items-center justify-between gap-3 mb-4">
+                <h4 className="flex items-center gap-2 font-bold text-[#0A4B7F]">
+                  <span className="w-1 h-6 bg-[#FFF100] rounded-full block"></span>
+                  {isAccumulator ? 'Accumulator Legs' : 'Bet Slips'}
+                </h4>
+                {!isAccumulator && (
+                  <TicketHitLegend winning={hasWinningBets && winningBalls.length > 0} machine={hasMachineBets && machineBalls.length > 0} />
+                )}
+              </div>
 
               <div className="space-y-4">
                 {ticket.betslips.map((betslip, index) => (
@@ -201,7 +220,8 @@ function RouteComponent() {
                                      betslip.bet1.map((ball) => (
                                         isAccumulator && ball === 0 ? 
                                         <span className="text-sm font-medium text-[#0A4B7F]"> Standard - {betslip.betType.description} </span> :
-                                        <Ball key={ball} className="h-8 w-8 text-xs font-bold" value={ball}/> 
+                                        <TicketBall key={ball} className="h-8 w-8 text-xs font-bold" value={ball}
+                                          hit={hitKind(betslip.winningType, ball, winningBalls, machineBalls)}/>
                                      ))
                                   ) : (
                                     <span className="text-sm text-gray-400 italic">None</span>
@@ -229,7 +249,8 @@ function RouteComponent() {
                               </span>
                               <div className="flex flex-wrap gap-2">
                                 {betslip.bet2.map((ball) => (
-                                  <Ball key={ball} className="h-8 w-8 text-xs bg-red-50 text-red-600 border-red-100" value={ball}/>
+                                  <TicketBall key={ball} className="h-8 w-8 text-xs" missClassName="bg-red-50 text-red-600 border-red-100" value={ball}
+                                    hit={hitKind(betslip.winningType, ball, winningBalls, machineBalls)}/>
                                 ))}
                               </div>
                            </div>

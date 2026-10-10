@@ -321,32 +321,32 @@ const BetSlip = ({
           <div className="flex bg-gray-100 p-1 rounded-xl">
             <button
               type="button"
-              className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${winningType === 1 ? 'bg-white text-[#0A4B7F] shadow' : 'text-gray-500 hover:text-gray-700'}`}
+              className={`flex-1 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all leading-tight ${winningType === 1 ? 'bg-white text-[#0A4B7F] shadow' : 'text-gray-500 hover:text-gray-700'}`}
               onClick={(e) => { e.preventDefault(); setWinningType(1); }}
             >
-              Normal Bet
+              Normal<br />Bet
             </button>
             <button
               type="button"
               title="Double Chance"
               aria-label="Double Chance"
-              className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${isDoubleChance ? 'bg-gradient-to-r from-[#0185B6] to-[#01B1A8] text-white shadow' : 'text-gray-500 hover:text-gray-700'}`}
+              className={`flex-1 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all leading-tight ${isDoubleChance ? 'bg-gradient-to-r from-[#0185B6] to-[#01B1A8] text-white shadow' : 'text-gray-500 hover:text-gray-700'}`}
               onClick={(e) => { e.preventDefault(); setWinningType(3); }}
             >
-              DC
+              Double<br />Chance
             </button>
             <button
               type="button"
-              className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${winningType === 2 ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow' : 'text-gray-500 hover:text-gray-700'}`}
+              className={`flex-1 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all leading-tight ${winningType === 2 ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow' : 'text-gray-500 hover:text-gray-700'}`}
               onClick={(e) => { e.preventDefault(); setWinningType(2); }}
             >
-              Machine Bet
+              Machine<br />Bet
             </button>
           </div>
         )}
         {selectedGame?.allowMachineNumberBet && isDoubleChance && numberOfLines * stake > 0 && (
           <p className="text-xs text-gray-500">
-            Double Chance splits your stake in two: ₦{((numberOfLines * stake) / 2).toLocaleString()} on the winning numbers and ₦{((numberOfLines * stake) / 2).toLocaleString()} on the machine numbers. Each is settled on its own; possible winning is for a win on one of them.
+            Double Chance splits your stake in two: ₦{Number.isInteger((numberOfLines * stake) / 2) ? ((numberOfLines * stake) / 2).toLocaleString() : ((numberOfLines * stake) / 2).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} on the winning numbers and ₦{Number.isInteger((numberOfLines * stake) / 2) ? ((numberOfLines * stake) / 2).toLocaleString() : ((numberOfLines * stake) / 2).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} on the machine numbers. Each is settled on its own; possible winning is for a win on one of them.
           </p>
         )}
 

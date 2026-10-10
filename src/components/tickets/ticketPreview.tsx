@@ -8,6 +8,8 @@ import {
 import { useCallback, useRef, useState } from "react"
 import { toast } from "sonner"
 import Ball from "@/components/ball.tsx"
+import { TicketBall, TicketHitLegend } from "@/components/tickets/ticket-ball.tsx"
+import { drawnBalls, hitKind } from "@/lib/ticketHits"
 import type { GameTicket } from "@/types/game"
 import { formatCurrency, fullDateTimeFormat } from "@/lib/utils"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card.tsx";
@@ -38,6 +40,12 @@ export function TicketPreview({ open, setOpen, ticket }: TicketPreviewProps) {
     queryFn: () => fetchGameResultByDailyGameId(ticket.game.id),
     enabled: ticket.status.name === 'Won' || ticket.status.name === 'Lost',
   });
+
+  // A picked number that came up is drawn as the result ball it matched, on the set(s) its bet is settled on
+  const winningBalls = drawnBalls(gameResult?.result, 'winning');
+  const machineBalls = drawnBalls(gameResult?.result, 'machine');
+  const hasWinningBets = ticket.betslips.some((slip) => slip.winningType !== 2);
+  const hasMachineBets = ticket.betslips.some((slip) => slip.winningType === 2 || slip.winningType === 3);
 
   const handleDownload = useCallback(async () => {
     if (!ticketCardRef.current) return;
@@ -195,10 +203,15 @@ export function TicketPreview({ open, setOpen, ticket }: TicketPreviewProps) {
               </div>
 
               <CardContent className="p-4 sm:p-6">
-                <h4 className="flex items-center gap-2 font-bold text-[#0A4B7F] mb-4">
-                  <span className="w-1 h-6 bg-[#FFF100] rounded-full block"></span>
-                  {isAccumulator ? 'Accumulator Legs' : 'Bet Slips'}
-                </h4>
+                <div className="flex items-center justify-between gap-3 mb-4">
+                  <h4 className="flex items-center gap-2 font-bold text-[#0A4B7F]">
+                    <span className="w-1 h-6 bg-[#FFF100] rounded-full block"></span>
+                    {isAccumulator ? 'Accumulator Legs' : 'Bet Slips'}
+                  </h4>
+                  {!isAccumulator && (
+                    <TicketHitLegend winning={hasWinningBets && winningBalls.length > 0} machine={hasMachineBets && machineBalls.length > 0} />
+                  )}
+                </div>
 
                 <div className="space-y-4">
                   {ticket.betslips.map((betslip, index) => (
@@ -250,7 +263,8 @@ export function TicketPreview({ open, setOpen, ticket }: TicketPreviewProps) {
                                     betslip.bet1.map((ball) => (
                                       isAccumulator && ball === 0 ?
                                         <span className="text-sm font-medium text-[#0A4B7F]"> Standard - {betslip.betType.description} </span> :
-                                        <Ball key={ball} className="h-7 w-7 text-[10px] sm:h-8 sm:w-8 sm:text-xs font-bold" value={ball} />
+                                        <TicketBall key={ball} className="h-7 w-7 text-[10px] sm:h-8 sm:w-8 sm:text-xs font-bold" value={ball}
+                                          hit={hitKind(betslip.winningType, ball, winningBalls, machineBalls)} />
                                     ))
                                   ) : (
                                     <span className="text-sm text-gray-400 italic">None</span>
@@ -278,7 +292,8 @@ export function TicketPreview({ open, setOpen, ticket }: TicketPreviewProps) {
                               </span>
                               <div className="flex flex-wrap gap-2">
                                 {betslip.bet2.map((ball) => (
-                                  <Ball key={ball} className="h-7 w-7 text-[10px] sm:h-8 sm:w-8 sm:text-xs bg-red-50 text-red-600 border-red-100" value={ball} />
+                                  <TicketBall key={ball} className="h-7 w-7 text-[10px] sm:h-8 sm:w-8 sm:text-xs" missClassName="bg-red-50 text-red-600 border-red-100" value={ball}
+                                    hit={hitKind(betslip.winningType, ball, winningBalls, machineBalls)} />
                                 ))}
                               </div>
                             </div>
