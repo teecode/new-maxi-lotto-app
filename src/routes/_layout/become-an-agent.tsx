@@ -64,6 +64,7 @@ interface FormData {
   whatsappNumber: string;
   emailAddress: string;
   residentialAddress: string;
+  agentType: string;
   // Step 2
   nin: string;
   bvn: string;
@@ -98,6 +99,7 @@ const initialForm: FormData = {
   whatsappNumber: "",
   emailAddress: "",
   residentialAddress: "",
+  agentType: "",
   nin: "",
   bvn: "",
   idType: "",
@@ -267,6 +269,7 @@ export default function BecomeAnAgent() {
       if (!form.whatsappNumber.trim()) errs.whatsappNumber = "WhatsApp number is required";
       if (!form.emailAddress.trim()) errs.emailAddress = "Email is required";
       if (!form.residentialAddress.trim()) errs.residentialAddress = "Address is required";
+      if (!form.agentType) errs.agentType = "Agent type is required";
     }
     if (s === 2) {
       if (!form.nin.trim()) errs.nin = "NIN is required";
@@ -324,6 +327,7 @@ export default function BecomeAnAgent() {
         lga: form.lga,
         state: form.stateCode,
         preferredSalesTerritory: form.preferredSalesTerritory,
+        agentType: form.agentType,
         yearsOfExperience: parseInt(form.yearsOfExperience) || 0,
         bankName: form.bankName,
         accountName: form.accountName,
@@ -379,7 +383,7 @@ export default function BecomeAnAgent() {
             </span>
           </h1>
           <p className="text-gray-400">
-            Earn up to 35% commission on every ticket sold.{" "}
+            Join the winning team today!{" "}
             <span className="text-xs text-gray-500">Terms and conditions apply.</span>
           </p>
         </div>
@@ -424,9 +428,30 @@ export default function BecomeAnAgent() {
             </div>
 
             <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* ─── STEP 1 ─── */}
               {step === 1 && (
                 <>
+                  <Field label="Agent Type" required error={errors.agentType} className="md:col-span-2">
+                    <div className="space-y-3">
+                      <p className="text-sm text-gray-400">
+                        Do you own a bet shop or you want lotto terminals? (Betshop activation can be completed within a day while lotto terminal can take some time, due to compliance checks and due diligence)
+                      </p>
+                      <RadioGroup
+                        value={form.agentType}
+                        onValueChange={(v) => set("agentType", v)}
+                        className="flex flex-col gap-2"
+                      >
+                        <div className="flex items-center gap-2">
+                          <RadioGroupItem value="BetShop" id="type-betshop" />
+                          <Label htmlFor="type-betshop" className="cursor-pointer">Bet Shop</Label>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <RadioGroupItem value="LottoTerminal" id="type-lotto" />
+                          <Label htmlFor="type-lotto" className="cursor-pointer">Lotto Terminals</Label>
+                        </div>
+                      </RadioGroup>
+                    </div>
+                  </Field>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:col-span-2">
                     <Field label="First Name" required error={errors.firstName}>
                       <Input
@@ -631,19 +656,12 @@ export default function BecomeAnAgent() {
                         <SelectValue placeholder="Select state" />
                       </SelectTrigger>
                       <SelectContent>
-                        {/* Only active states are selectable */}
-                        {NIGERIA_STATES.filter((s) => s.active).map((s) => (
+                        {/* Only Delta State is selectable for now */}
+                        {NIGERIA_STATES.filter((s) => s.code === 'DT').map((s) => (
                           <SelectItem key={s.code} value={s.code}>
                             {s.name}
                           </SelectItem>
                         ))}
-                        {/* Inactive states shown as disabled */}
-                        {/* Uncomment below and add more states as licensing expands */}
-                        {/* {NIGERIA_STATES.filter((s) => !s.active).map((s) => (
-                          <SelectItem key={s.code} value={s.code} disabled>
-                            {s.name} (coming soon)
-                          </SelectItem>
-                        ))} */}
                       </SelectContent>
                     </Select>
                   </Field>

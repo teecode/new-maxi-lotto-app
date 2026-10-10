@@ -9,6 +9,7 @@ export interface AgencyApplicationRequest {
   whatsappNumber: string;
   emailAddress: string;
   residentialAddress: string;
+  agentType: string;
 
   // Section 2 – KYC
   nin: string;
