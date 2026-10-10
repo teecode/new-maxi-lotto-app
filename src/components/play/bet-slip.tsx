@@ -157,9 +157,6 @@ const BetSlip = ({
     const code = selectedBetType.code
     const nap = selectedBetType.nap
 
-    if (stake < selectedBetType.minimumStake || stake > selectedBetType.maximumStake)
-      return toast.error(`Stake must be between ₦${selectedBetType.minimumStake} and ₦${selectedBetType.maximumStake}`)
-
     // Validation (following Vue logic)
     if (code === 'BANKER') {
       if (selectedBalls.length !== 1)
@@ -174,8 +171,14 @@ const BetSlip = ({
         return toast.error(`Select at least ${selectedBetType.minimumNumberOfBalls} ball(s).`)
     }
 
+    if (stake <= 0) return toast.error("Enter a stake per line.")
+
     // Calculate total stake (lines * stake per line)
     const totalAmount = numberOfLines * stake
+
+    // The stake limits apply to the whole bet, which is what the server checks, not to each line.
+    if (totalAmount < selectedBetType.minimumStake || totalAmount > selectedBetType.maximumStake)
+      return toast.error(`Total stake must be between ₦${selectedBetType.minimumStake.toLocaleString()} and ₦${selectedBetType.maximumStake.toLocaleString()}. Yours is ₦${totalAmount.toLocaleString()}.`)
 
     const newBet: BetList = {
       betType: selectedBetType,
@@ -325,23 +328,25 @@ const BetSlip = ({
             </button>
             <button
               type="button"
+              title="Double Chance"
+              aria-label="Double Chance"
+              className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${isDoubleChance ? 'bg-gradient-to-r from-[#0185B6] to-[#01B1A8] text-white shadow' : 'text-gray-500 hover:text-gray-700'}`}
+              onClick={(e) => { e.preventDefault(); setWinningType(3); }}
+            >
+              DC
+            </button>
+            <button
+              type="button"
               className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${winningType === 2 ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow' : 'text-gray-500 hover:text-gray-700'}`}
               onClick={(e) => { e.preventDefault(); setWinningType(2); }}
             >
               Machine Bet
             </button>
-            <button
-              type="button"
-              className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${isDoubleChance ? 'bg-gradient-to-r from-[#0185B6] to-[#01B1A8] text-white shadow' : 'text-gray-500 hover:text-gray-700'}`}
-              onClick={(e) => { e.preventDefault(); setWinningType(3); }}
-            >
-              Double Chance
-            </button>
           </div>
         )}
-        {selectedGame?.allowMachineNumberBet && isDoubleChance && (
+        {selectedGame?.allowMachineNumberBet && isDoubleChance && numberOfLines * stake > 0 && (
           <p className="text-xs text-gray-500">
-            Your stake is split in two: ₦{((numberOfLines * stake) / 2).toLocaleString()} on the winning numbers and ₦{((numberOfLines * stake) / 2).toLocaleString()} on the machine numbers. Each is settled on its own; possible winning is for a win on one of them.
+            Double Chance splits your stake in two: ₦{((numberOfLines * stake) / 2).toLocaleString()} on the winning numbers and ₦{((numberOfLines * stake) / 2).toLocaleString()} on the machine numbers. Each is settled on its own; possible winning is for a win on one of them.
           </p>
         )}
 
@@ -359,8 +364,8 @@ const BetSlip = ({
             className="border-2 border-[#0185B6]/30 focus:border-[#0185B6] rounded-xl px-4 py-3 text-center font-bold text-lg"
           />
           <div className="flex justify-between text-xs text-gray-500">
-            <span>Min: ₦{selectedBetType?.minimumStake}</span>
-            <span>Max: ₦{selectedBetType?.maximumStake}</span>
+            <span>Min total: ₦{selectedBetType?.minimumStake}</span>
+            <span>Max total: ₦{selectedBetType?.maximumStake}</span>
           </div>
         </div>
 
