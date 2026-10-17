@@ -63,7 +63,21 @@ jobs:
     - name: Copy Files to IIS
       run: |
         $baseDir = "C:\inetpub\wwwroot\${{ env.DEPLOY_ENV }}"
-        Copy-Item -Path "dist\*" -Destination "$baseDir\maxilotto-online-web${{ env.DEPLOY_SUFFIX }}" -Recurse -Force
+        # Copied in three passes so that no visitor is ever sent to files that are not there yet:
+        # first everything the pages load (hashed scripts, styles, images), then the HTML pages
+        # that point to them, and last the service worker files that decide what installed apps
+        # run. A plain Copy-Item copies in no particular order, so for a moment a new index.html
+        # could ask for scripts that had not arrived. Nothing on the server is deleted: tabs still
+        # running the previous build keep finding their files.
+        $src = (Resolve-Path "dist").Path
+        $dest = "$baseDir\maxilotto-online-web${{ env.DEPLOY_SUFFIX }}"
+        $last = @('sw.js', 'registerSW.js', 'push-sw.js', 'manifest.webmanifest')
+        $pass = { if ($last -contains $_.Name) { 2 } elseif ($_.Extension -eq '.html') { 1 } else { 0 } }
+        Get-ChildItem -Path $src -Recurse -File | Sort-Object -Property @{ Expression = $pass } | ForEach-Object {
+          $target = Join-Path $dest $_.FullName.Substring($src.Length + 1)
+          New-Item -ItemType Directory -Force -Path (Split-Path $target -Parent) | Out-Null
+          Copy-Item -LiteralPath $_.FullName -Destination $target -Force
+        }
 
     # Tells Bing (and the other IndexNow engines: Yandex, Seznam, Naver) about every page in
     # the new sitemap, so changes are picked up within hours instead of on the next crawl.

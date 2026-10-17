@@ -13,6 +13,7 @@ import { Provider } from './utils/Provider.tsx'
 import { Toaster } from './components/ui/sonner.tsx'
 import useAuthStore from './store/authStore.ts'
 import { PWAInstallPrompt } from './components/PWAInstallPrompt.tsx'
+import { reloadToLatest, shouldReloadOnNavigation, startAppUpdateWatcher } from './lib/app-update.ts'
 
 // Create a new router instance
 const router = createRouter({
@@ -24,6 +25,16 @@ const router = createRouter({
   scrollRestoration: true,
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
+})
+
+// New deploys: see lib/app-update.ts. The bet slip is kept in sessionStorage, so a reload loses nothing.
+startAppUpdateWatcher({
+  accent: '#0185B6',
+  // Clear the mobile bottom navigation bar (69px, hidden from the sm breakpoint up).
+  bottomOffset: () => (window.innerWidth < 640 ? 85 : 16),
+})
+router.subscribe('onBeforeNavigate', (e) => {
+  if (e.fromLocation && e.pathChanged && shouldReloadOnNavigation()) void reloadToLatest(e.toLocation.href)
 })
 
 // Register the router instance for type safety
