@@ -30,7 +30,8 @@ import { MobileDataCards, type CardField } from '@/components/ui/mobile-data-car
 import type { GameResultType } from '@/types/game';
 import Ball from '../ball';
 import { Badge } from '../ui/base-badge';
-import { fullDateFormat, getImageUrl } from '@/lib/utils';
+import { getImageUrl } from '@/lib/utils';
+import { fullDateFormat } from '@/lib/game-time';
 import { Image } from "@unpic/react";
 
 

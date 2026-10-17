@@ -1,3 +1,8 @@
+/// <reference types="vitest/config" />
+// The only Vite config. There used to be a vite.config.js next to this file;
+// Vite loads .js first, so this file (with the PWA and push setup) was never
+// used, and it could not build anyway: nitroV2Plugin is for TanStack Start
+// server rendering, which this single-page app does not use.
 import { defineConfig } from 'vite'
 // @ts-ignore
 import viteReact from '@vitejs/plugin-react'
@@ -6,14 +11,13 @@ import tailwindcss from '@tailwindcss/vite'
 // @ts-ignore
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import { fileURLToPath, URL } from 'node:url'
-import { nitroV2Plugin } from '@tanstack/nitro-v2-vite-plugin'
 // @ts-ignore
 import { VitePWA } from 'vite-plugin-pwa'
+import { generatedPageFiles, seoPlugin } from './scripts/vite-plugin-seo'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    nitroV2Plugin(),
     tanstackRouter({
       target: 'react',
       autoCodeSplitting: true,
@@ -22,33 +26,32 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['maxilotto-icon.png'],
+      // public/manifest.json (linked from index.html) is the app manifest.
+      manifest: false,
       workbox: {
+        // Push notifications (src/services/AuthService.ts, components/PushNotificationManager.tsx)
+        // wait for this service worker; push-sw.js handles the push and click events.
         importScripts: ['/push-sw.js'],
+        // Only the app shell. Precaching every route's code (about 90 files, 2.2 MB) would
+        // make each visitor download all of it in the background on mobile data; the
+        // browser's HTTP cache already keeps the hashed assets they actually use.
+        globPatterns: ['index.html'],
+        // One HTML file per page for crawlers; the app shell is index.html.
+        globIgnores: generatedPageFiles(),
+        // Navigations to real files (the Android APK, sitemap.xml, robots.txt, images) and to
+        // the socket.io proxy must reach the server, not get the app shell back.
+        navigateFallbackDenylist: [/^\/downloads\//, /^\/socket\.io/, /\/[^/?]+\.[a-z0-9]+$/i],
       },
-      manifest: {
-        name: 'Maxi Lotto',
-        short_name: 'MaxiLotto',
-        description: 'Play Maxi Lotto online',
-        theme_color: '#ffffff',
-        icons: [
-          {
-            src: 'maxilotto-icon.png',
-            sizes: '192x192',
-            type: 'image/png'
-          },
-          {
-            src: 'maxilotto-icon.png',
-            sizes: '512x512',
-            type: 'image/png'
-          }
-        ]
-      }
     }),
+    seoPlugin(),
   ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
   },
 })

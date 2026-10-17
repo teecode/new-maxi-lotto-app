@@ -158,13 +158,16 @@ describe("BetSlip Double Chance", () => {
     expect(addBet.mock.calls[0][0]).toMatchObject({ winningType: 3, stake: 100, maxWinning: 12000 });
   });
 
-  it("orders the toggle Normal, DC, Machine", () => {
+  it("orders the toggle Normal, Double Chance, Machine", () => {
     renderSlip(numbers(2));
 
     const toggle = screen.getByRole("button", { name: "Double Chance" }).parentElement!;
-    const labels = Array.from(toggle.querySelectorAll("button")).map((b) => b.textContent?.trim());
+    // Each label is two lines ("Normal<br />Bet"); read the line break as a space.
+    const labels = Array.from(toggle.querySelectorAll("button")).map((b) =>
+      b.innerHTML.replace(/<br\s*\/?>/g, " ").replace(/<[^>]+>/g, "").trim(),
+    );
 
-    expect(labels).toEqual(["Normal Bet", "DC", "Machine Bet"]);
+    expect(labels).toEqual(["Normal Bet", "Double Chance", "Machine Bet"]);
   });
 
   it("shows the stake-split note only once there is an amount to split", () => {

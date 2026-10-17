@@ -1,6 +1,7 @@
 import { DataGridColumnHeader } from "@/components/ui/data-grid-column-header";
 import { Skeleton } from "@/components/ui/skeleton";
-import { formatCurrency, fullDateFormat } from "@/lib/utils";
+import { formatCurrency } from "@/lib/utils";
+import { fullDateFormat } from "@/lib/game-time";
 import type { Transaction } from "@/types/transaction";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "../ui/base-badge";

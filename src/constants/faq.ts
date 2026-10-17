@@ -5,9 +5,14 @@ export interface FaqItem {
 
 export const FAQ_DATA: FaqItem[] = [
 	{
-		question: 'What is Maxi Lotto?',
+		question: 'What is MaxiLotto?',
 		answer:
-			'Maxi Lotto is an online lottery platform that offers a variety of lottery games from around the world. Players can participate in national and international lotteries, with the chance to win big prizes.',
+			'MaxiLotto is a Nigerian 5/90 lotto brand operated by LukzerNet Nigeria Limited. You can play daily draws online at maxilotto.ng, on the MaxiLotto Android app or at MaxiLotto retail shops, and online winnings are credited to your wallet.',
+	},
+	{
+		question: 'Is MaxiLotto real and safe to play?',
+		answer:
+			'Yes. MaxiLotto is operated by LukzerNet Nigeria Limited from B13 Behind City Park, Express Junction, Udu Road, Delta State. The odds for every bet type are published, results are posted after every draw, and online wins are paid to your wallet. Only play on maxilotto.ng, the official [MaxiLotto app](/download-app) or at MaxiLotto shops.',
 	},
 	{
 		question: 'Is MaxiLotto legal?',
@@ -66,6 +71,26 @@ export const FAQ_DATA: FaqItem[] = [
 		question: 'What is a Double Chance bet?',
 		answer:
 			'Double Chance plays the same selection as a Normal Bet and a Machine Bet in one go. Your stake is split in two: half is played against the winning numbers and half against the machine numbers. Each half is checked on its own, so a win on either set pays on half of your stake, and numbers from the two sets are never combined to make a win. It is available on games that allow Machine Bets, for single bets only.',
+	},
+	{
+		question: 'Where can I check MaxiLotto results?',
+		answer:
+			'Results for every MaxiLotto draw appear on the Results page once the draw is published, with the winning numbers and, for games that have them, the machine numbers. You can also look up past results by game and date.',
+	},
+	{
+		question: 'Is there a MaxiLotto app?',
+		answer:
+			'Yes. Download the official Android app from the [MaxiLotto App](/download-app) page; it uses the same account as the website. On iPhone, add maxilotto.ng to your home screen from Safari.',
+	},
+	{
+		question: 'Does MaxiLotto have bonuses?',
+		answer:
+			'Yes. Current offers, including the first deposit bonus and the Ambassador referral programme, are on the [Promotions](/promotions) page. Terms apply.',
+	},
+	{
+		question: 'How do I become a MaxiLotto agent?',
+		answer:
+			'Apply online on the Become an Agent page. Choose a bet shop or lotto terminal setup, fill in your personal, KYC, business and bank details, and submit. Bet shop activation can be completed within a day; lotto terminals take longer because of compliance checks.',
 	},
 	{
 		question: 'How does the Ambassador (Referral) program work?',

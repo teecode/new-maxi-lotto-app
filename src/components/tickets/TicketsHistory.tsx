@@ -29,7 +29,8 @@ import { getColumns } from './column';
 import { TicketPreview } from './ticketPreview';
 import { MobileDataCards, type CardField } from '@/components/ui/mobile-data-cards';
 import { Badge } from '@/components/ui/base-badge';
-import { formatCurrency, fullDateFormat } from '@/lib/utils';
+import { formatCurrency } from '@/lib/utils';
+import { fullDateFormat } from '@/lib/game-time';
 
 // interface TicketHistoryProps {
 //   tickets: GameTicket[];

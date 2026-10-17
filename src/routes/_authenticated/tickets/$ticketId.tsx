@@ -3,7 +3,8 @@ import {fetchGameResultByDailyGameId, fetchTicketById} from "@/services/GameServ
 import {Card, CardContent, CardFooter, CardHeader} from "@/components/ui/card.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {DownloadIcon, Share2, Loader2} from "lucide-react";
-import {formatCurrency, fullDateTimeFormat} from "@/lib/utils.ts";
+import { formatCurrency } from "@/lib/utils.ts";
+import { fullDateTimeFormat } from "@/lib/game-time";
 import {TicketBall, TicketHitLegend} from "@/components/tickets/ticket-ball.tsx";
 import {drawnBalls, hitKind} from "@/lib/ticketHits";
 import {Badge} from "@/components/ui/badge.tsx";

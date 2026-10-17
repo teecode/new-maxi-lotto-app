@@ -11,7 +11,8 @@ import Ball from "@/components/ball.tsx"
 import { TicketBall, TicketHitLegend } from "@/components/tickets/ticket-ball.tsx"
 import { drawnBalls, hitKind } from "@/lib/ticketHits"
 import type { GameTicket } from "@/types/game"
-import { formatCurrency, fullDateTimeFormat } from "@/lib/utils"
+import { formatCurrency } from "@/lib/utils"
+import { fullDateTimeFormat } from "@/lib/game-time"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card.tsx";
 import { Badge } from "@/components/ui/badge.tsx";
 import { DownloadIcon, Share2, Loader2 } from "lucide-react";

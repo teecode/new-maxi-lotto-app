@@ -21,16 +21,20 @@ import { Route as LayoutWithdrawalPolicyRouteImport } from './routes/_layout/wit
 import { Route as LayoutTermsAndConditionRouteImport } from './routes/_layout/terms-and-condition'
 import { Route as LayoutResultsRouteImport } from './routes/_layout/results'
 import { Route as LayoutResponsibleGamblingRouteImport } from './routes/_layout/responsible-gambling'
+import { Route as LayoutPromotionsRouteImport } from './routes/_layout/promotions'
 import { Route as LayoutPrivacyPolicyRouteImport } from './routes/_layout/privacy-policy'
 import { Route as LayoutPlayRouteImport } from './routes/_layout/play'
+import { Route as LayoutLottoInNigeriaRouteImport } from './routes/_layout/lotto-in-nigeria'
 import { Route as LayoutLeaderboardRouteImport } from './routes/_layout/leaderboard'
 import { Route as LayoutHowToPlayRouteImport } from './routes/_layout/how-to-play'
 import { Route as LayoutGamesRouteImport } from './routes/_layout/games'
 import { Route as LayoutFaqRouteImport } from './routes/_layout/faq'
+import { Route as LayoutDownloadAppRouteImport } from './routes/_layout/download-app'
 import { Route as LayoutContactRouteImport } from './routes/_layout/contact'
 import { Route as LayoutBecomeAnAgentRouteImport } from './routes/_layout/become-an-agent'
 import { Route as LayoutAccumulatorRouteImport } from './routes/_layout/accumulator'
 import { Route as LayoutAboutRouteImport } from './routes/_layout/about'
+import { Route as Layout2SureLottoRouteImport } from './routes/_layout/2-sure-lotto'
 import { Route as AuthenticatedWithdrawalRouteImport } from './routes/_authenticated/withdrawal'
 import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
 import { Route as AuthenticatedTransactionsRouteImport } from './routes/_authenticated/transactions'
@@ -111,6 +115,11 @@ const LayoutResponsibleGamblingRoute =
     path: '/responsible-gambling',
     getParentRoute: () => LayoutRoute,
   } as any)
+const LayoutPromotionsRoute = LayoutPromotionsRouteImport.update({
+  id: '/promotions',
+  path: '/promotions',
+  getParentRoute: () => LayoutRoute,
+} as any)
 const LayoutPrivacyPolicyRoute = LayoutPrivacyPolicyRouteImport.update({
   id: '/privacy-policy',
   path: '/privacy-policy',
@@ -119,6 +128,11 @@ const LayoutPrivacyPolicyRoute = LayoutPrivacyPolicyRouteImport.update({
 const LayoutPlayRoute = LayoutPlayRouteImport.update({
   id: '/play',
   path: '/play',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const LayoutLottoInNigeriaRoute = LayoutLottoInNigeriaRouteImport.update({
+  id: '/lotto-in-nigeria',
+  path: '/lotto-in-nigeria',
   getParentRoute: () => LayoutRoute,
 } as any)
 const LayoutLeaderboardRoute = LayoutLeaderboardRouteImport.update({
@@ -141,6 +155,11 @@ const LayoutFaqRoute = LayoutFaqRouteImport.update({
   path: '/faq',
   getParentRoute: () => LayoutRoute,
 } as any)
+const LayoutDownloadAppRoute = LayoutDownloadAppRouteImport.update({
+  id: '/download-app',
+  path: '/download-app',
+  getParentRoute: () => LayoutRoute,
+} as any)
 const LayoutContactRoute = LayoutContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -159,6 +178,11 @@ const LayoutAccumulatorRoute = LayoutAccumulatorRouteImport.update({
 const LayoutAboutRoute = LayoutAboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => LayoutRoute,
+} as any)
+const Layout2SureLottoRoute = Layout2SureLottoRouteImport.update({
+  id: '/2-sure-lotto',
+  path: '/2-sure-lotto',
   getParentRoute: () => LayoutRoute,
 } as any)
 const AuthenticatedWithdrawalRoute = AuthenticatedWithdrawalRouteImport.update({
@@ -288,16 +312,20 @@ export interface FileRoutesByFullPath {
   '/transactions': typeof AuthenticatedTransactionsRoute
   '/wallet': typeof AuthenticatedWalletRoute
   '/withdrawal': typeof AuthenticatedWithdrawalRoute
+  '/2-sure-lotto': typeof Layout2SureLottoRoute
   '/about': typeof LayoutAboutRoute
   '/accumulator': typeof LayoutAccumulatorRoute
   '/become-an-agent': typeof LayoutBecomeAnAgentRoute
   '/contact': typeof LayoutContactRoute
+  '/download-app': typeof LayoutDownloadAppRoute
   '/faq': typeof LayoutFaqRoute
   '/games': typeof LayoutGamesRoute
   '/how-to-play': typeof LayoutHowToPlayRoute
   '/leaderboard': typeof LayoutLeaderboardRoute
+  '/lotto-in-nigeria': typeof LayoutLottoInNigeriaRoute
   '/play': typeof LayoutPlayRoute
   '/privacy-policy': typeof LayoutPrivacyPolicyRoute
+  '/promotions': typeof LayoutPromotionsRoute
   '/responsible-gambling': typeof LayoutResponsibleGamblingRoute
   '/results': typeof LayoutResultsRoute
   '/terms-and-condition': typeof LayoutTermsAndConditionRoute
@@ -330,16 +358,20 @@ export interface FileRoutesByTo {
   '/transactions': typeof AuthenticatedTransactionsRoute
   '/wallet': typeof AuthenticatedWalletRoute
   '/withdrawal': typeof AuthenticatedWithdrawalRoute
+  '/2-sure-lotto': typeof Layout2SureLottoRoute
   '/about': typeof LayoutAboutRoute
   '/accumulator': typeof LayoutAccumulatorRoute
   '/become-an-agent': typeof LayoutBecomeAnAgentRoute
   '/contact': typeof LayoutContactRoute
+  '/download-app': typeof LayoutDownloadAppRoute
   '/faq': typeof LayoutFaqRoute
   '/games': typeof LayoutGamesRoute
   '/how-to-play': typeof LayoutHowToPlayRoute
   '/leaderboard': typeof LayoutLeaderboardRoute
+  '/lotto-in-nigeria': typeof LayoutLottoInNigeriaRoute
   '/play': typeof LayoutPlayRoute
   '/privacy-policy': typeof LayoutPrivacyPolicyRoute
+  '/promotions': typeof LayoutPromotionsRoute
   '/responsible-gambling': typeof LayoutResponsibleGamblingRoute
   '/results': typeof LayoutResultsRoute
   '/terms-and-condition': typeof LayoutTermsAndConditionRoute
@@ -374,16 +406,20 @@ export interface FileRoutesById {
   '/_authenticated/transactions': typeof AuthenticatedTransactionsRoute
   '/_authenticated/wallet': typeof AuthenticatedWalletRoute
   '/_authenticated/withdrawal': typeof AuthenticatedWithdrawalRoute
+  '/_layout/2-sure-lotto': typeof Layout2SureLottoRoute
   '/_layout/about': typeof LayoutAboutRoute
   '/_layout/accumulator': typeof LayoutAccumulatorRoute
   '/_layout/become-an-agent': typeof LayoutBecomeAnAgentRoute
   '/_layout/contact': typeof LayoutContactRoute
+  '/_layout/download-app': typeof LayoutDownloadAppRoute
   '/_layout/faq': typeof LayoutFaqRoute
   '/_layout/games': typeof LayoutGamesRoute
   '/_layout/how-to-play': typeof LayoutHowToPlayRoute
   '/_layout/leaderboard': typeof LayoutLeaderboardRoute
+  '/_layout/lotto-in-nigeria': typeof LayoutLottoInNigeriaRoute
   '/_layout/play': typeof LayoutPlayRoute
   '/_layout/privacy-policy': typeof LayoutPrivacyPolicyRoute
+  '/_layout/promotions': typeof LayoutPromotionsRoute
   '/_layout/responsible-gambling': typeof LayoutResponsibleGamblingRoute
   '/_layout/results': typeof LayoutResultsRoute
   '/_layout/terms-and-condition': typeof LayoutTermsAndConditionRoute
@@ -419,16 +455,20 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/wallet'
     | '/withdrawal'
+    | '/2-sure-lotto'
     | '/about'
     | '/accumulator'
     | '/become-an-agent'
     | '/contact'
+    | '/download-app'
     | '/faq'
     | '/games'
     | '/how-to-play'
     | '/leaderboard'
+    | '/lotto-in-nigeria'
     | '/play'
     | '/privacy-policy'
+    | '/promotions'
     | '/responsible-gambling'
     | '/results'
     | '/terms-and-condition'
@@ -461,16 +501,20 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/wallet'
     | '/withdrawal'
+    | '/2-sure-lotto'
     | '/about'
     | '/accumulator'
     | '/become-an-agent'
     | '/contact'
+    | '/download-app'
     | '/faq'
     | '/games'
     | '/how-to-play'
     | '/leaderboard'
+    | '/lotto-in-nigeria'
     | '/play'
     | '/privacy-policy'
+    | '/promotions'
     | '/responsible-gambling'
     | '/results'
     | '/terms-and-condition'
@@ -504,16 +548,20 @@ export interface FileRouteTypes {
     | '/_authenticated/transactions'
     | '/_authenticated/wallet'
     | '/_authenticated/withdrawal'
+    | '/_layout/2-sure-lotto'
     | '/_layout/about'
     | '/_layout/accumulator'
     | '/_layout/become-an-agent'
     | '/_layout/contact'
+    | '/_layout/download-app'
     | '/_layout/faq'
     | '/_layout/games'
     | '/_layout/how-to-play'
     | '/_layout/leaderboard'
+    | '/_layout/lotto-in-nigeria'
     | '/_layout/play'
     | '/_layout/privacy-policy'
+    | '/_layout/promotions'
     | '/_layout/responsible-gambling'
     | '/_layout/results'
     | '/_layout/terms-and-condition'
@@ -632,6 +680,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutResponsibleGamblingRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/promotions': {
+      id: '/_layout/promotions'
+      path: '/promotions'
+      fullPath: '/promotions'
+      preLoaderRoute: typeof LayoutPromotionsRouteImport
+      parentRoute: typeof LayoutRoute
+    }
     '/_layout/privacy-policy': {
       id: '/_layout/privacy-policy'
       path: '/privacy-policy'
@@ -644,6 +699,13 @@ declare module '@tanstack/react-router' {
       path: '/play'
       fullPath: '/play'
       preLoaderRoute: typeof LayoutPlayRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/lotto-in-nigeria': {
+      id: '/_layout/lotto-in-nigeria'
+      path: '/lotto-in-nigeria'
+      fullPath: '/lotto-in-nigeria'
+      preLoaderRoute: typeof LayoutLottoInNigeriaRouteImport
       parentRoute: typeof LayoutRoute
     }
     '/_layout/leaderboard': {
@@ -674,6 +736,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutFaqRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/download-app': {
+      id: '/_layout/download-app'
+      path: '/download-app'
+      fullPath: '/download-app'
+      preLoaderRoute: typeof LayoutDownloadAppRouteImport
+      parentRoute: typeof LayoutRoute
+    }
     '/_layout/contact': {
       id: '/_layout/contact'
       path: '/contact'
@@ -700,6 +769,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof LayoutAboutRouteImport
+      parentRoute: typeof LayoutRoute
+    }
+    '/_layout/2-sure-lotto': {
+      id: '/_layout/2-sure-lotto'
+      path: '/2-sure-lotto'
+      fullPath: '/2-sure-lotto'
+      preLoaderRoute: typeof Layout2SureLottoRouteImport
       parentRoute: typeof LayoutRoute
     }
     '/_authenticated/withdrawal': {
@@ -899,16 +975,20 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 interface LayoutRouteChildren {
+  Layout2SureLottoRoute: typeof Layout2SureLottoRoute
   LayoutAboutRoute: typeof LayoutAboutRoute
   LayoutAccumulatorRoute: typeof LayoutAccumulatorRoute
   LayoutBecomeAnAgentRoute: typeof LayoutBecomeAnAgentRoute
   LayoutContactRoute: typeof LayoutContactRoute
+  LayoutDownloadAppRoute: typeof LayoutDownloadAppRoute
   LayoutFaqRoute: typeof LayoutFaqRoute
   LayoutGamesRoute: typeof LayoutGamesRoute
   LayoutHowToPlayRoute: typeof LayoutHowToPlayRoute
   LayoutLeaderboardRoute: typeof LayoutLeaderboardRoute
+  LayoutLottoInNigeriaRoute: typeof LayoutLottoInNigeriaRoute
   LayoutPlayRoute: typeof LayoutPlayRoute
   LayoutPrivacyPolicyRoute: typeof LayoutPrivacyPolicyRoute
+  LayoutPromotionsRoute: typeof LayoutPromotionsRoute
   LayoutResponsibleGamblingRoute: typeof LayoutResponsibleGamblingRoute
   LayoutResultsRoute: typeof LayoutResultsRoute
   LayoutTermsAndConditionRoute: typeof LayoutTermsAndConditionRoute
@@ -917,16 +997,20 @@ interface LayoutRouteChildren {
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
+  Layout2SureLottoRoute: Layout2SureLottoRoute,
   LayoutAboutRoute: LayoutAboutRoute,
   LayoutAccumulatorRoute: LayoutAccumulatorRoute,
   LayoutBecomeAnAgentRoute: LayoutBecomeAnAgentRoute,
   LayoutContactRoute: LayoutContactRoute,
+  LayoutDownloadAppRoute: LayoutDownloadAppRoute,
   LayoutFaqRoute: LayoutFaqRoute,
   LayoutGamesRoute: LayoutGamesRoute,
   LayoutHowToPlayRoute: LayoutHowToPlayRoute,
   LayoutLeaderboardRoute: LayoutLeaderboardRoute,
+  LayoutLottoInNigeriaRoute: LayoutLottoInNigeriaRoute,
   LayoutPlayRoute: LayoutPlayRoute,
   LayoutPrivacyPolicyRoute: LayoutPrivacyPolicyRoute,
+  LayoutPromotionsRoute: LayoutPromotionsRoute,
   LayoutResponsibleGamblingRoute: LayoutResponsibleGamblingRoute,
   LayoutResultsRoute: LayoutResultsRoute,
   LayoutTermsAndConditionRoute: LayoutTermsAndConditionRoute,

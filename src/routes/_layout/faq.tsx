@@ -9,7 +9,7 @@ export const Route = createFileRoute('/_layout/faq')({
 function RouteComponent() {
   return (
     <>
-      <PageHeader title="Faq" className="uppercase"/>
+      <PageHeader title="FAQ" />
 
       <section className="relative py-12 sm:py-24 bg-slate-50/50 min-h-[calc(100vh-200px)] overflow-hidden">
         {/* Abstract Background Decoration */}

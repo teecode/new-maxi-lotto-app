@@ -28,7 +28,7 @@ export const Route = createFileRoute('/_layout/leaderboard')({
  * Feature Toggle: Set to `true` when marketing is ready to display total accrued winnings amount publicly.
  * When `false`, total winnings values are hidden from the Leaderboard UI while preserving underlying rank calculations.
  */
-export const SHOW_TOTAL_WINNINGS = false;
+const SHOW_TOTAL_WINNINGS = false;
 
 function LeaderboardPage() {
   const { data: leaderboard, isLoading } = useLeaderboard();
@@ -108,9 +108,9 @@ function LeaderboardPage() {
             <Sparkles className="w-3.5 h-3.5 text-amber-300" />
           </div>
 
-          <h1 className="text-2xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white mb-3 sm:mb-4">
+          <h2 className="text-2xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white mb-3 sm:mb-4">
             Hall of <span className="bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent drop-shadow-sm">Champions</span>
-          </h1>
+          </h2>
 
           <p className="text-slate-400 text-xs sm:text-base max-w-2xl mx-auto leading-relaxed mb-6 sm:mb-8 px-2">
             Celebrating MaxiLotto's most formidable players ranked by tier achievement and performance. Place your bets and climb to the top!
@@ -617,4 +617,3 @@ function LeaderboardPage() {
   );
 }
 
-export default LeaderboardPage;

@@ -29,6 +29,14 @@ import {
 import { useFetchBanks } from "@/hooks/useUserProfile";
 import { resolveAccountDetails } from "@/services/UserService";
 import { toast } from "sonner";
+import { ContentSections } from "@/components/content/content-sections";
+import { FaqList } from "@/components/faq-data";
+import {
+  AGENT_FAQ,
+  AGENT_GUIDE_INTRO,
+  AGENT_GUIDE_SECTIONS,
+  AGENT_GUIDE_TITLE,
+} from "@/content/become-an-agent";
 
 export const Route = createFileRoute("/_layout/become-an-agent")({
   component: BecomeAnAgent,
@@ -195,7 +203,7 @@ function FileUploadField({
 // ────────────────────────────────────────────────────────────────────────────────
 // Main Page
 // ────────────────────────────────────────────────────────────────────────────────
-export default function BecomeAnAgent() {
+function BecomeAnAgent() {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState<FormData>(initialForm);
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
@@ -382,8 +390,8 @@ export default function BecomeAnAgent() {
               Maxilotto Agent
             </span>
           </h1>
-          <p className="text-gray-400">
-            Join the winning team today!{" "}
+          <p className="text-gray-400 max-w-2xl mx-auto">
+            Sell 5/90 lotto from your shop and earn up to 35% commission on every ticket. Apply online in about five minutes.{" "}
             <span className="text-xs text-gray-500">Terms and conditions apply.</span>
           </p>
         </div>
@@ -827,6 +835,21 @@ export default function BecomeAnAgent() {
             </div>
           </div>
         </form>
+
+        {/* Guide for people searching "how to become a lotto agent" */}
+        <div className="mt-16 space-y-6">
+          <div className="text-center space-y-3 max-w-3xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white">{AGENT_GUIDE_TITLE}</h2>
+            <p className="text-gray-400 leading-relaxed">{AGENT_GUIDE_INTRO}</p>
+          </div>
+          <ContentSections sections={AGENT_GUIDE_SECTIONS} tone="dark" />
+          <section aria-labelledby="agent-faq" className="space-y-5 pt-4">
+            <h2 id="agent-faq" className="text-xl sm:text-2xl font-bold text-white">
+              Agent questions
+            </h2>
+            <FaqList items={AGENT_FAQ} name="agent-faq" tone="dark" />
+          </section>
+        </div>
       </div>
     </div>
   );

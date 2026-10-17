@@ -64,7 +64,7 @@ function RouteComponent() {
 
   return (
     <>
-      <PageHeader title="Maxi Drive — How to Play" />
+      <PageHeader title="Maxi Drive — How to Play" subtitle="5/90 lotto rules, bet types and odds, with payout examples" />
 
       <section className="py-8 sm:py-12 bg-slate-50/50">
         <div className="container space-y-10">
@@ -130,7 +130,11 @@ function RouteComponent() {
               <div className="lg:w-2/5 w-full flex justify-center">
                 <div className="relative rounded-2xl overflow-hidden shadow-md border border-slate-200 bg-slate-900 max-w-sm w-full">
                   <img
-                    src="/single-bet-naira.png"
+                    src="/single-bet-naira.jpg"
+                    width={1024}
+                    height={1024}
+                    loading="lazy"
+                    decoding="async"
                     alt="Single Bet Naira Payout Illustration"
                     className="w-full h-auto object-cover"
                   />
@@ -145,8 +149,12 @@ function RouteComponent() {
               <div className="lg:w-2/5 w-full order-2 lg:order-1 flex justify-center">
                 <div className="relative rounded-2xl overflow-hidden shadow-md border border-slate-200 bg-slate-900 max-w-sm w-full">
                   <img
-                    src="/accumulator-naira.png"
-                    alt="Accumulator Bet Naira Multiplier Illustration"
+                    src="/accumulator-guide.jpg"
+                    width={1024}
+                    height={1024}
+                    loading="lazy"
+                    decoding="async"
+                    alt="Accumulator example: three lotto market legs at odds 1.90, 1.90 and 3.20 multiply to 11.55, so ₦1,000 could pay ₦11,552"
                     className="w-full h-auto object-cover"
                   />
                 </div>
@@ -199,8 +207,12 @@ function RouteComponent() {
               <div className="lg:w-2/5 w-full flex justify-center">
                 <div className="relative rounded-2xl overflow-hidden shadow-md border border-slate-200 bg-slate-900 max-w-sm w-full">
                   <img
-                    src="/direct-bets-naira.png"
-                    alt="Direct Bets Naira Draw Illustration"
+                    src="/direct-bets-guide.jpg"
+                    width={1024}
+                    height={1024}
+                    loading="lazy"
+                    decoding="async"
+                    alt="1-Direct and 2-Direct examples: a ₦100 1-Direct on 45 wins ₦4,000; a ₦100 2-Direct on 12 and 88 wins ₦24,000"
                     className="w-full h-auto object-cover"
                   />
                 </div>
@@ -298,7 +310,11 @@ function RouteComponent() {
               <div className="lg:w-2/5 w-full order-2 lg:order-1 flex justify-center">
                 <div className="relative rounded-2xl overflow-hidden shadow-md border border-slate-200 bg-slate-900 max-w-sm w-full">
                   <img
-                    src="/banker-against-naira.png"
+                    src="/banker-against-naira.jpg"
+                    width={1024}
+                    height={1024}
+                    loading="lazy"
+                    decoding="async"
                     alt="Banker & Against Bet Payout Illustration"
                     className="w-full h-auto object-cover"
                   />

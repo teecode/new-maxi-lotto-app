@@ -13,6 +13,8 @@ import {Image} from "@unpic/react"
 import {getRankColor} from "@/lib/ranks"
 import HeroCarousel from "@/components/hero-carousel";
 import ReferralPromoCarousel from "@/components/referral-promo-carousel";
+import {RichText} from "@/components/content/content-sections";
+import {HOME_ABOUT_HEADING, HOME_ABOUT_POINTS, HOME_ABOUT_TEXT} from "@/content/home";
 
 export const Route = createFileRoute('/_layout/')({
   component: App,
@@ -342,6 +344,28 @@ function App() {
 
         </div>
 
+      </section>
+
+      {/* === About / SEO copy === */}
+      <section className="py-12 sm:py-16 bg-white border-t border-gray-100">
+        <div className="container">
+          <div className="max-w-3xl mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-bgColor">{HOME_ABOUT_HEADING}</h2>
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed mt-3">
+              <RichText text={HOME_ABOUT_TEXT} />
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {HOME_ABOUT_POINTS.map((point) => (
+              <div key={point.title} className="rounded-2xl bg-gray-50 border border-gray-100 p-5">
+                <h3 className="font-bold text-[#0A4B7F] mb-2">{point.title}</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  <RichText text={point.text} />
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
     </>

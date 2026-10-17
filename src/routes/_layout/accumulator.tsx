@@ -190,7 +190,7 @@ function AccumulatorPage() {
 
   return (
     <>
-      <PageHeader title="Accumulator Games" />
+      <PageHeader title="Accumulator Games" subtitle="Combine draws on one ticket and multiply the odds" />
       <section className="py-8 sm:py-12 min-h-screen bg-gray-50">
         <div className="container mx-auto px-4">
           {/* Game Selection */}
@@ -204,7 +204,7 @@ function AccumulatorPage() {
             {/* LEFT: Markets */}
             <div className="lg:col-span-2 space-y-6">
               <div className="flex justify-between items-center">
-                <h1 className="text-2xl font-bold text-[#0A4B7F]">Accumulator Markets</h1>
+                <h2 className="text-2xl font-bold text-[#0A4B7F]">Accumulator Markets</h2>
                 <Badge variant="secondary" className="text-xs">Sports Mode</Badge>
               </div>
 

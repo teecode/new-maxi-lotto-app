@@ -1,6 +1,7 @@
 import { DataGridColumnHeader } from "@/components/ui/data-grid-column-header";
 import { Skeleton } from "@/components/ui/skeleton";
-import { fullDateFormat, getImageUrl } from "@/lib/utils";
+import { getImageUrl } from "@/lib/utils";
+import { fullDateFormat } from "@/lib/game-time";
 import type { GameResultType } from "@/types/game";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Image } from "@unpic/react";

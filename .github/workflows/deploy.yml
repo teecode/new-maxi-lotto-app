@@ -64,3 +64,22 @@ jobs:
       run: |
         $baseDir = "C:\inetpub\wwwroot\${{ env.DEPLOY_ENV }}"
         Copy-Item -Path "dist\*" -Destination "$baseDir\maxilotto-online-web${{ env.DEPLOY_SUFFIX }}" -Recurse -Force
+
+    # Tells Bing (and the other IndexNow engines: Yandex, Seznam, Naver) about every page in
+    # the new sitemap, so changes are picked up within hours instead of on the next crawl.
+    # Google does not use IndexNow; it finds the sitemap through robots.txt.
+    # The key is public by design: https://maxilotto.ng/66c2fa91591feae30c8b01a5899393ea.txt proves the site is ours.
+    - name: Notify search engines (IndexNow)
+      if: env.DEPLOY_ENV == 'prod'
+      continue-on-error: true
+      run: |
+        [xml]$sitemap = Get-Content "dist\sitemap.xml"
+        $urls = @($sitemap.urlset.url | ForEach-Object { $_.loc })
+        $body = @{
+            host        = "maxilotto.ng"
+            key         = "66c2fa91591feae30c8b01a5899393ea"
+            keyLocation = "https://maxilotto.ng/66c2fa91591feae30c8b01a5899393ea.txt"
+            urlList     = $urls
+        } | ConvertTo-Json
+        Invoke-RestMethod -Method Post -Uri "https://api.indexnow.org/indexnow" -ContentType "application/json; charset=utf-8" -Body $body
+        Write-Host "Submitted $($urls.Count) URLs to IndexNow"

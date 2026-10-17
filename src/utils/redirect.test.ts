@@ -2,10 +2,16 @@ import { describe, expect, it } from "vitest";
 import { normalizeRedirectTarget } from "./redirect";
 
 describe("normalizeRedirectTarget", () => {
+  // Built from the test page's own origin: jsdom's default is http://localhost:3000,
+  // so a hard-coded http://localhost counted as another site.
   it("converts a same-origin absolute URL into a router-safe relative path", () => {
     expect(
-      normalizeRedirectTarget("http://localhost/play?tab=1#top", "/play"),
+      normalizeRedirectTarget(`${window.location.origin}/play?tab=1#top`, "/play"),
     ).toBe("/play?tab=1#top");
+  });
+
+  it("refuses to redirect to another site", () => {
+    expect(normalizeRedirectTarget("https://evil.example/play", "/play")).toBe("/play");
   });
 
   it("keeps existing relative paths unchanged", () => {

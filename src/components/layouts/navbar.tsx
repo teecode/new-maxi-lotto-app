@@ -43,6 +43,7 @@ const navGroups: Array<navGroupProps> = [
       {title: "Maxi Games", url: "/games"},
       {title: "Maxi Results", url: "/results"},
       {title: "Leaderboard", url: "/leaderboard"},
+      {title: "Promotions", url: "/promotions"},
     ],
   },
   {
@@ -51,6 +52,9 @@ const navGroups: Array<navGroupProps> = [
     children: [
       {title: "Maxi Ask", url: "/faq"},
       {title: "Maxi Drive", url: "/how-to-play"},
+      {title: "Lotto Guide", url: "/lotto-in-nigeria"},
+      {title: "Become an Agent", url: "/become-an-agent"},
+      {title: "Get the App", url: "/download-app"},
       {title: "Contact Us", url: "/contact"},
     ],
   },

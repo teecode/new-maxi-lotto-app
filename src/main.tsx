@@ -43,9 +43,12 @@ function InnerApp() {
   )
 }
 
-// Render the app
+// Render the app. The server sends #app holding a static, crawlable version
+// of the page ([data-prerender], from scripts/vite-plugin-seo.ts); React
+// replaces it on first render. Any other content means the app is already
+// mounted (hot reload), so leave it alone.
 const rootElement = document.getElementById('app')
-if (rootElement && !rootElement.innerHTML) {
+if (rootElement && (!rootElement.firstElementChild || rootElement.firstElementChild.hasAttribute('data-prerender'))) {
   const root = createRoot(rootElement)
   root.render(
     <StrictMode>

@@ -1,6 +1,8 @@
 {
+  "id": "/",
   "short_name": "MaxiLotto",
-  "name": "MaxiLotto",
+  "name": "MaxiLotto — Play 5/90 Lotto Online",
+  "description": "Play 5/90 lotto online in Nigeria: daily draws, live results, and winnings paid to your wallet.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,18 +10,21 @@
       "type": "image/x-icon"
     },
     {
-      "src": "maxilotto-icon.png",
+      "src": "pwa-192x192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "maxilotto-icon.png",
+      "src": "pwa-512x512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#0A4B7F",
+  "background_color": "#ffffff",
+  "lang": "en-NG",
+  "categories": ["entertainment", "games"]
 }
