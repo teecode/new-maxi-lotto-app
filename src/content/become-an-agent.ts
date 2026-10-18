@@ -2,7 +2,7 @@ import type { ContentSection, FaqEntry } from './types'
 
 // Facts here mirror the application form in routes/_layout/become-an-agent.tsx
 // (required fields, Delta State only, review time) and the agent offer on the
-// home page (up to 35% commission). Update both together.
+// home page (attractive commission; no percentage is advertised). Update both together.
 
 export const AGENT_GUIDE_TITLE = 'How to become a MaxiLotto lotto agent in Nigeria'
 
@@ -17,7 +17,7 @@ export const AGENT_GUIDE_SECTIONS: ContentSection[] = [
       {
         type: 'list',
         items: [
-          'Earn up to 35% commission on tickets sold (terms and conditions apply).',
+          'Earn attractive commission on every ticket you sell (terms and conditions apply).',
           'Applying is free and takes about five minutes online.',
           'Sell from a PC with a receipt printer using the MaxiLotto web POS, or from a MaxiLotto lotto terminal.',
           'Daily 5/90 draws with published odds, results and machine numbers your customers already understand.',
@@ -89,7 +89,7 @@ export const AGENT_FAQ: FaqEntry[] = [
   },
   {
     question: 'How much commission do MaxiLotto agents earn?',
-    answer: 'Agents earn up to 35% commission on tickets sold. Terms and conditions apply.',
+    answer: 'MaxiLotto agents earn an attractive commission on every ticket they sell. Apply or contact us to find out the rates for your outlet. Terms and conditions apply.',
   },
   {
     question: 'Which states can I apply from?',

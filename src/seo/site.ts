@@ -88,7 +88,7 @@ const pages: PageSeo[] = [
     name: 'Become an Agent',
     title: 'Become a Lotto Agent in Nigeria — Apply Online | MaxiLotto',
     description:
-      'Turn your shop into a MaxiLotto lotto outlet. Apply online in minutes, choose a bet shop or lotto terminal setup, and earn up to 35% commission on tickets sold.',
+      'Turn your shop into a MaxiLotto lotto outlet. Apply online in minutes, choose a bet shop or lotto terminal setup, and earn attractive commission on every ticket sold.',
   },
   {
     path: '/leaderboard',

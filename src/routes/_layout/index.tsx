@@ -8,7 +8,7 @@ import LatestDrawTicket from '@/components/latest-draw-ticket'
 import {cn, formatCurrency, maskUsernameIfPhoneNumber} from '@/lib/utils'
 import TodayGameSlider from "@/components/today-games-slider.tsx";
 import type {EmblaOptionsType} from "embla-carousel";
-import {ChevronRight, Gamepad2, Star, Trophy, UserPlus, Wallet, BadgePercent, MapPin, Clock, ArrowRight} from "lucide-react";
+import {ChevronRight, Gamepad2, Star, Trophy, UserPlus, Wallet, Coins, MapPin, Clock, ArrowRight} from "lucide-react";
 import {Image} from "@unpic/react"
 import {getRankColor} from "@/lib/ranks"
 import HeroCarousel from "@/components/hero-carousel";
@@ -232,7 +232,7 @@ function App() {
               {/* Benefits list */}
               <ul className="space-y-3 mb-8 text-left max-w-sm mx-auto lg:mx-0">
                 {[
-                  { icon: BadgePercent, text: "Earn up to 35% commission per ticket sold" },
+                  { icon: Coins,        text: "Earn attractive commission on every ticket sold" },
                   { icon: MapPin,       text: "Currently active in Delta State — expanding soon" },
                   { icon: Clock,        text: "Quick & easy online application — takes 5 minutes" },
                 ].map(({ icon: Icon, text }, i) => (
@@ -259,7 +259,7 @@ function App() {
             {/* Right: Stat cards */}
             <div className="flex-shrink-0 grid grid-cols-2 gap-4 w-full max-w-xs lg:max-w-sm">
               {[
-                { value: "35%",    label: "Max Commission",    bg: "bg-white/20" },
+                { value: "💰",     label: "Attractive Commission", bg: "bg-white/20" },
                 { value: "5 min",  label: "Application Time",  bg: "bg-white/15" },
                 { value: "24/7",   label: "Support Available", bg: "bg-white/15" },
                 { value: "Free",   label: "Registration",      bg: "bg-white/20" },

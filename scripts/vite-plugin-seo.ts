@@ -163,7 +163,7 @@ const pageContent: Record<string, () => string> = {
     `<section><h2>${esc(HOME_ABOUT_HEADING)}</h2><p>${rich(HOME_ABOUT_TEXT)}</p>` +
     HOME_ABOUT_POINTS.map((p) => `<h3>${esc(p.title)}</h3><p>${rich(p.text)}</p>`).join('') +
     `</section>` +
-    `<section><h2>Become a MaxiLotto agent</h2><p>Turn your shop into a lotto outlet and earn up to 35% commission on every ticket sold. <a href="/become-an-agent">Apply online</a>.</p></section>`,
+    `<section><h2>Become a MaxiLotto agent</h2><p>Turn your shop into a lotto outlet and earn attractive commission on every ticket sold. <a href="/become-an-agent">Apply online</a>.</p></section>`,
   '/how-to-play': () =>
     `<h1>Maxi Drive — How to Play 5/90 lotto</h1>` +
     `<p>${esc(SEO_PAGES['/how-to-play'].description)}</p>` +
@@ -176,7 +176,7 @@ const pageContent: Record<string, () => string> = {
   '/promotions': () => renderGuide(PROMOTIONS_GUIDE),
   '/become-an-agent': () =>
     `<h1>Become a MaxiLotto Agent</h1>` +
-    `<p>Sell 5/90 lotto from your shop and earn up to 35% commission on every ticket. Apply online in about five minutes. Terms and conditions apply.</p>` +
+    `<p>Sell 5/90 lotto from your shop and earn attractive commission on every ticket. Apply online in about five minutes. Terms and conditions apply.</p>` +
     `<h2>${esc(AGENT_GUIDE_TITLE)}</h2><p>${esc(AGENT_GUIDE_INTRO)}</p>` +
     renderSections(AGENT_GUIDE_SECTIONS) +
     renderFaq('Agent questions', AGENT_FAQ),

@@ -391,7 +391,7 @@ function BecomeAnAgent() {
             </span>
           </h1>
           <p className="text-gray-400 max-w-2xl mx-auto">
-            Sell 5/90 lotto from your shop and earn up to 35% commission on every ticket. Apply online in about five minutes.{" "}
+            Sell 5/90 lotto from your shop and earn attractive commission on every ticket. Apply online in about five minutes.{" "}
             <span className="text-xs text-gray-500">Terms and conditions apply.</span>
           </p>
         </div>

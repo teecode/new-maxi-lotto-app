@@ -98,7 +98,7 @@ const slides: SlideData[] = [
         🤝
       </>
     ),
-    description: "Earn up to 35% commission on every ticket sold. Join our growing network of agents across Nigeria. Terms and conditions apply.",
+    description: "Earn attractive commission on every ticket sold. Join our growing network of agents across Nigeria. Terms and conditions apply.",
     image: "/slide-7.jpg",
     ctaText: "Apply Now",
     ctaLink: "/become-an-agent",

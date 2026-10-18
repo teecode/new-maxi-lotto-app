@@ -7,7 +7,6 @@ export const PROMO = {
   firstDepositBonus: '50%',
   laterDepositBonus: '10%',
   referralCommission: '20%',
-  agentCommission: '35%',
 }
 
 export const PROMOTIONS_GUIDE: GuideContent = {
@@ -46,11 +45,11 @@ export const PROMOTIONS_GUIDE: GuideContent = {
     },
     {
       id: 'agent-commission',
-      heading: `Agents: up to ${PROMO.agentCommission} commission`,
+      heading: 'Agents: attractive commission on every ticket',
       blocks: [
         {
           type: 'p',
-          text: `Own a shop? Sell MaxiLotto to your customers and earn up to ${PROMO.agentCommission} commission on every ticket. [Apply to become an agent](/become-an-agent) in about five minutes.`,
+          text: 'Own a shop? Sell MaxiLotto to your customers and earn attractive commission on every ticket. [Apply to become an agent](/become-an-agent) in about five minutes.',
         },
       ],
     },
