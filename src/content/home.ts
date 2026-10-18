@@ -17,7 +17,7 @@ export const HOME_ABOUT_POINTS: { title: string; text: string }[] = [
     text: 'The winning and machine numbers for every MaxiLotto draw are published on the [Results](/results) page, and wins on online tickets are credited to your wallet automatically.',
   },
   {
-    title: 'Coming from another brand?',
-    text: 'Played Baba Ijebu, Golden Chance or Green Lotto before? It is the same 5/90 game with the same bet names. Our [guide to lotto in Nigeria](/lotto-in-nigeria) explains how they compare.',
+    title: 'Played lotto at a shop before?',
+    text: 'It is the same 5/90 game with the same bet names, now on your phone. Our [guide to lotto in Nigeria](/lotto-in-nigeria) explains what changes when you play online.',
   },
 ]

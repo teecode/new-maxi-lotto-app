@@ -72,9 +72,9 @@ const pages: PageSeo[] = [
   {
     path: '/lotto-in-nigeria',
     name: 'Lotto in Nigeria',
-    title: 'Lotto in Nigeria: Baba Ijebu, Golden Chance, Green Lotto & 5/90',
+    title: 'Lotto in Nigeria: How 5/90 Works, Bet Names & Playing Online | MaxiLotto',
     description:
-      'How lotto works in Nigeria: Premier Lotto (Baba Ijebu), Golden Chance and Green Lotto compared with MaxiLotto, plus 5/90 bet types, results and safe-play tips.',
+      'A plain guide to lotto in Nigeria: how 5/90 works, what 2 Sure, NAP, Perm and Banker mean, how results work, and how playing online compares with a lotto shop.',
   },
   {
     path: '/2-sure-lotto',

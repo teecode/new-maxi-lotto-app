@@ -1,15 +1,15 @@
 import type { GuideContent } from './types'
 
-// Competitor names are used only to describe and compare. Keep every statement
-// about other operators neutral and verifiable: no claims about their odds,
-// payouts or licences, and nothing that suggests MaxiLotto is connected to them.
+// Deliberately names no other lotto brand: the legal position on naming competitors
+// is still being confirmed. Talk about "other operators" or "a lotto shop" instead.
+// (A version that named and compared brands is in git history, commit 2984564.)
 
 export const LOTTO_GUIDE: GuideContent = {
   title: 'Lotto in Nigeria',
-  subtitle: 'Baba Ijebu, Golden Chance, Green Lotto and playing 5/90 online',
+  subtitle: 'How 5/90 works, what the bet names mean, and playing online',
   toc: true,
   intro:
-    'Lotto is one of the most popular games of chance in Nigeria. Whether you grew up hearing about Baba Ijebu, check Golden Chance results after work or follow Green Lotto draws, the game underneath is almost always the same: 5/90 lotto. This guide explains how 5/90 works, the brands you will hear about, how they compare with MaxiLotto, what the common bet names mean, how results work, and how to play 5/90 online.',
+    'Lotto is one of the most popular games of chance in Nigeria, and almost every brand you will see at a lotto shop runs the same game underneath: 5/90 lotto. This guide explains how 5/90 works, what the common bet names mean, how results work, how playing online compares with buying from a lotto shop, and how to play 5/90 online with MaxiLotto.',
   sections: [
     {
       id: 'what-is-5-90-lotto',
@@ -30,67 +30,39 @@ export const LOTTO_GUIDE: GuideContent = {
       ],
     },
     {
-      id: 'lotto-brands-in-nigeria',
-      heading: 'The lotto names you hear in Nigeria',
+      id: 'one-game-many-brands',
+      heading: 'One game, many brands',
       blocks: [
         {
           type: 'p',
-          text: 'Several lotto brands are household names in Nigeria. They are separate companies, each with its own draws, results, odds and agents. Here is a short, neutral overview.',
-        },
-        {
-          type: 'terms',
-          items: [
-            {
-              id: 'premier-lotto-baba-ijebu',
-              term: 'Premier Lotto (Baba Ijebu)',
-              text: 'One of the oldest and best-known lotto brands in Nigeria, widely known by the nickname Baba Ijebu. Its 5/90 draws are sold through a large network of agents.',
-            },
-            {
-              id: 'golden-chance-lotto',
-              term: 'Golden Chance Lotto',
-              text: 'A well-known Nigerian lotto brand that runs its own 5/90 draws, sold through agents and lotto shops.',
-            },
-            {
-              id: 'green-lotto',
-              term: 'Green Lotto',
-              text: 'Another Nigerian lotto brand built on the 5/90 format, with its own draws and results.',
-            },
-            {
-              id: 'maxilotto',
-              term: 'MaxiLotto',
-              text: 'A 5/90 lotto brand of LukzerNet Nigeria Limited. You can play online at maxilotto.ng, on the [MaxiLotto Android app](/download-app) or at MaxiLotto shops, and the odds for every bet type are published on the [How to Play](/how-to-play) page.',
-            },
-          ],
+          text: 'Nigeria has several lotto brands, each a separate company with its own draws, results, odds and agents. Most are built on the same 5/90 format, so if you can play one, you can play the others: the numbers, the draw and most bet names are the same.',
         },
         {
           type: 'p',
-          text: 'If you can play one of these, you can play the others: the numbers, the 5/90 format and most bet types are the same. What changes from brand to brand is the draw schedule, the odds each operator pays, and how you buy a ticket and collect a win.',
+          text: 'What changes from brand to brand is the draw schedule, the odds each operator pays, and how you buy a ticket and collect a win. MaxiLotto is a 5/90 lotto brand of LukzerNet Nigeria Limited that you can play online at maxilotto.ng, on the [MaxiLotto Android app](/download-app) or at MaxiLotto shops, and the odds for every bet type are published on [How to Play](/how-to-play).',
         },
       ],
     },
     {
-      id: 'maxilotto-vs-baba-ijebu-golden-chance-green-lotto',
-      heading: 'MaxiLotto vs Baba Ijebu, Golden Chance and Green Lotto',
+      id: 'lotto-shop-or-online',
+      heading: 'Lotto shop or MaxiLotto online: what changes',
       blocks: [
         {
-          type: 'p',
-          text: 'All four are 5/90 lotto brands, so the game itself is the same. The differences are in how you play, what is published and which extra bets you can place. Here is what you get at MaxiLotto next to what most Nigerian lotto players are used to from the big retail brands.',
-        },
-        {
           type: 'table',
-          head: ['', 'What players are used to', 'At MaxiLotto'],
+          head: ['', 'Buying at a lotto shop', 'Playing on MaxiLotto'],
           rows: [
             ['The game', '5/90: five winning numbers from 1 to 90', 'The same 5/90 game'],
             ['Bet types', 'Direct (2 Sure, NAP 3), Perm, Banker and Against', 'All of these, plus Machine bets, Double Chance and accumulators'],
-            ['Where you play', 'At a lotto agent or shop', 'Online at maxilotto.ng, on the Android app, or at MaxiLotto shops'],
+            ['Where you play', 'At the shop, while it is open', 'Online at maxilotto.ng or on the Android app, and at MaxiLotto shops'],
+            ['Your ticket', 'A paper slip you have to keep safe', 'Stored in your account'],
             ['Odds', 'Set by each operator', 'Published for every bet type: 2 Direct 240x, 3 Direct 2,100x, 5 Direct 44,000x'],
-            ['Results', "On each operator's own channels", 'On the Results page after every draw, with winning and machine numbers'],
-            ['Getting paid', 'Usually collected from the agent who sold the ticket', 'Online wins go to your wallet automatically, and you withdraw to your bank'],
+            ['Results', "On the operator's own channels", 'On the Results page after every draw, with winning and machine numbers'],
+            ['Getting paid', 'Collected from the agent who sold the ticket', 'Online wins go to your wallet automatically, and you withdraw to your bank'],
           ],
         },
         {
-          type: 'note',
-          text: "This comparison describes MaxiLotto and common lotto practice in Nigeria. For another brand's exact odds, draw times and online options, check that operator's official channels.",
+          type: 'p',
+          text: 'Prefer cash? MaxiLotto also sells tickets through MaxiLotto shops, and shop owners who want to sell MaxiLotto can [become an agent](/become-an-agent).',
         },
       ],
     },
@@ -124,42 +96,19 @@ export const LOTTO_GUIDE: GuideContent = {
     },
     {
       id: 'lotto-results',
-      heading: 'Checking results: Baba Ijebu, Golden Chance, Green Lotto and MaxiLotto',
+      heading: 'Checking lotto results',
       blocks: [
         {
           type: 'p',
-          text: 'Each operator draws and publishes its own results. A Premier Lotto (Baba Ijebu), Golden Chance or Green Lotto result only decides tickets bought from that operator, and a MaxiLotto result only decides MaxiLotto tickets.',
+          text: "Every lotto operator draws and publishes its own results, and a result only decides tickets bought from that operator. Another brand's draw does not decide a MaxiLotto ticket, and a MaxiLotto draw does not decide anyone else's.",
         },
         {
           type: 'p',
-          text: "For another brand's results, use that operator's official channels. MaxiLotto results, with the winning numbers and any machine numbers, are on the [Results](/results) page as soon as each draw is published, and the times of today's draws are on [Today's Games](/games).",
+          text: "MaxiLotto results, with the winning numbers and any machine numbers, are on the [Results](/results) page as soon as each draw is published, and the times of today's draws are on [Today's Games](/games).",
         },
         {
           type: 'note',
-          text: 'Be careful with anyone selling "sure banker" numbers or "fixed" results for any brand. Lotto draws are random; nobody can sell you a guaranteed number.',
-        },
-      ],
-    },
-    {
-      id: 'online-or-shop',
-      heading: 'Playing online or at a lotto shop',
-      blocks: [
-        {
-          type: 'p',
-          text: 'Most Nigerian players have bought tickets from a lotto agent or shop. Playing online works the same way, but from your phone:',
-        },
-        {
-          type: 'list',
-          items: [
-            'Fund a wallet by bank transfer, card or USSD instead of paying cash.',
-            'Your tickets are stored in your account, so there is no paper slip to lose.',
-            'Online wins are credited to your MaxiLotto wallet automatically, and you can withdraw to your bank account.',
-            'You can play from anywhere in Nigeria, on the website or the [Android app](/download-app).',
-          ],
-        },
-        {
-          type: 'p',
-          text: 'If you prefer cash, MaxiLotto also sells tickets through MaxiLotto shops. Shop owners who want to sell MaxiLotto can [become an agent](/become-an-agent).',
+          text: 'Be careful with anyone selling "sure banker" numbers or "fixed" results. Lotto draws are random; nobody can sell you a guaranteed number.',
         },
       ],
     },
@@ -181,7 +130,7 @@ export const LOTTO_GUIDE: GuideContent = {
     },
     {
       id: 'play-responsibly',
-      heading: 'Play responsibly, whichever brand you choose',
+      heading: 'Play responsibly',
       blocks: [
         {
           type: 'list',
@@ -197,24 +146,24 @@ export const LOTTO_GUIDE: GuideContent = {
   ],
   faq: [
     {
-      question: 'Is MaxiLotto the same as Baba Ijebu or Premier Lotto?',
+      question: 'Is MaxiLotto connected to other lotto brands?',
       answer:
-        'No. MaxiLotto is a separate lotto brand operated by LukzerNet Nigeria Limited. It is not part of, or affiliated with, Premier Lotto (Baba Ijebu), Golden Chance or Green Lotto.',
+        'No. MaxiLotto is a separate lotto brand operated by LukzerNet Nigeria Limited, and it is not affiliated with any other lotto operator.',
     },
     {
-      question: 'Which is better, MaxiLotto or Baba Ijebu?',
+      question: "Can I check other lotto brands' results on MaxiLotto?",
       answer:
-        'They play the same 5/90 game. MaxiLotto adds online play with a wallet, an Android app, published odds for every bet type, Machine bets, Double Chance and accumulators. Choose whichever suits how you like to play, and only play with money you can afford to lose.',
+        'No. MaxiLotto publishes only the results of its own draws. Other operators publish their results through their own official channels.',
     },
     {
-      question: 'Can I check Baba Ijebu, Golden Chance or Green Lotto results on MaxiLotto?',
+      question: 'Can I play my usual numbers on MaxiLotto?',
       answer:
-        'No. MaxiLotto publishes only the results of its own draws. Other brands publish their results through their own official channels.',
+        'Yes. Any numbers from 1 to 90 can be played with the bet types you already know, such as 2 Direct, Perm, Banker and Against. Your ticket is decided by the MaxiLotto draw you choose.',
     },
     {
-      question: 'Can I play my usual Baba Ijebu numbers on MaxiLotto?',
+      question: 'Is it better to play lotto online or at a shop?',
       answer:
-        'Yes. Any numbers from 1 to 90 can be played on MaxiLotto with the same bet types you know, such as 2 Direct, Perm, Banker and Against. Your ticket is decided by the MaxiLotto draw you choose.',
+        'It is the same 5/90 game either way. Online, your tickets are stored in your account and wins go to your wallet automatically; at a shop you pay cash and keep a paper slip. Choose whichever suits you, and only play with money you can afford to lose.',
     },
     {
       question: 'What is 2 sure in lotto?',
@@ -232,6 +181,4 @@ export const LOTTO_GUIDE: GuideContent = {
         'Each operator recruits its own agents. To sell MaxiLotto, apply online on the MaxiLotto [Become an Agent](/become-an-agent) page with your personal, identity, business and bank details.',
     },
   ],
-  disclaimer:
-    'Premier Lotto, Baba Ijebu, Golden Chance and Green Lotto are names and trademarks of their respective owners. MaxiLotto is not affiliated with, endorsed by or connected to them; the names are used only to describe and compare.',
 }

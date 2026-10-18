@@ -30,11 +30,11 @@ export const RESULTS_SECTIONS: ContentSection[] = [
   },
   {
     id: 'other-brands-results',
-    heading: 'Looking for Baba Ijebu, Golden Chance or Green Lotto results?',
+    heading: "Looking for another lotto brand's results?",
     blocks: [
       {
         type: 'p',
-        text: 'Premier Lotto (Baba Ijebu), Golden Chance and Green Lotto publish their results on their own official channels, and their results only decide their own tickets. This page shows MaxiLotto draws only. See [how MaxiLotto compares](/lotto-in-nigeria#maxilotto-vs-baba-ijebu-golden-chance-green-lotto) with those brands.',
+        text: "Every lotto operator publishes its own results on its own official channels, and those results only decide its own tickets. This page shows MaxiLotto draws only. New to playing online? Our [guide to lotto in Nigeria](/lotto-in-nigeria) explains how it works.",
       },
     ],
   },
