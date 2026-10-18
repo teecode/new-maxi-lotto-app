@@ -1,8 +1,7 @@
-/// <reference types="vitest/config" />
-// The only Vite config. There used to be a vite.config.js next to this file;
-// Vite loads .js first, so this file (with the PWA and push setup) was never
-// used, and it could not build anyway: nitroV2Plugin is for TanStack Start
-// server rendering, which this single-page app does not use.
+// The only Vite config; test settings are in vitest.config.ts. There used to be a
+// vite.config.js next to this file. Vite loads .js first, so this file (with the PWA
+// and push setup) was never used, and it could not build anyway: nitroV2Plugin is
+// for TanStack Start server rendering, which this single-page app does not use.
 import { defineConfig } from 'vite'
 // @ts-ignore
 import viteReact from '@vitejs/plugin-react'
@@ -49,9 +48,5 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
-  },
-  test: {
-    globals: true,
-    environment: 'jsdom',
   },
 })
