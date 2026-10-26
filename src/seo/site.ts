@@ -58,9 +58,9 @@ const pages: PageSeo[] = [
   {
     path: '/accumulator',
     name: 'Accumulator',
-    title: 'Lotto Accumulator — Combine Draws, Multiply the Odds | MaxiLotto',
+    title: 'Lotto Accumulator: How Combined Odds Work | MaxiLotto',
     description:
-      'Combine selections from several MaxiLotto draws into one accumulator ticket. The odds of every leg multiply together for a bigger potential return.',
+      'Combine multiple predictions for one selected MaxiLotto game into an accumulator ticket. Each leg must win, and the odds of the legs multiply together.',
   },
   {
     path: '/how-to-play',
@@ -186,4 +186,3 @@ export const normalizePath = (pathname: string) => {
   const trimmed = pathname.replace(/\/+$/, '')
   return trimmed === '' ? '/' : trimmed.toLowerCase()
 }
-

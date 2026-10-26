@@ -12,7 +12,7 @@
 // React replaces the static content when it mounts (see src/main.tsx).
 //
 // Staging builds (DEPLOY_ENV=staging, set by the deploy workflow) are marked
-// noindex everywhere and robots.txt disallows all crawling.
+// noindex everywhere. Crawlers must be allowed to fetch pages to see that tag.
 
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
@@ -43,6 +43,7 @@ import { TWO_SURE_GUIDE } from '../src/content/two-sure'
 import { APK_URL, DOWNLOAD_APP_GUIDE } from '../src/content/download-app'
 import { PROMOTIONS_GUIDE } from '../src/content/promotions'
 import { RESULTS_SECTIONS } from '../src/content/results'
+import { ACCUMULATOR_SECTIONS } from '../src/content/accumulator'
 import { AGENT_FAQ, AGENT_GUIDE_INTRO, AGENT_GUIDE_SECTIONS, AGENT_GUIDE_TITLE } from '../src/content/become-an-agent'
 
 const HEAD_MARKER = '<!--seo-head-->'
@@ -184,6 +185,9 @@ const pageContent: Record<string, () => string> = {
   '/results': () =>
     `<h1>Lotto Results: MaxiLotto 5/90 winning and machine numbers for every draw</h1><p>${esc(SEO_PAGES['/results'].description)}</p>` +
     renderSections(RESULTS_SECTIONS),
+  '/accumulator': () =>
+    `<h1>Lotto Accumulator</h1><p>${esc(SEO_PAGES['/accumulator'].description)}</p>` +
+    renderSections(ACCUMULATOR_SECTIONS),
   '/games': () =>
     `<h1>Daily Games</h1><p>${esc(SEO_PAGES['/games'].description)}</p>` +
     `<p>New to 5/90? Read <a href="/how-to-play">how to play</a> first, then check the <a href="/results">latest results</a>.</p>`,
@@ -230,7 +234,7 @@ function renderBody(page: PageSeo, year: number) {
 }
 
 function robotsTxt(noindexAll: boolean) {
-  if (noindexAll) return 'User-agent: *\nDisallow: /\n'
+  if (noindexAll) return 'User-agent: *\nDisallow:\n'
   return [
     'User-agent: *',
     ...PRIVATE_PREFIXES.map((p) => `Disallow: ${p}`),
@@ -240,9 +244,11 @@ function robotsTxt(noindexAll: boolean) {
   ].join('\n')
 }
 
-const sitemapXml = () =>
+const sitemapXml = (noindexAll: boolean) =>
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-  INDEXABLE_PAGES.map((p) => `  <url><loc>${absoluteUrl(p.path)}</loc></url>`).join('\n') +
+  (noindexAll ? [] : INDEXABLE_PAGES)
+    .map((p) => `  <url><loc>${absoluteUrl(p.path)}</loc></url>`)
+    .join('\n') +
   `\n</urlset>\n`
 
 export function seoPlugin(): Plugin {
@@ -281,7 +287,7 @@ export function seoPlugin(): Plugin {
         mkdirSync(dirname(file), { recursive: true })
         writeFileSync(file, fill(template, page))
       }
-      writeFileSync(join(outDir, 'sitemap.xml'), sitemapXml())
+      writeFileSync(join(outDir, 'sitemap.xml'), sitemapXml(noindexAll))
       writeFileSync(join(outDir, 'robots.txt'), robotsTxt(noindexAll))
     },
   }

@@ -15,6 +15,8 @@ import {toast} from "sonner"
 import GameCarousel from '@/components/play/game-carousel'
 import {cn} from "@/lib/utils"
 import PageHeader from "@/components/layouts/page-header.tsx";
+import { ContentSections } from '@/components/content/content-sections'
+import { ACCUMULATOR_SECTIONS } from '@/content/accumulator'
 
 export const Route = createFileRoute('/_layout/accumulator')({
   component: AccumulatorPage,
@@ -190,7 +192,7 @@ function AccumulatorPage() {
 
   return (
     <>
-      <PageHeader title="Accumulator Games" subtitle="Combine draws on one ticket and multiply the odds" />
+      <PageHeader title="Lotto Accumulator" subtitle="Combine predictions for one game and multiply the odds" />
       <section className="py-8 sm:py-12 min-h-screen bg-gray-50">
         <div className="container mx-auto px-4">
           {/* Game Selection */}
@@ -489,6 +491,11 @@ function AccumulatorPage() {
               </div>
             </div>
           )}
+        </div>
+      </section>
+      <section className="pb-12 sm:pb-16">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <ContentSections sections={ACCUMULATOR_SECTIONS} />
         </div>
       </section>
     </>
