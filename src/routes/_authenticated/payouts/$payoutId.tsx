@@ -9,7 +9,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import {Image} from "@unpic/react";
-import {formatCurrency, fullDateTimeFormat} from "@/lib/utils.ts";
+import { formatCurrency } from "@/lib/utils.ts";
+import { fullDateTimeFormat } from "@/lib/game-time";
 import {Button} from "@/components/ui/button.tsx";
 import {DownloadIcon, Share2} from "lucide-react";
 

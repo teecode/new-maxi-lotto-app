@@ -34,16 +34,17 @@ export const updatePassword = async (
 	newPassword: string
 ): Promise<defaultApiResponse> => {
 	try {
-		const response = await apiClient.put<defaultApiResponse>(
+		const response = await apiClient.post<defaultApiResponse>(
 			'User/UpdatePassword',
 			{ oldPassword, newPassword }
 		);
 		return response.data;
 	} catch (error: any) {
 		if (error.response && error.response.data) {
-			throw new Error(
-				error.response.data.error || 'Failed to update password.'
-			);
+			const errorMsg = typeof error.response.data === 'string'
+				? error.response.data
+				: error.response.data.error || error.response.data.message || 'Failed to update password.';
+			throw new Error(errorMsg);
 		}
 		throw new Error('Network error, please try again.');
 	}
@@ -176,7 +177,7 @@ export const sendContactUsMessage = async (
 export const fetchFavouriteBalls = async (): Promise<number[]> => {
 	try {
 		const response = await apiClient.get<FavouriteBallsResponse>(
-			'/Ticket/favouriteball'
+			'/Wager/favouriteball'
 		);
 		return response.data.balls;
 	} catch (error: any) {
@@ -195,7 +196,7 @@ export const updateFavouriteBall = async (
 	balls: number[]
 ): Promise<any> => {
 	try {
-		const response = await apiClient.post<any>('/Ticket/favouriteball', {
+		const response = await apiClient.post<any>('/Wager/favouriteball', {
 			customerID,
 			balls,
 		});

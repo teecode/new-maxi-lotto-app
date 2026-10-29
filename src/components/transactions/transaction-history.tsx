@@ -26,7 +26,8 @@ import { DatePicker } from '@/components/ui/date-picker';
 import { fetchUserTransactions } from '@/services/Transactions';
 import { MobileDataCards, type CardField } from '@/components/ui/mobile-data-cards';
 import { Badge } from '@/components/ui/base-badge';
-import { formatCurrency, fullDateFormat } from '@/lib/utils';
+import { formatCurrency } from '@/lib/utils';
+import { fullDateFormat } from '@/lib/game-time';
 import type { Transaction } from '@/types/transaction';
 
 

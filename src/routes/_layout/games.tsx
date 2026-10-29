@@ -6,7 +6,8 @@ import * as _ from 'lodash';
 import moment from 'moment';
 
 import { Spinner } from '@/components/ui/spinner'
-import { cn, finalImagePath, isGameClosed } from '@/lib/utils'
+import { cn, finalImagePath } from '@/lib/utils'
+import { isGameClosed } from '@/lib/game-time'
 import type { Game } from "@/types/game.ts";
 import Countdown from "@/components/count-down.tsx";
 import { Badge } from "@/components/ui/badge.tsx";
@@ -38,7 +39,7 @@ function RouteComponent() {
 
   return (
     <div className="min-h-screen bg-gray-50/50">
-      <PageHeader title="Daily Games" />
+      <PageHeader title="Daily Games" subtitle="Today's MaxiLotto 5/90 draws and draw times" />
 
       <section className="py-8 sm:py-16">
         <div className="container px-4">

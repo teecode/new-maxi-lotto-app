@@ -12,6 +12,8 @@ import { ThemeProvider } from './components/theme-provider.tsx'
 import { Provider } from './utils/Provider.tsx'
 import { Toaster } from './components/ui/sonner.tsx'
 import useAuthStore from './store/authStore.ts'
+import { PWAInstallPrompt } from './components/PWAInstallPrompt.tsx'
+import { reloadToLatest, shouldReloadOnNavigation, startAppUpdateWatcher } from './lib/app-update.ts'
 
 // Create a new router instance
 const router = createRouter({
@@ -25,6 +27,16 @@ const router = createRouter({
   defaultPreloadStaleTime: 0,
 })
 
+// New deploys: see lib/app-update.ts. The bet slip is kept in sessionStorage, so a reload loses nothing.
+startAppUpdateWatcher({
+  accent: '#0185B6',
+  // Clear the mobile bottom navigation bar (69px, hidden from the sm breakpoint up).
+  bottomOffset: () => (window.innerWidth < 640 ? 85 : 16),
+})
+router.subscribe('onBeforeNavigate', (e) => {
+  if (e.fromLocation && e.pathChanged && shouldReloadOnNavigation()) void reloadToLatest(e.toLocation.href)
+})
+
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
   interface Register {
@@ -34,12 +46,20 @@ declare module '@tanstack/react-router' {
 
 function InnerApp() {
   const auth = useAuthStore()
-  return <RouterProvider router={router} context={{ auth }} />
+  return (
+    <>
+      <RouterProvider router={router} context={{ auth }} />
+      <PWAInstallPrompt />
+    </>
+  )
 }
 
-// Render the app
+// Render the app. The server sends #app holding a static, crawlable version
+// of the page ([data-prerender], from scripts/vite-plugin-seo.ts); React
+// replaces it on first render. Any other content means the app is already
+// mounted (hot reload), so leave it alone.
 const rootElement = document.getElementById('app')
-if (rootElement && !rootElement.innerHTML) {
+if (rootElement && (!rootElement.firstElementChild || rootElement.firstElementChild.hasAttribute('data-prerender'))) {
   const root = createRoot(rootElement)
   root.render(
     <StrictMode>

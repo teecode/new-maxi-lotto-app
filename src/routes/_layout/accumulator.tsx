@@ -15,6 +15,8 @@ import {toast} from "sonner"
 import GameCarousel from '@/components/play/game-carousel'
 import {cn} from "@/lib/utils"
 import PageHeader from "@/components/layouts/page-header.tsx";
+import { ContentSections } from '@/components/content/content-sections'
+import { ACCUMULATOR_SECTIONS } from '@/content/accumulator'
 
 export const Route = createFileRoute('/_layout/accumulator')({
   component: AccumulatorPage,
@@ -40,13 +42,13 @@ const MARKET_DESCRIPTIONS: Record<string, string> = {
 
 function AccumulatorPage() {
   const [stakeAmount, setStakeAmount] = useState<number>(100)
+  const [winningType, setWinningType] = useState<number>(1) // 1: Normal, 2: Machine
 
   // Use bet store for selected game to ensure carousel highlighting works
   const {selectedGame, setSelectedGame} = useBetStore()
 
   const MIN_STAKE = 50
-  const MAX_STAKE = 10000
-  const MAX_POTENTIAL_WIN = 2500000
+  const MAX_POTENTIAL_WIN = 500000
 
   const [accumulatorLegs, setAccumulatorLegs] = useState<{
     betType: BetType,
@@ -164,9 +166,10 @@ function AccumulatorPage() {
       numberOfLines: 1,
       againstBalls: [],
       bankerBalls: [],
-      amount: stakeAmount
+      amount: stakeAmount,
+      winningType: winningType
     }))
-  }, [accumulatorLegs, stakeAmount])
+  }, [accumulatorLegs, stakeAmount, winningType])
 
   const {
     handlePlaceBet,
@@ -189,7 +192,7 @@ function AccumulatorPage() {
 
   return (
     <>
-      <PageHeader title="Accumulator Games" />
+      <PageHeader title="Lotto Accumulator" subtitle="Combine predictions for one game and multiply the odds" />
       <section className="py-8 sm:py-12 min-h-screen bg-gray-50">
         <div className="container mx-auto px-4">
           {/* Game Selection */}
@@ -203,7 +206,7 @@ function AccumulatorPage() {
             {/* LEFT: Markets */}
             <div className="lg:col-span-2 space-y-6">
               <div className="flex justify-between items-center">
-                <h1 className="text-2xl font-bold text-[#0A4B7F]">Accumulator Markets</h1>
+                <h2 className="text-2xl font-bold text-[#0A4B7F]">Accumulator Markets</h2>
                 <Badge variant="secondary" className="text-xs">Sports Mode</Badge>
               </div>
 
@@ -315,6 +318,26 @@ function AccumulatorPage() {
                   </div>
 
                   <div className="p-4 space-y-4 max-h-[60vh] overflow-y-auto">
+                    {/* Machine/Normal Toggle */}
+                    {selectedGame?.allowMachineNumberBet && (
+                      <div className="flex bg-gray-100 p-1 rounded-xl mb-4">
+                        <button
+                          type="button"
+                          className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${winningType === 1 ? 'bg-white text-[#0A4B7F] shadow' : 'text-gray-500 hover:text-gray-700'}`}
+                          onClick={(e) => { e.preventDefault(); setWinningType(1); }}
+                        >
+                          Normal Bet
+                        </button>
+                        <button
+                          type="button"
+                          className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${winningType === 2 ? 'bg-gradient-to-r from-purple-500 to-indigo-500 text-white shadow' : 'text-gray-500 hover:text-gray-700'}`}
+                          onClick={(e) => { e.preventDefault(); setWinningType(2); }}
+                        >
+                          Machine Bet
+                        </button>
+                      </div>
+                    )}
+
                     {accumulatorLegs.length === 0 ? (
                       <div className="text-center py-8 text-gray-400 text-sm">
                         <p>No bets selected.</p>
@@ -368,16 +391,15 @@ function AccumulatorPage() {
                         }}
                         className={cn(
                           "w-full p-2 border rounded focus:ring-1 outline-none font-bold",
-                          (stakeAmount < MIN_STAKE || stakeAmount > MAX_STAKE)
+                          (stakeAmount < MIN_STAKE)
                             ? "border-red-500 text-red-600 focus:border-red-500 focus:ring-red-500"
                             : "border-gray-300 text-[#0A4B7F] focus:border-[#0A4B7F] focus:ring-[#0A4B7F]"
                         )}
                         min={0}
-                        max={MAX_STAKE}
                       />
-                      {(stakeAmount < MIN_STAKE || stakeAmount > MAX_STAKE) && (
+                      {(stakeAmount < MIN_STAKE) && (
                         <p className="text-xs text-red-500">
-                          {stakeAmount < MIN_STAKE ? `Minimum stake is NGN ${MIN_STAKE}` : `Maximum stake is NGN ${MAX_STAKE.toLocaleString()}`}
+                          Minimum stake is NGN {MIN_STAKE}
                         </p>
                       )}
                     </div>
@@ -408,7 +430,6 @@ function AccumulatorPage() {
                           loading ||
                           bookingLoading ||
                           stakeAmount < MIN_STAKE ||
-                          stakeAmount > MAX_STAKE ||
                           potentialWin > MAX_POTENTIAL_WIN
                         }
                         onClick={handlePlaceBet}
@@ -423,7 +444,6 @@ function AccumulatorPage() {
                           loading ||
                           bookingLoading ||
                           stakeAmount < MIN_STAKE ||
-                          stakeAmount > MAX_STAKE ||
                           potentialWin > MAX_POTENTIAL_WIN
                         }
                         onClick={handleBookBet}
@@ -471,6 +491,11 @@ function AccumulatorPage() {
               </div>
             </div>
           )}
+        </div>
+      </section>
+      <section className="pb-12 sm:pb-16">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <ContentSections sections={ACCUMULATOR_SECTIONS} />
         </div>
       </section>
     </>

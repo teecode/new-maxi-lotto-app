@@ -1,6 +1,5 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import moment from 'moment'
 import { gradients } from '@/constants';
 /**
  * Merges Tailwind class names, resolving any conflicts.
@@ -90,28 +89,6 @@ export const generateUUID = () => {
 		return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
 	});
 };
-export const timeOnlyFormat = (gameTime: string) => {
-	return moment(gameTime, 'YYYY-MM-DD h:mm:ss A').format('hh:mm A');
-};
-
-export const isGameClosed = (endGameTime: string) => {
-	return moment(endGameTime, 'YYYY-MM-DD h:mm:ss A').isBefore(
-		moment(new Date()).subtract(1, 'seconds')
-	);
-};
-
-export const fullDateFormat = (date: string) => {
-	return moment(date, 'YYYY-MM-DD h:mm:ss A').format('YYYY-MM-DD');
-};
-
-export const fullDateTimeFormat = (date: string) => {
-	return moment(date, 'YYYY-MM-DD h:mm:ss A').format('YYYY-MM-DD HH:mm:ss');
-};
-
-export const timeFormat = (gameTime: string) => {
-	return moment(gameTime, 'YYYY-MM-DD h:mm:ss A').format('hh:mm:ss A');
-};
-
 export const getRandomGradient = () => {
 	const randomIndex = Math.floor(Math.random() * gradients.length);
 	return gradients[randomIndex];
@@ -134,10 +111,48 @@ export const maskAccountNumber = (accountNumber: string): string => {
 };
 
 export const getImageUrl = (name: string) => {
-	const path = 'data:image/jpeg;base64,' + name;
-	return name ? path : '/placeholder.png';
+	if (!name) return '/placeholder.png';
+	if (name.startsWith('data:image') && !name.includes('SlideImages/')) return name;
+	
+	let cleanName = name;
+	if (cleanName.includes('SlideImages/')) {
+		cleanName = cleanName.substring(cleanName.indexOf('SlideImages/'));
+	}
+	
+	if (cleanName.startsWith('http')) return cleanName;
+	
+	const path = cleanName.startsWith('/') ? cleanName : `/${cleanName}`;
+	return `https://maxilotto.ng${path}`;
 };
 
 // const finalImagePath = image ? `/${image}` : '/placeholder.png';
 export const finalImagePath = (image: string) =>
 	image ? `/${image}` : '/placeholder.png';
+
+export const maskUsername = (username?: string): string => {
+	if (!username) return 'Anonymous';
+	const clean = username.trim();
+	const digitsOnly = clean.replace(/\D/g, '');
+	
+	// Check if string represents a phone number (10 to 14 digits, optional leading +)
+	const isPhone = digitsOnly.length >= 10 && digitsOnly.length <= 14 && (clean.startsWith('+') || /^\d+$/.test(clean) || clean.startsWith('0') || clean.startsWith('234'));
+	
+	if (isPhone) {
+		const prefix = clean.slice(0, 3);
+		const suffix = clean.slice(-4);
+		return `${prefix}****${suffix}`;
+	}
+
+	// For standard text / alphanumeric usernames
+	if (clean.length <= 3) {
+		return `${clean.charAt(0)}*${clean.slice(-1)}`;
+	} else if (clean.length <= 5) {
+		return `${clean.slice(0, 2)}**${clean.slice(-1)}`;
+	} else if (clean.length <= 8) {
+		return `${clean.slice(0, 2)}***${clean.slice(-2)}`;
+	} else {
+		return `${clean.slice(0, 3)}***${clean.slice(-3)}`;
+	}
+};
+
+export const maskUsernameIfPhoneNumber = maskUsername;

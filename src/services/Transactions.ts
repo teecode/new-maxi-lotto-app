@@ -79,7 +79,20 @@ export const requestWithdrawal = async (
 		return response.data;
 	} catch (error: any) {
 		if (error.response) {
-			throw new Error(error.response.data || 'Failed to request withdrawal.');
+			const data = error.response.data;
+			let errorMessage = 'Failed to request withdrawal.';
+			if (typeof data === 'string') {
+				errorMessage = data;
+			} else if (typeof data === 'object' && data !== null) {
+				if (data.messages && Array.isArray(data.messages)) {
+					errorMessage = data.messages.join(', ');
+				} else if (data.Messages && Array.isArray(data.Messages)) {
+					errorMessage = data.Messages.join(', ');
+				} else {
+					errorMessage = JSON.stringify(data);
+				}
+			}
+			throw new Error(errorMessage);
 		}
 		throw new Error('Network error, please check your connection.');
 	}

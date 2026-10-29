@@ -9,3 +9,6 @@ count.txt
 .tanstack
 .wrangler
 /.vs
+
+# The Android APK is copied to the server by hand, not shipped through git
+public/downloads/*.apk

@@ -8,8 +8,11 @@ import {
 import { useCallback, useRef, useState } from "react"
 import { toast } from "sonner"
 import Ball from "@/components/ball.tsx"
+import { TicketBall, TicketHitLegend } from "@/components/tickets/ticket-ball.tsx"
+import { drawnBalls, hitKind } from "@/lib/ticketHits"
 import type { GameTicket } from "@/types/game"
-import { formatCurrency, fullDateTimeFormat } from "@/lib/utils"
+import { formatCurrency } from "@/lib/utils"
+import { fullDateTimeFormat } from "@/lib/game-time"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card.tsx";
 import { Badge } from "@/components/ui/badge.tsx";
 import { DownloadIcon, Share2, Loader2 } from "lucide-react";
@@ -38,6 +41,12 @@ export function TicketPreview({ open, setOpen, ticket }: TicketPreviewProps) {
     queryFn: () => fetchGameResultByDailyGameId(ticket.game.id),
     enabled: ticket.status.name === 'Won' || ticket.status.name === 'Lost',
   });
+
+  // A picked number that came up is drawn as the result ball it matched, on the set(s) its bet is settled on
+  const winningBalls = drawnBalls(gameResult?.result, 'winning');
+  const machineBalls = drawnBalls(gameResult?.result, 'machine');
+  const hasWinningBets = ticket.betslips.some((slip) => slip.winningType !== 2);
+  const hasMachineBets = ticket.betslips.some((slip) => slip.winningType === 2 || slip.winningType === 3);
 
   const handleDownload = useCallback(async () => {
     if (!ticketCardRef.current) return;
@@ -138,13 +147,26 @@ export function TicketPreview({ open, setOpen, ticket }: TicketPreviewProps) {
                     </Badge>
 
                     {gameResult && gameResult.result && (
-                      <div className="flex flex-col gap-1.5 mt-3 items-center animate-in fade-in slide-in-from-top-2 duration-500">
-                        <p className="text-[9px] sm:text-[10px] text-blue-200 font-bold uppercase tracking-widest leading-none">Winning Numbers</p>
-                        <div className="flex gap-1.5 sm:gap-2">
-                          {[gameResult.result.winningBall1, gameResult.result.winningBall2, gameResult.result.winningBall3, gameResult.result.winningBall4, gameResult.result.winningBall5].map((ball, i) => (
-                            <Ball key={i} value={ball} variant="winning" className="h-7 w-7 text-[9px] sm:h-8 sm:w-8 sm:text-[10px] md:h-10 md:w-10 md:text-xs shadow-lg border-white/10" />
-                          ))}
+                      <div className="flex flex-col gap-3 mt-3 items-center animate-in fade-in slide-in-from-top-2 duration-500 z-10 relative">
+                        <div className="flex flex-col items-center gap-1.5">
+                          <p className="text-[9px] sm:text-[10px] text-blue-200 font-bold uppercase tracking-widest leading-none">Winning Numbers</p>
+                          <div className="flex gap-1.5 sm:gap-2">
+                            {[gameResult.result.winningBall1, gameResult.result.winningBall2, gameResult.result.winningBall3, gameResult.result.winningBall4, gameResult.result.winningBall5].map((ball, i) => (
+                              <Ball key={i} value={ball} variant="winning" className="h-7 w-7 text-[9px] sm:h-8 sm:w-8 sm:text-[10px] md:h-10 md:w-10 md:text-xs shadow-lg border-white/10" />
+                            ))}
+                          </div>
                         </div>
+
+                        {gameResult.result.machineBall1 > 0 && (
+                          <div className="flex flex-col items-center gap-1.5">
+                            <p className="text-[9px] sm:text-[10px] text-yellow-300 font-bold uppercase tracking-widest leading-none">Machine Numbers</p>
+                            <div className="flex gap-1.5 sm:gap-2">
+                              {[gameResult.result.machineBall1, gameResult.result.machineBall2, gameResult.result.machineBall3, gameResult.result.machineBall4, gameResult.result.machineBall5].map((ball, i) => (
+                                <Ball key={i} value={ball} variant="machine" className="h-7 w-7 text-[9px] sm:h-8 sm:w-8 sm:text-[10px] md:h-10 md:w-10 md:text-xs shadow-lg border-white/10" />
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
@@ -182,10 +204,15 @@ export function TicketPreview({ open, setOpen, ticket }: TicketPreviewProps) {
               </div>
 
               <CardContent className="p-4 sm:p-6">
-                <h4 className="flex items-center gap-2 font-bold text-[#0A4B7F] mb-4">
-                  <span className="w-1 h-6 bg-[#FFF100] rounded-full block"></span>
-                  {isAccumulator ? 'Accumulator Legs' : 'Bet Slips'}
-                </h4>
+                <div className="flex items-center justify-between gap-3 mb-4">
+                  <h4 className="flex items-center gap-2 font-bold text-[#0A4B7F]">
+                    <span className="w-1 h-6 bg-[#FFF100] rounded-full block"></span>
+                    {isAccumulator ? 'Accumulator Legs' : 'Bet Slips'}
+                  </h4>
+                  {!isAccumulator && (
+                    <TicketHitLegend winning={hasWinningBets && winningBalls.length > 0} machine={hasMachineBets && machineBalls.length > 0} />
+                  )}
+                </div>
 
                 <div className="space-y-4">
                   {ticket.betslips.map((betslip, index) => (
@@ -195,6 +222,12 @@ export function TicketPreview({ open, setOpen, ticket }: TicketPreviewProps) {
                         <div className="flex items-center gap-2">
                           <span className="font-bold text-[#0A4B7F] text-sm">{betslip.betType.code}</span>
                           {isAccumulator && <Badge variant="outline" className="text-xs bg-white text-gray-600 border-gray-200">Odds: {(betslip.betType.winFactor || 1).toFixed(2)}</Badge>}
+                          {betslip.winningType === 2 && (
+                            <Badge variant="outline" className="text-[10px] sm:text-xs bg-purple-50 text-purple-700 border-purple-200">Machine Bet</Badge>
+                          )}
+                          {betslip.winningType === 3 && (
+                            <Badge variant="outline" className="text-[10px] sm:text-xs bg-cyan-50 text-cyan-700 border-cyan-200">Double Chance</Badge>
+                          )}
                         </div>
                         <Badge
                           variant={betslip.status.name === 'Won' ? 'default' : 'secondary'}
@@ -231,7 +264,8 @@ export function TicketPreview({ open, setOpen, ticket }: TicketPreviewProps) {
                                     betslip.bet1.map((ball) => (
                                       isAccumulator && ball === 0 ?
                                         <span className="text-sm font-medium text-[#0A4B7F]"> Standard - {betslip.betType.description} </span> :
-                                        <Ball key={ball} className="h-7 w-7 text-[10px] sm:h-8 sm:w-8 sm:text-xs font-bold" value={ball} />
+                                        <TicketBall key={ball} className="h-7 w-7 text-[10px] sm:h-8 sm:w-8 sm:text-xs font-bold" value={ball}
+                                          hit={hitKind(betslip.winningType, ball, winningBalls, machineBalls)} />
                                     ))
                                   ) : (
                                     <span className="text-sm text-gray-400 italic">None</span>
@@ -259,7 +293,8 @@ export function TicketPreview({ open, setOpen, ticket }: TicketPreviewProps) {
                               </span>
                               <div className="flex flex-wrap gap-2">
                                 {betslip.bet2.map((ball) => (
-                                  <Ball key={ball} className="h-7 w-7 text-[10px] sm:h-8 sm:w-8 sm:text-xs bg-red-50 text-red-600 border-red-100" value={ball} />
+                                  <TicketBall key={ball} className="h-7 w-7 text-[10px] sm:h-8 sm:w-8 sm:text-xs" missClassName="bg-red-50 text-red-600 border-red-100" value={ball}
+                                    hit={hitKind(betslip.winningType, ball, winningBalls, machineBalls)} />
                                 ))}
                               </div>
                             </div>

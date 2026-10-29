@@ -1,6 +1,9 @@
 import { Link } from '@tanstack/react-router'
 import { Image } from "@unpic/react";
-import NewsLetter from "@/components/NewsLetter.tsx";
+import { lazy, Suspense } from 'react'
+
+// Loaded after the page: the form brings zod and react-hook-form, and it sits at the very bottom.
+const NewsLetter = lazy(() => import('@/components/NewsLetter.tsx'))
 
 const socialLinks = [
   {
@@ -60,7 +63,7 @@ const Footer = () => {
     <footer className="shadow-none font-poppins">
       <div className="flex bg-gradient-to-b py-8 sm:py-16 from-[#01B1A8] to-[#0185B6]">
         <div className="container">
-          <div className="grid grid-cols-1 gap-10 sm:gap-6 sm:grid-cols-5">
+          <div className="grid grid-cols-1 gap-10 sm:gap-6 sm:grid-cols-6">
 
             {/* Logo */}
             <div className="mb-0 md:mb-0">
@@ -69,14 +72,43 @@ const Footer = () => {
               </Link>
             </div>
 
-            {/* Legal Links */}
+            {/* Play & Learn */}
             <div>
-              <h2 className="mb-2 text-lg font-bold text-[#fff100] capitalize dark:text-white">Legal Links</h2>
+              <h2 className="mb-2 text-lg font-bold text-[#fff100] capitalize dark:text-white">Play &amp; Learn</h2>
+              <ul className="text-white text-sm font-medium space-y-3">
+                <li><Link to="/play" className="hover:underline">Play 5/90 Lotto</Link></li>
+                <li><Link to="/results" className="hover:underline">Lotto Results</Link></li>
+                <li><Link to="/how-to-play" className="hover:underline">How to Play</Link></li>
+                <li><Link to="/2-sure-lotto" className="hover:underline">2 Sure Lotto</Link></li>
+                <li><Link to="/lotto-in-nigeria" className="hover:underline">Lotto in Nigeria</Link></li>
+                <li><Link to="/promotions" className="hover:underline">Promotions</Link></li>
+                <li><Link to="/become-an-agent" className="hover:underline">Become an Agent</Link></li>
+                <li><Link to="/faq" className="hover:underline">FAQ</Link></li>
+                <li><Link to="/about" className="hover:underline">About Us</Link></li>
+                <li><Link to="/contact" className="hover:underline">Contact Us</Link></li>
+              </ul>
+            </div>
+
+            {/* Quick Links */}
+            <div>
+              <h2 className="mb-2 text-lg font-bold text-[#fff100] capitalize dark:text-white">Quick Links</h2>
               <ul className="text-white text-sm font-medium space-y-3">
                 <li><Link to="/privacy-policy" className="hover:underline">Privacy Policy</Link></li>
                 <li><Link to="/terms-and-condition" className="hover:underline">Terms And Condition</Link></li>
                 <li><Link to="/responsible-gambling" className="hover:underline">Responsible Gambling</Link></li>
                 <li><Link to="/withdrawal-policy" className="hover:underline">Withdrawal Policy</Link></li>
+                <li>
+                  <button 
+                    onClick={() => {
+                      localStorage.removeItem('pwaPromptDismissed');
+                      window.location.reload();
+                    }}
+                    className="hover:underline flex items-center gap-1"
+                  >
+                    Install Mobile App
+                  </button>
+                </li>
+                <li><Link to="/download-app" className="hover:underline">Download Android App</Link></li>
               </ul>
             </div>
 
@@ -108,7 +140,9 @@ const Footer = () => {
                   Subscribe now and receive weekly newsletter for latest draw and offer news and much more!
                 </li>
                 <li className="mb-0">
-                  <NewsLetter />
+                  <Suspense fallback={<div className="h-40" />}>
+                    <NewsLetter />
+                  </Suspense>
                 </li>
               </ul>
             </div>

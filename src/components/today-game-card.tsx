@@ -2,7 +2,8 @@ import type {Game} from "@/types/game.ts";
 import {Button} from "@/components/ui/button.tsx";
 import Countdown from "@/components/count-down.tsx";
 import {Image} from "@unpic/react";
-import {cn, finalImagePath, isGameClosed} from "@/lib/utils.ts";
+import { cn, finalImagePath } from "@/lib/utils.ts";
+import { isGameClosed } from "@/lib/game-time";
 import {useBetStore} from "@/store/bet-store.ts";
 import {useNavigate} from "@tanstack/react-router";
 

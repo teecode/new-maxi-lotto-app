@@ -1,5 +1,4 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { z } from 'zod';
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/lib/utils';
@@ -15,8 +14,10 @@ import { useQueryClient } from '@tanstack/react-query';
 import { CheckCircle2, Copy, AlertCircle } from 'lucide-react';
 import PageHeader from '@/components/layouts/page-header';
 
-const sarePayTransferSearchSchema = z.object({
-  amount: z.number().catch(0),
+// A plain function rather than a zod schema: route options are loaded with the
+// app's first bundle, and zod would come with them.
+const sarePayTransferSearchSchema = (search: Record<string, unknown>): { amount: number } => ({
+  amount: typeof search.amount === 'number' && Number.isFinite(search.amount) ? search.amount : 0,
 });
 
 export const Route = createFileRoute('/_authenticated/deposit/sarepay-transfer')({

@@ -20,6 +20,7 @@ export const signupSchema = z
 		confirmPassword: z
 			.string()
 			.min(6, 'Confirm password must be at least 6 characters long'),
+		referralCode: z.string().optional(),
 	})
 	.refine((data) => data.password === data.confirmPassword, {
 		message: "Passwords don't match",
@@ -32,3 +33,10 @@ export const forgotPasswordSchema = z
 	.refine((data) => data.email.includes('@'), {
 		message: 'Please enter a valid email address',
 	});
+
+export const resetPasswordOtpSchema = z.object({
+	otp: z
+		.string()
+		.min(6, 'Enter the 6-digit code sent to your email')
+		.max(6, 'Enter the 6-digit code sent to your email'),
+});

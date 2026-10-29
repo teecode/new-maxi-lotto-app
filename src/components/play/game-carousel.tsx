@@ -1,7 +1,8 @@
 import { NextButton, PrevButton, usePrevNextButtons } from '@/components/embla-carousel-arrow-button'
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge'; // Add this import
-import { cn, finalImagePath, fullDateTimeFormat, isGameClosed } from "@/lib/utils";
+import { cn, finalImagePath } from "@/lib/utils";
+import { fullDateTimeFormat, isGameClosed } from "@/lib/game-time";
 import type { Game } from '@/types/game'
 import type { EmblaOptionsType } from 'embla-carousel'
 import AutoScroll from 'embla-carousel-auto-scroll'

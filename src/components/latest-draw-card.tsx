@@ -30,6 +30,10 @@ const LatestDrawCard = ({
     .filter((key) => key.startsWith("winningBall"))
     .map((key) => result[key]);
 
+  const machineBalls = Object.keys(result)
+    .filter((key) => key.startsWith("machineBall"))
+    .map((key) => result[key]);
+
   return (
     <div className={`relative rounded-2xl p-6 shadow-xl border border-white/10 overflow-hidden ${className}`}
       style={{
@@ -57,28 +61,57 @@ const LatestDrawCard = ({
         </div>
       </div>
 
-      {/* Winning Numbers */}
-      <div className="relative z-10 space-y-3">
-        <div className="flex items-center gap-2">
-          <div className="w-1 h-4 rounded-full bg-gradient-to-b from-cyan-400 to-blue-500" />
-          <h4 className="text-cyan-300/90 font-semibold text-sm uppercase tracking-wider">Winning Numbers</h4>
+      {/* Numbers Section */}
+      <div className="relative z-10 space-y-4">
+        {/* Winning Numbers */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <div className="w-1 h-4 rounded-full bg-gradient-to-b from-cyan-400 to-blue-500" />
+            <h4 className="text-cyan-300/90 font-semibold text-sm uppercase tracking-wider">Winning Numbers</h4>
+          </div>
+
+          <div className="flex gap-2.5 flex-wrap">
+            {winningBalls.map((ball, idx) => (
+              <div
+                key={`winning-${idx}`}
+                className="relative flex items-center justify-center size-9 rounded-full text-white font-bold text-sm shadow-lg"
+                style={{
+                  background: ballColors[idx % ballColors.length],
+                }}
+              >
+                {/* Glossy shine - snooker ball effect */}
+                <div className="absolute top-1 left-1.5 w-3 h-3 bg-white/40 rounded-full blur-[2px]" />
+                <span className="relative z-10">{ball}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="flex gap-2.5 flex-wrap">
-          {winningBalls.map((ball, idx) => (
-            <div
-              key={`winning-${idx}`}
-              className="relative flex items-center justify-center size-10 rounded-full text-white font-bold text-sm shadow-lg"
-              style={{
-                background: ballColors[idx % ballColors.length],
-              }}
-            >
-              {/* Glossy shine - snooker ball effect */}
-              <div className="absolute top-1 left-1.5 w-3 h-3 bg-white/40 rounded-full blur-[2px]" />
-              <span className="relative z-10">{ball}</span>
+        {/* Machine Numbers */}
+        {machineBalls && machineBalls.length > 0 && machineBalls.some(b => b > 0) && (
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <div className="w-1 h-4 rounded-full bg-gradient-to-b from-purple-400 to-pink-500" />
+              <h4 className="text-purple-300/90 font-semibold text-sm uppercase tracking-wider">Machine Numbers</h4>
             </div>
-          ))}
-        </div>
+
+            <div className="flex gap-2.5 flex-wrap">
+              {machineBalls.map((ball, idx) => (
+                <div
+                  key={`machine-${idx}`}
+                  className="relative flex items-center justify-center size-9 rounded-full text-white font-bold text-sm shadow-lg opacity-90"
+                  style={{
+                    background: ballColors[idx % ballColors.length],
+                  }}
+                >
+                  {/* Glossy shine - snooker ball effect */}
+                  <div className="absolute top-1 left-1.5 w-3 h-3 bg-white/40 rounded-full blur-[2px]" />
+                  <span className="relative z-10">{ball}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

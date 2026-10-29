@@ -1,6 +1,12 @@
 import axios from 'axios';
 import useAuthStore from '@/store/authStore';
 
+// A production build without VITE_API_URL set must fail loudly rather than silently
+// routing real users' deposits/bets to the test backend.
+if (import.meta.env.PROD && !import.meta.env.VITE_API_URL) {
+	throw new Error('VITE_API_URL must be set for production builds.');
+}
+
 const apiURL = import.meta.env.VITE_API_URL || 'https://testapi.maxilotto.ng/api/';
 
 const apiClient = axios.create({

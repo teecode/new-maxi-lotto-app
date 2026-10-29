@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { z } from 'zod';
 import {
   verifyDeposit,
   verifySarepayDeposit,
@@ -12,9 +11,10 @@ import useAuthStore from "@/store/authStore.ts";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 
-const verificationSearchSchema = z.object({
-  provider: z.string().optional(),
-});
+// A plain function rather than a zod schema: route options are loaded with the
+// app's first bundle, and zod would come with them.
+const verificationSearchSchema = (search: Record<string, unknown>): { provider?: string } =>
+  typeof search.provider === 'string' ? { provider: search.provider } : {};
 
 export const Route = createFileRoute(
   '/_authenticated/deposit/verify/$depositId',

@@ -33,7 +33,7 @@ function RouteComponent() {
                 alt="" />
             </div>
             <div className="text-sm text-slate-600 max-w-lg">
-              <h1 className="text-xl uppercase font-semibold text-slate-700">  MaxiLotto, by LukzerNet Nigeria Limited</h1>
+              <h2 className="text-xl uppercase font-semibold text-slate-700">  MaxiLotto, by LukzerNet Nigeria Limited</h2>
               <div className="w-24 h-[3px] rounded-full bg-gradient-to-r from-primary-900 to-secondary-900"></div>
               <p className="mt-8">
                 MaxiLotto is a modern 5/90 lotto platform created for today’s players—fast, transparent, and easy to use. As a brand of LukzerNet Nigeria Limited, we combine secure technology with clear rules and quick payouts, so you can focus on the thrill of the draw.

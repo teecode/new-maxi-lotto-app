@@ -7,7 +7,7 @@ import {
 } from '@/services/GameService';
 import type { LatestDrawTicketResponse } from '@/types/api';
 import type { BetType, Game, WinnerTicket } from '@/types/game';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 export const useGetBetTypes = (gameType?: number) => {
 	return useQuery<BetType[], Error>({
@@ -31,8 +31,11 @@ export const useFetchLatestDraw = () => {
 	});
 };
 
+// Not a suspense query: the home page is the only user, and suspending here
+// left the whole page (hero, games, footer) blank until this one call came
+// back, and an error page if it failed.
 export const useFetchTopWinner = () => {
-	return useSuspenseQuery<WinnerTicket[], Error>({
+	return useQuery<WinnerTicket[], Error>({
 		queryKey: ['topWinners'], // include filters in queryKey
 		queryFn: fetchLastFourWinner,
 	});

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { PROMO } from "@/content/promotions";
 
 interface SlideData {
   id: number;
@@ -34,17 +35,30 @@ const slides: SlideData[] = [
     ctaLink: "/play",
   },
   {
+    id: 15,
+    title: (
+      <>
+        Transform your <span className="bg-gradient-to-r from-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">Sports Shop</span>
+        <br />into a Lotto Hub 🎰
+      </>
+    ),
+    description: "Offer MaxiLotto to your customers using our new PC-friendly Web POS. Earn massive commissions on every ticket sold.",
+    image: "/retail_pos_banner.jpg",
+    ctaText: "Become a Partner",
+    ctaLink: "/become-an-agent",
+  },
+  {
     id: 2,
     title: "Double Your Luck! 🎁",
-    description: "Get a massive 50% bonus on your very first deposit. More funds, more chances to win big!",
+    description: `Get a massive ${PROMO.firstDepositBonus} bonus on your very first deposit. More funds, more chances to win big!`,
     image: "/slide-2.png",
     ctaText: "Claim Bonus",
-    ctaLink: "/wallet",
+    ctaLink: "/promotions",
   },
   {
     id: 3,
     title: "Keep the Wins Rolling 🔄",
-    description: "Enjoy a 10% bonus on every subsequent deposit you make. The rewards never stop!",
+    description: `Enjoy a ${PROMO.laterDepositBonus} bonus on every subsequent deposit you make. The rewards never stop!`,
     image: "/slide-3.png",
     ctaText: "Deposit Now",
     ctaLink: "/wallet",
@@ -63,7 +77,7 @@ const slides: SlideData[] = [
     description: "Boost Your Odds: Play Accumulators on your lotto and watch your potential winnings skyrocket!",
     image: "/slide-5.png",
     ctaText: "Play Accumulator",
-    ctaLink: "/maxi-special-combo",
+    ctaLink: "/accumulator",
   },
   {
     id: 6,
@@ -72,6 +86,22 @@ const slides: SlideData[] = [
     image: "/slide-6.png",
     ctaText: "Start Playing",
     ctaLink: "/play",
+  },
+  {
+    id: 7,
+    title: (
+      <>
+        Become a{" "}
+        <span className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
+          Maxilotto Agent
+        </span>{" "}
+        🤝
+      </>
+    ),
+    description: "Earn attractive commission on every ticket sold. Join our growing network of agents across Nigeria. Terms and conditions apply.",
+    image: "/slide-7.jpg",
+    ctaText: "Apply Now",
+    ctaLink: "/become-an-agent",
   },
 ];
 
@@ -128,9 +158,9 @@ export default function HeroCarousel() {
                         transition={{ duration: 0.8, ease: "easeOut" }}
                         className="flex flex-col gap-4 sm:gap-6"
                       >
-                        <h1 className="text-4xl sm:text-[4.2rem] font-semibold text-background tracking-[-1.92px] leading-tight decoration-skip-ink drop-shadow-lg">
+                        <h2 className="text-4xl sm:text-[4.2rem] font-semibold text-background tracking-[-1.92px] leading-tight decoration-skip-ink drop-shadow-lg">
                           {slide.title}
-                        </h1>
+                        </h2>
 
                         <p className="text-xl text-background font-medium leading-relaxed max-w-lg drop-shadow-md">
                           {slide.description}
@@ -175,6 +205,11 @@ export default function HeroCarousel() {
           </Button>
         </div>
       </div>
+
+      {/* The page's one <h1>, outside the slides so it does not rotate away */}
+      <h1 className="absolute bottom-16 inset-x-0 z-20 px-4 text-center text-[11px] sm:text-xs font-semibold uppercase tracking-[0.25em] text-white/70 pointer-events-none">
+        MaxiLotto · Play 5/90 lotto online in Nigeria
+      </h1>
 
       {/* Dots */}
       <div className="absolute bottom-10 left-0 right-0 z-20 flex justify-center gap-3">
