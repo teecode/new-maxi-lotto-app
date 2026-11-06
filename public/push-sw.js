@@ -13,6 +13,8 @@ self.addEventListener('push', (event) => {
     body: data.message || data.body,
     icon: data.icon || '/maxilotto-icon.png',
     badge: data.badge || '/maxilotto-icon.png',
+    // A bonus's picture, shown large where the browser supports it (Chrome, Android)
+    image: data.image || undefined,
     data: {
       url: data.url || '/'
     }

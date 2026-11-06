@@ -13,6 +13,7 @@ import {Image} from "@unpic/react"
 import {getRankColor} from "@/lib/ranks"
 import HeroCarousel from "@/components/hero-carousel";
 import ReferralPromoCarousel from "@/components/referral-promo-carousel";
+import BonusOffers from "@/components/bonus-offers";
 import {RichText} from "@/components/content/content-sections";
 import {HOME_ABOUT_HEADING, HOME_ABOUT_POINTS, HOME_ABOUT_TEXT} from "@/content/home";
 
@@ -85,6 +86,8 @@ function App() {
     <>
       {/* === Hero Carousel Section === */}
       <HeroCarousel />
+      {/* === Bonus offers from the back office (nothing shows until one is on the website) === */}
+      <BonusOffers />
       {/*=== Games Marquee === */}
       <section
         className="py-10 border-y border-white/5 relative shadow-[0_0_50px_rgba(0,0,0,0.5)] z-20 bg-gradient-to-r from-[#0f172a] via-[#0f2d37] to-[#0f172a]">
