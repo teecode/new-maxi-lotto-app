@@ -15,9 +15,10 @@ import {logout} from '@/services/AuthService'
 import useAuthStore from '@/store/authStore'
 import {Link} from '@tanstack/react-router';
 import {Image} from '@unpic/react';
-import {ChevronDown, Lock, LogOut, User, Users} from 'lucide-react'
+import {ChevronDown, Gift, Lock, LogOut, User, Users} from 'lucide-react'
 import {useEffect} from 'react'
 import MobileNav from './mobile-nav-drawer';
+import NotificationBell from '@/components/notification-bell';
 import type {navGroupProps} from "@/types";
 
 const navGroups: Array<navGroupProps> = [
@@ -147,6 +148,7 @@ const Navbar = () => {
           {/* register and login button */}
           {isAuthenticated ? (
             <>
+              <NotificationBell/>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -177,6 +179,13 @@ const Navbar = () => {
                       <Link to="/profile">
                         <User/>
                         <span>Profile</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator/>
+                    <DropdownMenuItem asChild>
+                      <Link to="/bonuses">
+                        <Gift/>
+                        <span>My Bonuses</span>
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator/>

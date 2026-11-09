@@ -64,6 +64,11 @@ export const ProfileSettingsOne = [
 		route: '/payouts',
 		icon: Handshake,
 	},
+	{
+		label: 'Bonuses',
+		route: '/bonuses',
+		icon: Gift,
+	},
 ];
 
 export const ProfileSettingsTwo = [

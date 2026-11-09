@@ -75,7 +75,9 @@ export const placeBet = async (
 		dailyGameId: number;
         ticketType?: number; // Added ticketType
 	},
-	betSlips: any
+	betSlips: any,
+	/** A free-ticket voucher to pay with instead of the wallet */
+	voucherId?: string | number | null
 ) => {
 	try {
 		// v1 / dailygame / get;
@@ -84,7 +86,7 @@ export const placeBet = async (
 			betslips: betSlips,
 			requestId: generateUUID(), // generate a random string for requestId,
 			regMethod: 1,
-			vouchersEarnedId: 0,
+			vouchersEarnedId: Number(voucherId) || 0,
 		});
 		return response.data;
 	} catch (error: any) {

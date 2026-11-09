@@ -26,6 +26,11 @@ import {useFetchFavouriteBalls} from "@/hooks/useUserProfile"
 import BetSlip from '@/components/play/bet-slip'
 import {FavouriteBallDialog} from '@/components/play/favourite-ball-dialog'
 import GameCarousel from '@/components/play/game-carousel'
+import VoucherPicker from '@/components/play/voucher-picker'
+import {useRuleNames} from '@/components/bonus/voucher-card'
+import {useMyVouchers, useRefreshBonuses} from '@/hooks/useBonusPromotions'
+import {checkVoucher, naira} from '@/lib/bonus-words'
+import {Gift} from 'lucide-react'
 
 const FormSchema = z.object({
   betType: z.string().min(1, "Please select a bet type"),
@@ -35,6 +40,9 @@ const OPTIONS: EmblaOptionsType = {loop: true}
 
 export const Route = createFileRoute('/_layout/play')({
   component: RouteComponent,
+  // ?voucher=<id>: arrive ready to pay with that free ticket ("Play it now" on a voucher)
+  validateSearch: (search: Record<string, unknown>): { voucher?: string } =>
+    search.voucher ? {voucher: String(search.voucher)} : {},
 })
 
 function RouteComponent() {
@@ -50,6 +58,27 @@ function RouteComponent() {
   const {data: betTypes} = useGetBetTypes()
   const {data: games} = useFetchDailyGames()
   const {data: favoriteBalls} = useFetchFavouriteBalls(user)
+
+  // Free tickets: the one asked for in the address is chosen once the list arrives
+  const search = Route.useSearch()
+  const {data: vouchers = []} = useMyVouchers()
+  const refreshBonuses = useRefreshBonuses()
+  const {gameName, betTypeName} = useRuleNames()
+  const [voucherId, setVoucherId] = useState<string | null>(null)
+  const [voucherFromLink, setVoucherFromLink] = useState(false)
+  useEffect(() => {
+    if (search.voucher && !voucherFromLink && vouchers.some(v => String(v.id) === search.voucher)) {
+      setVoucherId(search.voucher)
+      setVoucherFromLink(true)
+    }
+  }, [search.voucher, vouchers, voucherFromLink])
+  // A voucher that has just been used (or expired) drops out of the choice
+  useEffect(() => {
+    if (voucherId && vouchers.length && !vouchers.some(v => String(v.id) === voucherId)) setVoucherId(null)
+  }, [vouchers, voucherId])
+  const voucher = vouchers.find(v => String(v.id) === voucherId) ?? null
+  const voucherCheck = voucher ? checkVoucher(voucher, betsList, selectedGame, gameName, betTypeName) : null
+  const linkedVoucher = search.voucher ? vouchers.find(v => String(v.id) === search.voucher) : undefined
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -238,7 +267,12 @@ function RouteComponent() {
     resetAllGames: () => {
       clearBets()
     },
-    syncUser
+    syncUser,
+    voucherId: voucher && voucherCheck?.ok ? voucherId : null,
+    onVoucherUsed: () => {
+      setVoucherId(null)
+      refreshBonuses()
+    }
   })
 
   const handleRemoveItem = (index: number) => {
@@ -316,6 +350,21 @@ function RouteComponent() {
     <>
       <section className="pt-24 sm:pt-28 pb-20 sm:pb-16 min-h-screen bg-gradient-to-b from-[#01B1A8] to-[#0185B6]">
         <div className="container mx-auto px-4">
+          {/* Arrived from "Play it now" on a free ticket */}
+          {linkedVoucher && betsList.length === 0 && (
+            <div className="mb-5 flex items-start gap-3 rounded-2xl bg-white/95 p-4 shadow-lg ring-1 ring-white/50">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FFF100] text-[#0A4B7F]">
+                <Gift className="h-5 w-5" aria-hidden/>
+              </span>
+              <div className="text-sm">
+                <p className="font-bold text-[#0A4B7F]">Your {naira(linkedVoucher.amount)} free ticket is ready</p>
+                <p className="text-slate-600">
+                  Pick a game, choose your numbers and add the bet with a stake of up to {naira(linkedVoucher.amount)}.
+                  It is paid with your free ticket in My Games, not from your wallet.
+                </p>
+              </div>
+            </div>
+          )}
           {/* Game Carousel */}
           {games && (
             <GameCarousel
@@ -694,24 +743,35 @@ function RouteComponent() {
                           ))}
                         </div>
 
+                        {/* Pay with a free ticket */}
+                        <VoucherPicker vouchers={vouchers} selectedId={voucherId} onSelect={setVoucherId} check={voucherCheck}/>
+
                         {/* Total and Place Bet */}
                         <div className="mt-4 pt-4 border-t-2 border-gray-200">
                           <div className="bg-gradient-to-r from-gray-50 to-white rounded-xl p-3 mb-3">
                             <div className="flex justify-between items-center">
                               <span className="text-sm font-bold text-gray-700">Total Stake:</span>
-                              <span className="text-2xl font-bold text-[#0A4B7F]">
+                              <span className={`text-2xl font-bold ${voucher ? 'text-gray-400 line-through decoration-2' : 'text-[#0A4B7F]'}`}>
                               ₦{betsList.reduce((sum, bet) => sum + bet.stake, 0).toLocaleString()}
                             </span>
                             </div>
+                            {voucher && (
+                              <div className="mt-1 flex justify-between items-center text-sm">
+                                <span className="font-semibold text-gray-600">From your wallet:</span>
+                                <span className={`text-xl font-black ${voucherCheck?.ok ? 'text-emerald-600' : 'text-red-600'}`}>
+                                  {voucherCheck?.ok ? '₦0' : 'Fix the ticket above'}
+                                </span>
+                              </div>
+                            )}
                           </div>
                           <div className="flex flex-col gap-2">
                             <Button
                               type="button"
                               onClick={handlePlaceBet}
-                              disabled={loading || bookingLoading}
+                              disabled={loading || bookingLoading || (!!voucher && !voucherCheck?.ok)}
                               className="w-full bg-gradient-to-r from-[#0185B6] to-[#01B1A8] text-[#FFF100] rounded-xl py-5 text-base font-bold shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] disabled:opacity-50"
                             >
-                              {loading ? 'Placing Bet...' : 'Place Bet'}
+                              {loading ? 'Placing Bet...' : voucher ? 'Place Bet with Free Ticket' : 'Place Bet'}
                             </Button>
                             <Button
                               type="button"

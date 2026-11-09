@@ -10,8 +10,67 @@ import { Plus } from 'lucide-react'
 import { formatCurrency } from '@/lib/utils'
 import type { EmblaOptionsType } from 'embla-carousel'
 import PageHeader from "@/components/layouts/page-header.tsx";
+import { useClaimBonus, useMyBonuses, useMyVouchers } from '@/hooks/useBonusPromotions'
+import { naira, rewardText, ticketsLeft, timeLeft } from '@/lib/bonus-words'
+import { ChevronRight, Gift, LoaderCircle, Ticket } from 'lucide-react'
 
 const OPTIONS: EmblaOptionsType = { slidesToScroll: 2 }
+
+// Free tickets sit beside the balance: what there is to play or claim, a tap from the bonuses page
+function FreeTicketsSummary() {
+  const { data: vouchers = [] } = useMyVouchers()
+  const { data: bonuses = [] } = useMyBonuses()
+  const claim = useClaimBonus()
+  const claimable = bonuses.filter((b) => b.mine?.status === 'Claimable')
+  const worth = vouchers.reduce((sum, v) => sum + v.amount * ticketsLeft(v), 0)
+  const soonest = vouchers[0] ? timeLeft(vouchers[0].expirationDate) : null
+
+  return (
+    <div className="space-y-3 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
+      {claimable.map((bonus) => (
+        <div key={bonus.id} className="flex flex-col gap-3 rounded-3xl bg-gradient-to-r from-emerald-500 to-teal-500 p-5 text-white shadow-lg shadow-emerald-600/20 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-3">
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white/20"><Gift className="h-6 w-6" aria-hidden /></span>
+            <div>
+              <p className="font-bold">{bonus.headline}</p>
+              <p className="text-sm text-white/85">{rewardText(bonus)} ready to claim</p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => claim.mutate(bonus)}
+            disabled={claim.isPending}
+            className="inline-flex items-center justify-center gap-1.5 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-emerald-700 shadow hover:bg-emerald-50 disabled:opacity-60"
+          >
+            {claim.isPending && <LoaderCircle className="h-4 w-4 animate-spin" />}
+            Claim
+          </button>
+        </div>
+      ))}
+
+      <Link
+        to="/bonuses"
+        className="group flex items-center justify-between gap-4 rounded-3xl bg-white p-5 shadow-sm ring-1 ring-slate-100 transition hover:shadow-md"
+      >
+        <div className="flex items-center gap-4">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#FFF100] text-[#0A4B7F]"><Ticket className="h-6 w-6" aria-hidden /></span>
+          <div>
+            <p className="text-sm font-black uppercase tracking-[0.15em] text-slate-400">Free tickets</p>
+            {vouchers.length ? (
+              <p className="font-bold text-slate-900">
+                {vouchers.length} to play · worth {naira(worth)}
+                {soonest && <span className={soonest.urgent ? ' text-red-600' : ' text-slate-500'}> · {soonest.text}</span>}
+              </p>
+            ) : (
+              <p className="font-semibold text-slate-600">Earn free tickets from bonus offers</p>
+            )}
+          </div>
+        </div>
+        <ChevronRight className="h-5 w-5 text-slate-400 transition group-hover:translate-x-0.5" />
+      </Link>
+    </div>
+  )
+}
 
 export const Route = createFileRoute('/_authenticated/wallet')({
   component: RouteComponent,
@@ -74,6 +133,9 @@ function RouteComponent() {
                 <Link to="/withdrawal">Withdraw</Link>
               </Button>
             </div>
+
+            {/* Free tickets and bonuses to claim */}
+            <FreeTicketsSummary/>
 
             {/* Cards Management Section */}
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-300">

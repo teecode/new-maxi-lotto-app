@@ -16,6 +16,8 @@ export interface Referee {
   referredRank: string;
   totalWinningAmount: number;
   totalPlayedAmount: number;
+  /** What you have earned in commission from this player */
+  totalEarnedAmount?: number;
   winningCount: number;
 }
 

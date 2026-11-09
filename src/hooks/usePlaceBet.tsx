@@ -12,6 +12,10 @@ interface PlaceBetProps {
   resetAllGames: () => void
   syncUser: () => Promise<void>
   ticketType?: number // Added
+  /** Pay with this free-ticket voucher instead of the wallet */
+  voucherId?: string | null
+  /** After a ticket was paid with the voucher */
+  onVoucherUsed?: () => void
 }
 
 export const usePlaceBet = ({
@@ -20,7 +24,9 @@ export const usePlaceBet = ({
   selectedGame,
   resetAllGames,
   syncUser,
-  ticketType // Added
+  ticketType, // Added
+  voucherId,
+  onVoucherUsed
 }: PlaceBetProps) => {
 
   const [loading, setLoading] = useState(false)
@@ -102,12 +108,13 @@ export const usePlaceBet = ({
       })
 
       // ✅ 5. Send to backend
-      const response = await placeBet(payload, betSlips)
+      const response = await placeBet(payload, betSlips, voucherId)
 
       // ... (Error handling and state management remain the same) ...
       if (response) {
         await queryClient.invalidateQueries({ queryKey: ['userProfile'] });
-        toast.success("Bet placed successfully!")
+        toast.success(voucherId ? "Bet placed with your free ticket! Good luck." : "Bet placed successfully!")
+        if (voucherId) onVoucherUsed?.()
 
         const dateKey = `dailyStake_${new Date().toISOString().split('T')[0]}`
         const localStake = Number(localStorage.getItem(dateKey)) || 0
@@ -118,7 +125,8 @@ export const usePlaceBet = ({
           ? (betsList[0]?.stake || 0) 
           : betsList.reduce((sum, bet) => sum + bet.stake, 0)
           
-        const newTotal = localStake + ticketTotal
+        // A free ticket is not the customer's own money, so it does not count towards the daily reminder
+        const newTotal = localStake + (voucherId ? 0 : ticketTotal)
         localStorage.setItem(dateKey, String(newTotal))
 
         if (ticketType === 2 && newTotal >= 100000) {

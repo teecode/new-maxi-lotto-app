@@ -4,13 +4,94 @@ import { useGetReferees, useGetTotalReferralEarnings, useGetMyReferralPlan } fro
 import { useUserProfile } from '@/hooks/useUserProfile';
 import { formatCurrency } from '@/lib/utils';
 import { Spinner } from '@/components/ui/spinner';
-import { Users, Trophy, DollarSign, Activity } from 'lucide-react';
+import { Users, Trophy, DollarSign, Activity, Check, Copy, Link2, Share2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
 
 import { Link } from '@tanstack/react-router';
+import { toast } from 'sonner';
+
+// Copies text, falling back to a hidden field where the clipboard API is not allowed (an http page, an old browser)
+async function copyText(text: string): Promise<boolean> {
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch {
+    // fall through to the old way
+  }
+  const field = document.createElement('textarea');
+  field.value = text;
+  field.setAttribute('readonly', '');
+  field.style.position = 'fixed';
+  field.style.opacity = '0';
+  document.body.appendChild(field);
+  field.select();
+  const ok = document.execCommand('copy');
+  document.body.removeChild(field);
+  return ok;
+}
+
+/** The customer's referral link, ready to copy or share; or how to get one */
+function ReferralLinkCard({ url, code }: { url?: string | null; code?: string | null }) {
+  const [copied, setCopied] = useState(false);
+  if (!url) {
+    return (
+      <div className="mb-10 flex flex-col gap-4 rounded-[2rem] border border-slate-100 bg-white p-6 shadow-xl shadow-slate-200/50 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+        <div className="flex items-center gap-4">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-pink-50 text-pink-500"><Link2 className="h-6 w-6" aria-hidden /></span>
+          <div>
+            <p className="font-black text-slate-900">Get your referral link</p>
+            <p className="text-sm text-slate-500">Join the referral programme to get a link you can share with friends.</p>
+          </div>
+        </div>
+        <Link to="/settings/referral" className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-5 py-3 text-xs font-black uppercase tracking-widest text-white hover:bg-pink-500">Apply now</Link>
+      </div>
+    );
+  }
+  const copy = async () => {
+    if (await copyText(url)) {
+      setCopied(true);
+      toast.success('Referral link copied');
+      window.setTimeout(() => setCopied(false), 2500);
+    } else {
+      toast.error('Could not copy. Press and hold the link to copy it.');
+    }
+  };
+  const share = async () => {
+    try {
+      await navigator.share({ title: 'Join me on MaxiLotto', text: code ? `Sign up with my code ${code}` : 'Join me on MaxiLotto', url });
+    } catch {
+      // closed without sharing
+    }
+  };
+  const canShare = typeof navigator !== 'undefined' && typeof navigator.share === 'function';
+  return (
+    <div className="mb-10 rounded-[2rem] bg-gradient-to-br from-[#0A4B7F] via-[#0185B6] to-[#01B1A8] p-6 text-white shadow-xl shadow-cyan-900/20 sm:p-8">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-xs font-black uppercase tracking-[0.2em] text-white/70">Your referral link</p>
+        {code && <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-bold">Code: <span className="font-mono">{code}</span></span>}
+      </div>
+      <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <p className="min-w-0 flex-1 select-all truncate rounded-xl bg-white/10 px-4 py-3 font-mono text-sm ring-1 ring-white/20" title={url}>{url}</p>
+        <div className="flex gap-2">
+          <button type="button" onClick={copy} className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-black text-[#0A4B7F] shadow transition hover:bg-cyan-50 sm:flex-none">
+            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}{copied ? 'Copied' : 'Copy link'}
+          </button>
+          {canShare && (
+            <button type="button" onClick={share} className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/15 px-4 py-3 text-sm font-bold ring-1 ring-white/30 transition hover:bg-white/25" aria-label="Share your referral link">
+              <Share2 className="h-4 w-4" /><span className="hidden sm:inline">Share</span>
+            </button>
+          )}
+        </div>
+      </div>
+      <p className="mt-3 text-xs text-white/75">Friends who sign up with your link (or type your code) join your network, and you earn commission on their play.</p>
+    </div>
+  );
+}
 
 export const Route = createFileRoute('/_authenticated/referrals/')({
   component: ReferralsPage,
@@ -55,6 +136,9 @@ function ReferralsPage() {
 
         <div className="container mx-auto px-4 relative max-w-6xl">
           
+          {/* The link to share */}
+          <ReferralLinkCard url={user?.referralUrl} code={user?.referralCode} />
+
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             {/* Total Earnings Card */}
@@ -173,6 +257,7 @@ function ReferralsPage() {
                     <th className="px-6 py-4">User</th>
                     <th className="px-6 py-4">Rank</th>
                     <th className="px-6 py-4">Total Played</th>
+                    <th className="px-6 py-4">You Earned</th>
                     <th className="px-6 py-4">Date Joined</th>
                     <th className="px-6 py-4 text-right">Status</th>
                   </tr>
@@ -180,14 +265,14 @@ function ReferralsPage() {
                 <tbody className="divide-y divide-slate-100">
                   {isRefereesLoading ? (
                     <tr>
-                      <td colSpan={5} className="px-6 py-12 text-center">
+                      <td colSpan={6} className="px-6 py-12 text-center">
                         <Spinner className="mx-auto text-pink-500" />
                         <p className="text-xs text-slate-500 font-bold mt-4 animate-pulse">Loading downlines...</p>
                       </td>
                     </tr>
                   ) : filteredReferees.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="px-6 py-16 text-center">
+                      <td colSpan={6} className="px-6 py-16 text-center">
                         <Users className="w-12 h-12 text-slate-200 mx-auto mb-3" />
                         <p className="text-sm font-bold text-slate-600">No referrals found</p>
                         <p className="text-xs text-slate-400 mt-1">Invite friends to build your network.</p>
@@ -222,6 +307,9 @@ function ReferralsPage() {
                         </td>
                         <td className="px-6 py-4 font-bold text-slate-700">
                           {formatCurrency(referee.totalPlayedAmount || 0)}
+                        </td>
+                        <td className="px-6 py-4 font-black text-emerald-600">
+                          {formatCurrency(referee.totalEarnedAmount || 0)}
                         </td>
                         <td className="px-6 py-4 text-slate-500">
                           {referee.date ? format(new Date(referee.date), 'MMM dd, yyyy') : 'N/A'}
@@ -284,6 +372,10 @@ function ReferralsPage() {
                       <div>
                         <p className="text-[10px] uppercase tracking-wider font-black text-slate-400 mb-1">Total Played</p>
                         <p className="font-bold text-slate-700">{formatCurrency(referee.totalPlayedAmount || 0)}</p>
+                      </div>
+                      <div>
+                        <p className="text-[10px] uppercase tracking-wider font-black text-slate-400 mb-1">You Earned</p>
+                        <p className="font-black text-emerald-600">{formatCurrency(referee.totalEarnedAmount || 0)}</p>
                       </div>
                       <div>
                         <p className="text-[10px] uppercase tracking-wider font-black text-slate-400 mb-1">Date Joined</p>

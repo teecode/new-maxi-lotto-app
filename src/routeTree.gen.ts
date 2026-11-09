@@ -40,6 +40,7 @@ import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedTransactionsRouteImport } from './routes/_authenticated/transactions'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedFavouriteBallsRouteImport } from './routes/_authenticated/favourite-balls'
+import { Route as AuthenticatedBonusesRouteImport } from './routes/_authenticated/bonuses'
 import { Route as AuthenticatedTicketsIndexRouteImport } from './routes/_authenticated/tickets/index'
 import { Route as AuthenticatedReferralsIndexRouteImport } from './routes/_authenticated/referrals/index'
 import { Route as AuthenticatedPayoutsIndexRouteImport } from './routes/_authenticated/payouts/index'
@@ -212,6 +213,11 @@ const AuthenticatedFavouriteBallsRoute =
     path: '/favourite-balls',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedBonusesRoute = AuthenticatedBonusesRouteImport.update({
+  id: '/bonuses',
+  path: '/bonuses',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedTicketsIndexRoute =
   AuthenticatedTicketsIndexRouteImport.update({
     id: '/tickets/',
@@ -307,6 +313,7 @@ export interface FileRoutesByFullPath {
   '/': typeof LayoutIndexRoute
   '/app': typeof AppRoute
   '/auth': typeof AuthRouteWithChildren
+  '/bonuses': typeof AuthenticatedBonusesRoute
   '/favourite-balls': typeof AuthenticatedFavouriteBallsRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/transactions': typeof AuthenticatedTransactionsRoute
@@ -353,6 +360,7 @@ export interface FileRoutesByTo {
   '/': typeof LayoutIndexRoute
   '/app': typeof AppRoute
   '/auth': typeof AuthRouteWithChildren
+  '/bonuses': typeof AuthenticatedBonusesRoute
   '/favourite-balls': typeof AuthenticatedFavouriteBallsRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/transactions': typeof AuthenticatedTransactionsRoute
@@ -401,6 +409,7 @@ export interface FileRoutesById {
   '/_layout': typeof LayoutRouteWithChildren
   '/app': typeof AppRoute
   '/auth': typeof AuthRouteWithChildren
+  '/_authenticated/bonuses': typeof AuthenticatedBonusesRoute
   '/_authenticated/favourite-balls': typeof AuthenticatedFavouriteBallsRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/transactions': typeof AuthenticatedTransactionsRoute
@@ -450,6 +459,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/auth'
+    | '/bonuses'
     | '/favourite-balls'
     | '/profile'
     | '/transactions'
@@ -496,6 +506,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/auth'
+    | '/bonuses'
     | '/favourite-balls'
     | '/profile'
     | '/transactions'
@@ -543,6 +554,7 @@ export interface FileRouteTypes {
     | '/_layout'
     | '/app'
     | '/auth'
+    | '/_authenticated/bonuses'
     | '/_authenticated/favourite-balls'
     | '/_authenticated/profile'
     | '/_authenticated/transactions'
@@ -813,6 +825,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedFavouriteBallsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/bonuses': {
+      id: '/_authenticated/bonuses'
+      path: '/bonuses'
+      fullPath: '/bonuses'
+      preLoaderRoute: typeof AuthenticatedBonusesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/tickets/': {
       id: '/_authenticated/tickets/'
       path: '/tickets'
@@ -922,6 +941,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedBonusesRoute: typeof AuthenticatedBonusesRoute
   AuthenticatedFavouriteBallsRoute: typeof AuthenticatedFavouriteBallsRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedTransactionsRoute: typeof AuthenticatedTransactionsRoute
@@ -945,6 +965,7 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedBonusesRoute: AuthenticatedBonusesRoute,
   AuthenticatedFavouriteBallsRoute: AuthenticatedFavouriteBallsRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedTransactionsRoute: AuthenticatedTransactionsRoute,

@@ -51,15 +51,27 @@ const SignUpForm = () => {
 
       setLoading(true)
       const { username, password, email, phoneNumber, referralCode: formReferralCode } = values
-      // Pass the referral code from the URL (if any) to the registration API
-      const user = await registerUser(username, email, password, phoneNumber, formReferralCode)
+      // The code from a referral link (?ref=) or typed in; an unknown one never stops the sign-up
+      const code = formReferralCode?.trim() || undefined
+      const user = await registerUser(username, email, password, phoneNumber, code)
       // set Token
       setAccessToken(user.token)
       // set user
       setUser(user)
 
-      // show toast
+      // A sign-up bonus for the code goes straight to the new player's free tickets
+      const welcome = user.welcomeVouchers ?? []
+      if (welcome.length) {
+        const worth = welcome.reduce((sum, v) => sum + v.amount * (v.freeTicketsNumber || 1), 0)
+        toast.success(`Welcome to MaxiLotto! You got ₦${worth.toLocaleString('en-NG')} in free tickets for joining with your code.`, { duration: 7000 })
+        await navigate({ to: "/bonuses" })
+        return
+      }
+
       toast.success("Registration successful")
+      if (code && user.referralCodeNotFound) {
+        toast.info(`We couldn't find the code "${code}", so it wasn't applied. Your account is ready to use.`, { duration: 7000 })
+      }
 
       // redirect
       await navigate({ to: "/profile" })
@@ -221,7 +233,10 @@ const SignUpForm = () => {
               <FormControl>
                 <div className="relative group">
                   <Input
-                    placeholder="Referral Code (Optional)"
+                    placeholder="Referral or promo code (optional)"
+                    aria-label="Referral or promo code (optional)"
+                    autoCapitalize="none"
+                    autoCorrect="off"
                     className="pl-11 h-12 bg-white/[0.08] border-white/[0.12] text-white placeholder:text-slate-500 rounded-xl focus:bg-white/[0.12] focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20 transition-all duration-300"
                     {...field}
                   />
@@ -230,6 +245,7 @@ const SignUpForm = () => {
                   </div>
                 </div>
               </FormControl>
+              <p className="ml-1 text-xs text-slate-400">Got a code from a friend or an ad? Enter it for any welcome bonus.</p>
               <FormMessage className="text-red-500 text-xs font-medium ml-1" />
             </FormItem>
           )}

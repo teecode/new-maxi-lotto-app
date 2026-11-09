@@ -41,6 +41,10 @@ export type User = {
 	rank: string;
 	referralCode: string | null;
 	referralUrl: string | null;
+	/** Sign-up only: free tickets given for the referral or promo code */
+	welcomeVouchers?: { amount: number; freeTicketsNumber: number }[] | null;
+	/** Sign-up only: the code entered is no referrer's (the account was still created) */
+	referralCodeNotFound?: boolean;
 };
 
 export type MinimalUser = {
