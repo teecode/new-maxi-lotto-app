@@ -17,7 +17,7 @@ import type {BetType, Game} from "@/types/game"
 import {zodResolver} from "@hookform/resolvers/zod"
 import type {EmblaOptionsType} from 'embla-carousel'
 import {Trash2Icon} from "lucide-react"
-import {useEffect, useState} from "react"
+import {useEffect, useMemo, useState} from "react"
 import {useForm} from "react-hook-form"
 import {toast} from "sonner"
 import {z} from "zod"
@@ -29,7 +29,7 @@ import GameCarousel from '@/components/play/game-carousel'
 import VoucherPicker from '@/components/play/voucher-picker'
 import {useRuleNames} from '@/components/bonus/voucher-card'
 import {useMyVouchers, useRefreshBonuses} from '@/hooks/useBonusPromotions'
-import {checkVoucher, naira} from '@/lib/bonus-words'
+import {checkVoucher, naira, ticketTypeFits} from '@/lib/bonus-words'
 import {Gift} from 'lucide-react'
 
 const FormSchema = z.object({
@@ -61,7 +61,9 @@ function RouteComponent() {
 
   // Free tickets: the one asked for in the address is chosen once the list arrives
   const search = Route.useSearch()
-  const {data: vouchers = []} = useMyVouchers()
+  // Only free tickets that pay for a 5/90 ticket: accumulator-only ones are played on the Accumulator page
+  const {data: myVouchers = []} = useMyVouchers()
+  const vouchers = useMemo(() => myVouchers.filter(v => ticketTypeFits(v.ticketType, 1)), [myVouchers])
   const refreshBonuses = useRefreshBonuses()
   const {gameName, betTypeName} = useRuleNames()
   const [voucherId, setVoucherId] = useState<string | null>(null)

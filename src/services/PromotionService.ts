@@ -31,6 +31,12 @@ export interface BonusPromotion {
 	onNow: boolean;
 	nextOn?: string | null;
 	endsAt: string;
+	/** No end date: it runs until it is switched off, so endsAt (31 Dec 2099) is not shown */
+	ongoing?: boolean;
+	/** For Play: only these tickets count, 1 = 5/90 tickets, 2 = accumulators; empty for any */
+	onlyTicketType?: number | null;
+	/** The free ticket pays for this kind of ticket only: 1 = 5/90, 2 = accumulator; empty for either */
+	freeTicketType?: number | null;
 
 	/** "Play" (tickets), "Deposit", "Claim", or "Signup" (given when a new player signs up with a qualifying code) */
 	kind?: 'Play' | 'Deposit' | 'Claim' | 'Signup' | null;

@@ -36,10 +36,16 @@ export function timeLeft(iso: string | null | undefined): { text: string; urgent
 	return { text: `${days} ${plural(days, 'day', 'days')} left`, urgent: days <= 1 };
 }
 
-/** What you get: "₦150 free ticket" or "3 free tickets of ₦150" */
-export function rewardText(bonus: Pick<BonusPromotion, 'rewardAmount' | 'freeTickets'>): string {
+/** Ticket.TicketType of an accumulator; any other ticket is a 5/90 ticket from the Play page */
+export const ACCUMULATOR = 2;
+/** Whether a voucher limited to `only` (1 5/90, 2 accumulator, empty for either) pays for a ticket of that type */
+export const ticketTypeFits = (only: number | null | undefined, ticketType: number) => !only || (only === ACCUMULATOR) === (ticketType === ACCUMULATOR);
+
+/** What you get: "₦150 free ticket", "₦100 free accumulator ticket" or "3 free tickets of ₦150" */
+export function rewardText(bonus: Pick<BonusPromotion, 'rewardAmount' | 'freeTickets' | 'freeTicketType'>): string {
 	const tickets = bonus.freeTickets || 1;
-	return tickets === 1 ? `${naira(bonus.rewardAmount)} free ticket` : `${tickets} free tickets of ${naira(bonus.rewardAmount)}`;
+	const kind = bonus.freeTicketType === ACCUMULATOR ? 'accumulator ' : bonus.freeTicketType ? '5/90 ' : '';
+	return tickets === 1 ? `${naira(bonus.rewardAmount)} free ${kind}ticket` : `${tickets} free ${kind}tickets of ${naira(bonus.rewardAmount)}`;
 }
 
 /** The small print under what you get: time to use it and the winning cap */
@@ -54,7 +60,7 @@ export function rewardNote(bonus: BonusPromotion): string {
 /** What to do, in a few words: "Play 10 tickets", "Deposit ₦3,000", "Just claim it" */
 export function taskText(bonus: BonusPromotion): string {
 	const n = bonus.ticketCount || 0;
-	const tickets = plural(n, 'ticket', 'tickets');
+	const tickets = bonus.onlyTicketType === ACCUMULATOR ? plural(n, 'accumulator', 'accumulators') : plural(n, 'ticket', 'tickets');
 	switch (bonus.kind) {
 		case 'Play':
 			if (bonus.ticketKind === 'L') return bonus.repeatable ? `Every ${n} losing ${tickets}${bonus.streak ? ' in a row' : ''}` : `Lose ${n} ${tickets}${bonus.streak ? ' in a row' : ''}`;
@@ -74,6 +80,7 @@ export function taskText(bonus: BonusPromotion): string {
 /** The small print under what to do */
 export function taskNote(bonus: BonusPromotion): string {
 	const parts: string[] = [];
+	if (bonus.kind === 'Play' && bonus.onlyTicketType && bonus.onlyTicketType !== ACCUMULATOR) parts.push('5/90 tickets only, not accumulators');
 	if (bonus.kind === 'Play' && bonus.minStake) parts.push(`${naira(bonus.minStake)} or more each`);
 	if (bonus.kind === 'Play' && bonus.ticketKind !== 'T') parts.push('counted when the draw is settled');
 	if (bonus.kind === 'Claim' && bonus.minimumDeposited) parts.push(`for players who have deposited ${naira(bonus.minimumDeposited)}+`);
@@ -84,16 +91,25 @@ export function taskNote(bonus: BonusPromotion): string {
 	return parts.join(' · ');
 }
 
+/** Whether it has no end date (the API says so; an end in 2099 or later means the same) */
+export function hasNoEnd(bonus: Pick<BonusPromotion, 'ongoing' | 'endsAt'>): boolean {
+	return bonus.ongoing ?? new Date(bonus.endsAt).getFullYear() >= 2099;
+}
+
 /** The rules in a list, for "Details" */
 export function termsList(bonus: BonusPromotion): string[] {
 	const out: string[] = [];
 	if (bonus.when) out.push(`On: ${bonus.when}.`);
-	out.push(`Runs until ${shortDate(bonus.endsAt)}.`);
+	out.push(hasNoEnd(bonus) ? 'Runs until further notice.' : `Runs until ${shortDate(bonus.endsAt)}.`);
 	if (bonus.kind === 'Play') out.push('Only tickets paid from your wallet count; tickets played with a free ticket and cancelled tickets do not.');
+	if (bonus.kind === 'Play' && bonus.onlyTicketType === ACCUMULATOR) out.push('Only accumulator tickets count. Each accumulator counts as one ticket, at its stake.');
+	else if (bonus.kind === 'Play' && bonus.onlyTicketType) out.push('Only 5/90 tickets from the Play page count; accumulators do not.');
 	if (bonus.kind === 'Deposit') out.push(bonus.scheduled ? 'Only deposits made on its days count.' : 'Only deposits made while it runs count.');
 	if (bonus.kind === 'Signup') out.push('Given the moment you sign up with a qualifying code; it cannot be added to an existing account.');
 	if (bonus.scheduled) out.push('Each round (days in a row, such as a weekend) starts from zero.');
 	out.push('A free ticket pays your stake up to its value; your wallet is not charged.');
+	if (bonus.freeTicketType === ACCUMULATOR) out.push('The free ticket can only be played as an accumulator.');
+	else if (bonus.freeTicketType) out.push('The free ticket can only be played on 5/90, not as an accumulator.');
 	if (bonus.maxWinAmount) out.push(`Winnings on a free ticket are capped at ${naira(bonus.maxWinAmount)}.`);
 	out.push('Free tickets cannot be withdrawn. 18+ only.');
 	return out;
@@ -166,7 +182,7 @@ export function actionLink(bonus: BonusPromotion): { label: string; to: string }
 	if (status === 'Locked') return { label: 'Deposit', to: '/deposit' };
 	if (status === 'Done' || status === 'SoldOut' || status === 'Waiting' || status === 'Claimable') return null;
 	if (bonus.kind === 'Deposit') return { label: 'Deposit now', to: '/deposit' };
-	if (bonus.kind === 'Play') return { label: 'Play now', to: '/play' };
+	if (bonus.kind === 'Play') return { label: 'Play now', to: bonus.onlyTicketType === ACCUMULATOR ? '/accumulator' : '/play' };
 	return null;
 }
 
@@ -177,6 +193,8 @@ export const ticketsLeft = (voucher: Voucher) => Math.max(0, voucher.freeTickets
 /** A voucher's limits in short phrases, with names looked up from the games and bet types the page has */
 export function voucherRules(voucher: Voucher, gameName: (id: number) => string | undefined, betTypeName: (id: number) => string | undefined): string[] {
 	const out: string[] = [];
+	if (voucher.ticketType === ACCUMULATOR) out.push('Accumulators only');
+	else if (voucher.ticketType) out.push('5/90 tickets only');
 	if (voucher.allowedGameIds?.length) {
 		const names = voucher.allowedGameIds.map((id) => gameName(id)).filter(Boolean) as string[];
 		out.push(names.length ? `${names.join(', ')} only` : 'Selected games only');
@@ -200,17 +218,22 @@ export interface VoucherCheck {
 
 /**
  * Whether a ticket can be paid with a voucher, check by check, as the API will judge it (TicketValidationService):
- * the stake fits the voucher, and the game, bet types and lines are allowed.
+ * the kind of ticket (5/90 or accumulator) is the one it is for, the stake fits the voucher, and the game, bet types and
+ * lines are allowed. `ticketType` is the ticket being built: 1 on the Play page, 2 on the Accumulator page.
  */
 export function checkVoucher(
 	voucher: Voucher,
 	bets: { stake: number; numberOfLines: number; betType: { betTypeID: number } }[],
 	game: { templateGameId: number; gameName: string } | null,
 	gameName: (id: number) => string | undefined,
-	betTypeName: (id: number) => string | undefined
+	betTypeName: (id: number) => string | undefined,
+	ticketType = 1
 ): VoucherCheck {
-	const total = bets.reduce((sum, bet) => sum + (Number(bet.stake) || 0), 0);
+	const total = ticketType === ACCUMULATOR ? Number(bets[0]?.stake) || 0 : bets.reduce((sum, bet) => sum + (Number(bet.stake) || 0), 0);
 	const checks: { label: string; ok: boolean }[] = [];
+	if (!ticketTypeFits(voucher.ticketType, ticketType)) {
+		checks.push({ label: voucher.ticketType === ACCUMULATOR ? 'This free ticket is for accumulators. Use it on the Accumulator page' : 'This free ticket is for 5/90 tickets. Use it on the Play page', ok: false });
+	}
 	checks.push(
 		total <= voucher.amount
 			? { label: `Stake ${naira(total)}, within the ${naira(voucher.amount)} free ticket`, ok: true }

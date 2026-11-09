@@ -9,17 +9,24 @@ import useAuthStore from "@/store/authStore"
 import {useBetStore} from "@/store/bet-store"
 import type {BetList, BetType, Game} from "@/types/game"
 import type {EmblaOptionsType} from 'embla-carousel'
-import {InfoIcon, ShoppingBasketIcon, Trash2Icon} from "lucide-react"
-import {useCallback, useMemo, useState} from "react"
+import {Gift, InfoIcon, ShoppingBasketIcon, Trash2Icon} from "lucide-react"
+import {useCallback, useEffect, useMemo, useState} from "react"
 import {toast} from "sonner"
 import GameCarousel from '@/components/play/game-carousel'
 import {cn} from "@/lib/utils"
 import PageHeader from "@/components/layouts/page-header.tsx";
 import { ContentSections } from '@/components/content/content-sections'
 import { ACCUMULATOR_SECTIONS } from '@/content/accumulator'
+import VoucherPicker from '@/components/play/voucher-picker'
+import {useRuleNames} from '@/components/bonus/voucher-card'
+import {useMyVouchers, useRefreshBonuses} from '@/hooks/useBonusPromotions'
+import {ACCUMULATOR, checkVoucher, naira, ticketTypeFits} from '@/lib/bonus-words'
 
 export const Route = createFileRoute('/_layout/accumulator')({
   component: AccumulatorPage,
+  // ?voucher=<id>: arrive ready to pay with that free ticket ("Play an accumulator" on a voucher)
+  validateSearch: (search: Record<string, unknown>): { voucher?: string } =>
+    search.voucher ? {voucher: String(search.voucher)} : {},
 })
 
 const OPTIONS: EmblaOptionsType = {loop: true}
@@ -171,6 +178,36 @@ function AccumulatorPage() {
     }))
   }, [accumulatorLegs, stakeAmount, winningType])
 
+  // Free tickets that pay for an accumulator (not the 5/90-only ones). An accumulator stakes once, whatever its
+  // legs, so the stake must fit the free ticket; choosing one lowers a bigger stake to its value.
+  const search = Route.useSearch()
+  const {data: myVouchers = []} = useMyVouchers()
+  const vouchers = useMemo(() => myVouchers.filter(v => ticketTypeFits(v.ticketType, ACCUMULATOR)), [myVouchers])
+  const refreshBonuses = useRefreshBonuses()
+  const {gameName, betTypeName} = useRuleNames()
+  const [voucherId, setVoucherId] = useState<string | null>(null)
+  const [voucherFromLink, setVoucherFromLink] = useState(false)
+  const chooseVoucher = useCallback((id: string | null) => {
+    setVoucherId(id)
+    const chosen = vouchers.find(v => String(v.id) === id)
+    if (chosen) setStakeAmount(stake => Math.min(stake, chosen.amount))
+  }, [vouchers])
+  useEffect(() => {
+    if (search.voucher && !voucherFromLink && vouchers.some(v => String(v.id) === search.voucher)) {
+      chooseVoucher(search.voucher)
+      setVoucherFromLink(true)
+    }
+  }, [search.voucher, vouchers, voucherFromLink, chooseVoucher])
+  // A voucher that has just been used (or expired) drops out of the choice
+  useEffect(() => {
+    if (voucherId && vouchers.length && !vouchers.some(v => String(v.id) === voucherId)) setVoucherId(null)
+  }, [vouchers, voucherId])
+  const voucher = vouchers.find(v => String(v.id) === voucherId) ?? null
+  const voucherCheck = voucher && formattedBetsList.length
+    ? checkVoucher(voucher, formattedBetsList, selectedGame, gameName, betTypeName, ACCUMULATOR)
+    : null
+  const linkedVoucher = search.voucher ? vouchers.find(v => String(v.id) === search.voucher) : undefined
+
   const {
     handlePlaceBet,
     loading,
@@ -187,7 +224,12 @@ function AccumulatorPage() {
       setStakeAmount(100)
     },
     syncUser,
-    ticketType: 2 // Accumulator
+    ticketType: 2, // Accumulator
+    voucherId: voucher && voucherCheck?.ok ? voucherId : null,
+    onVoucherUsed: () => {
+      setVoucherId(null)
+      refreshBonuses()
+    }
   })
 
   return (
@@ -195,6 +237,20 @@ function AccumulatorPage() {
       <PageHeader title="Lotto Accumulator" subtitle="Combine predictions for one game and multiply the odds" />
       <section className="py-8 sm:py-12 min-h-screen bg-gray-50">
         <div className="container mx-auto px-4">
+          {linkedVoucher && accumulatorLegs.length === 0 && (
+            <div className="mb-5 flex items-start gap-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FFF100] text-[#0A4B7F]">
+                <Gift className="h-5 w-5" aria-hidden/>
+              </span>
+              <div className="text-sm">
+                <p className="font-bold text-[#0A4B7F]">Your {naira(linkedVoucher.amount)} free accumulator ticket is ready</p>
+                <p className="text-slate-600">
+                  Pick a game, add at least 2 selections and keep the stake at {naira(linkedVoucher.amount)} or less.
+                  It is paid with your free ticket, not from your wallet.
+                </p>
+              </div>
+            </div>
+          )}
           {/* Game Selection */}
           {games && (
             <GameCarousel handleSelectedGame={handleSelectedGame} games={games} options={OPTIONS}/>
@@ -421,6 +477,17 @@ function AccumulatorPage() {
                       </p>
                     )}
 
+                    {/* Pay with a free ticket */}
+                    <VoucherPicker vouchers={vouchers} selectedId={voucherId} onSelect={chooseVoucher} check={voucherCheck}/>
+                    {voucher && (
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="font-semibold text-gray-600">From your wallet:</span>
+                        <span className={cn("text-lg font-black", voucherCheck?.ok ? "text-emerald-600" : "text-red-600")}>
+                          {voucherCheck?.ok ? '₦0' : accumulatorLegs.length < 2 ? 'Add at least 2 selections' : 'Fix the ticket above'}
+                        </span>
+                      </div>
+                    )}
+
                     <div className="flex flex-col gap-2">
                       <Button
                         className="w-full bg-[#0A4B7F] hover:bg-[#093e6b] text-white py-6 text-lg rounded-xl shadow-lg shadow-[#0A4B7F]/20"
@@ -430,11 +497,12 @@ function AccumulatorPage() {
                           loading ||
                           bookingLoading ||
                           stakeAmount < MIN_STAKE ||
-                          potentialWin > MAX_POTENTIAL_WIN
+                          potentialWin > MAX_POTENTIAL_WIN ||
+                          (!!voucher && !voucherCheck?.ok)
                         }
                         onClick={handlePlaceBet}
                       >
-                        {loading ? "Processing..." : "PLACE BET"}
+                        {loading ? "Processing..." : voucher ? "PLACE BET WITH FREE TICKET" : "PLACE BET"}
                       </Button>
                       <Button
                         className="w-full bg-[#FFF100] hover:bg-[#FFE600] text-[#0A4B7F] py-6 text-lg rounded-xl shadow-lg font-bold"

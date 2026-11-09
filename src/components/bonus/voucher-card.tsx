@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router';
 import { CalendarClock, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Voucher } from '@/services/BonusService';
-import { naira, shortDate, ticketsLeft, timeLeft, voucherRules } from '@/lib/bonus-words';
+import { ACCUMULATOR, naira, shortDate, ticketsLeft, timeLeft, voucherRules } from '@/lib/bonus-words';
 import { useFetchDailyGames, useGetBetTypes } from '@/hooks/useGames';
 
 /** Names for the ids in a voucher's rules, from the games and bet types the site already loads */
@@ -63,13 +63,24 @@ export default function VoucherCard({ voucher, showPlay = true }: { voucher: Vou
 				</ul>
 				{showPlay && (
 					<div className="mt-auto pt-1">
-						<Link
-							to="/play"
-							search={{ voucher: voucher.id }}
-							className="inline-flex items-center gap-1 rounded-full bg-[#0A4B7F] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#0185B6]"
-						>
-							Play it now <ChevronRight className="h-3.5 w-3.5" />
-						</Link>
+						{/* An accumulator-only free ticket is played on the Accumulator page */}
+						{voucher.ticketType === ACCUMULATOR ? (
+							<Link
+								to="/accumulator"
+								search={{ voucher: voucher.id }}
+								className="inline-flex items-center gap-1 rounded-full bg-[#0A4B7F] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#0185B6]"
+							>
+								Play an accumulator <ChevronRight className="h-3.5 w-3.5" />
+							</Link>
+						) : (
+							<Link
+								to="/play"
+								search={{ voucher: voucher.id }}
+								className="inline-flex items-center gap-1 rounded-full bg-[#0A4B7F] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#0185B6]"
+							>
+								Play it now <ChevronRight className="h-3.5 w-3.5" />
+							</Link>
+						)}
 					</div>
 				)}
 			</div>

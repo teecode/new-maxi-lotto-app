@@ -87,7 +87,7 @@ export const useClaimBonus = () => {
 	return useMutation<Voucher, Error, BonusPromotion>({
 		mutationFn: (bonus) => claimBonus(bonus.id),
 		onSuccess: async (voucher, bonus) => {
-			toast.success(`Claimed! Your ${rewardText({ rewardAmount: voucher?.amount ?? bonus.rewardAmount, freeTickets: voucher?.freeTicketsNumber ?? bonus.freeTickets })} is ready to play.`);
+			toast.success(`Claimed! Your ${rewardText({ rewardAmount: voucher?.amount ?? bonus.rewardAmount, freeTickets: voucher?.freeTicketsNumber ?? bonus.freeTickets, freeTicketType: voucher?.ticketType ?? bonus.freeTicketType })} is ready to play.`);
 			await refresh();
 		},
 		onError: async (error) => {

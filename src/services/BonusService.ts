@@ -22,6 +22,8 @@ export interface Voucher {
 	allowedGameIds: number[];
 	/** Bet types it cannot be used on */
 	excludedBetTypeIds: number[];
+	/** The only kind of ticket it pays for: 1 a 5/90 ticket (Play page), 2 an accumulator; empty for either */
+	ticketType?: number | null;
 }
 
 // The API answers errors with a sentence (or a list of them); show that, not a status code

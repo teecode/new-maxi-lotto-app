@@ -6,6 +6,7 @@ import type { BonusPromotion } from '@/services/PromotionService';
 import {
 	actionLink,
 	dayLabel,
+	hasNoEnd,
 	naira,
 	rewardNote,
 	rewardText,
@@ -112,7 +113,7 @@ function Media({ promo, wide }: { promo: BonusPromotion; wide?: boolean }) {
 			<div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4">
 				<div className="min-w-0 text-white">
 					{promo.when && <p className="truncate text-xs font-bold uppercase tracking-wider drop-shadow">{promo.when}</p>}
-					<p className="text-[11px] font-medium text-white/80 drop-shadow">Until {shortDate(promo.endsAt)}</p>
+					{!hasNoEnd(promo) && <p className="text-[11px] font-medium text-white/80 drop-shadow">Until {shortDate(promo.endsAt)}</p>}
 				</div>
 				{images.length > 1 && (
 					<div className="flex shrink-0 gap-1.5">
