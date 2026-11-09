@@ -16,6 +16,27 @@ interface AuthStore {
 	syncUser: () => Promise<void>;
 }
 
+/**
+ * The signed-in user from User/Me. That answer names the customer `id` (not `customerId`), the phone `mobile`, and has
+ * no token or display name, so those are taken from it where present and otherwise kept from what sign-in gave.
+ * Every other field of the answer is kept as before. Without this, customerId was lost on every page and the
+ * bonus, voucher and notification lists never loaded.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const fromProfile = (me: any, previous: MinimalUser | null): MinimalUser => ({
+	...(previous ?? {}),
+	...me,
+	customerId: me.customerId ?? me.id ?? previous?.customerId,
+	username: me.username ?? previous?.username,
+	displayName: me.displayName ?? previous?.displayName,
+	email: me.email ?? previous?.email,
+	phoneNumber: me.phoneNumber ?? me.mobile ?? previous?.phoneNumber,
+	token: me.token ?? previous?.token,
+	isVerified: me.isVerified ?? previous?.isVerified,
+	isActive: me.isActive ?? previous?.isActive,
+	walletBalance: me.walletBalance ?? me.wallet?.walletBalance ?? previous?.walletBalance,
+});
+
 const useAuthStore = create<AuthStore>()(
 	persist(
 		(set) => ({
@@ -61,7 +82,7 @@ const useAuthStore = create<AuthStore>()(
 				try {
 					const data = await fetchUserProfile();
 					if (data) {
-						set({ minimalUser: data });
+						set((state) => ({ minimalUser: fromProfile(data, state.minimalUser) }));
 					}
 				} catch (error: any) {
 					// Check if it's a 401 (expired token)
