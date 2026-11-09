@@ -309,7 +309,7 @@ function ReferralsPage() {
                           {formatCurrency(referee.totalPlayedAmount || 0)}
                         </td>
                         <td className="px-6 py-4 font-black text-emerald-600">
-                          {formatCurrency(referee.totalEarnedAmount || 0)}
+                          {referee.totalEarnedAmount == null ? '—' : formatCurrency(referee.totalEarnedAmount)}
                         </td>
                         <td className="px-6 py-4 text-slate-500">
                           {referee.date ? format(new Date(referee.date), 'MMM dd, yyyy') : 'N/A'}
@@ -375,7 +375,7 @@ function ReferralsPage() {
                       </div>
                       <div>
                         <p className="text-[10px] uppercase tracking-wider font-black text-slate-400 mb-1">You Earned</p>
-                        <p className="font-black text-emerald-600">{formatCurrency(referee.totalEarnedAmount || 0)}</p>
+                        <p className="font-black text-emerald-600">{referee.totalEarnedAmount == null ? '—' : formatCurrency(referee.totalEarnedAmount)}</p>
                       </div>
                       <div>
                         <p className="text-[10px] uppercase tracking-wider font-black text-slate-400 mb-1">Date Joined</p>
