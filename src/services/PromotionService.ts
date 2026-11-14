@@ -58,6 +58,7 @@ export interface BonusPromotion {
 	validDays?: number | null;
 	voucherExpiresAt?: string | null;
 	maxWinAmount?: number | null;
+	maxOverallWinAmount?: number | null;
 
 	mine?: BonusCustomerStatus | null;
 }

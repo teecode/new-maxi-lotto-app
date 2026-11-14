@@ -16,6 +16,8 @@ export interface Voucher {
 	voucherBonusId?: number;
 	/** The most a ticket played with it can win, when capped */
 	maxWinAmount?: number | null;
+	/** The most all tickets played with this voucher can win combined, when capped */
+	maxOverallWinAmount?: number | null;
 	/** The most lines a bet may have */
 	maxLines?: number | null;
 	/** The games it can be used on (template game ids); empty for any game */

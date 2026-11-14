@@ -53,7 +53,8 @@ export function rewardNote(bonus: BonusPromotion): string {
 	const parts: string[] = [];
 	if (bonus.validDays) parts.push(`Use within ${bonus.validDays} ${plural(bonus.validDays, 'day', 'days')}`);
 	else if (bonus.voucherExpiresAt) parts.push(`Use by ${shortDate(bonus.voucherExpiresAt)}`);
-	if (bonus.maxWinAmount) parts.push(`win up to ${naira(bonus.maxWinAmount)}`);
+	if (bonus.maxWinAmount) parts.push(`win up to ${naira(bonus.maxWinAmount)} per ticket`);
+	if (bonus.maxOverallWinAmount) parts.push(`max ${naira(bonus.maxOverallWinAmount)} overall`);
 	return parts.join(' · ');
 }
 
@@ -201,7 +202,8 @@ export function voucherRules(voucher: Voucher, gameName: (id: number) => string 
 	} else {
 		out.push('Any game');
 	}
-	if (voucher.maxWinAmount) out.push(`Wins up to ${naira(voucher.maxWinAmount)}`);
+	if (voucher.maxWinAmount) out.push(`Wins up to ${naira(voucher.maxWinAmount)} per ticket`);
+	if (voucher.maxOverallWinAmount) out.push(`Max ${naira(voucher.maxOverallWinAmount)} overall`);
 	if (voucher.maxLines) out.push(`Up to ${voucher.maxLines} ${plural(voucher.maxLines, 'line', 'lines')}`);
 	if (voucher.excludedBetTypeIds?.length) {
 		const names = voucher.excludedBetTypeIds.map((id) => betTypeName(id)).filter(Boolean) as string[];
