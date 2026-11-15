@@ -1,3 +1,10 @@
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useNavigate } from '@tanstack/react-router';
+import { Building2, Check, CreditCard, Lock, Smartphone } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -7,57 +14,51 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { cn } from '@/lib/utils';
-
 import { Input } from '@/components/ui/input';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
-import { depositFunds } from '@/services/PaymentService';
-import { useState } from 'react';
-// import { ConfirmationModal } from './DepositConfirmation';
-import type { DepositResponse } from '@/types/api';
 import { Spinner } from '@/components/ui/spinner';
+import { cn, formatCurrency } from '@/lib/utils';
+import { depositFunds } from '@/services/PaymentService';
+import type { DepositResponse } from '@/types/api';
 import type { User } from '@/types/user';
 import { ConfirmationModal } from './deposit-confirmation';
-import { useNavigate } from '@tanstack/react-router';
 
-// Config arrays
 const paymentMethods = [
-  { id: 'cards-paystack', label: 'Paystack Card' },
-  { id: 'transfer', label: 'Transfer' },
-  { id: 'ussd', label: 'USSD' },
-];
+  {
+    id: 'cards-paystack',
+    label: 'Paystack Card',
+    subtitle: 'Instant debit card',
+    icon: CreditCard,
+  },
+  {
+    id: 'transfer',
+    label: 'Bank Transfer',
+    subtitle: 'Sarepay virtual acct',
+    icon: Building2,
+  },
+  {
+    id: 'ussd',
+    label: 'USSD',
+    subtitle: 'Dial bank *code#',
+    icon: Smartphone,
+  },
+] as const;
 
-// const channels = [
-//   {
-//     id: 'paystack',
-//     name: 'Paystack',
-//     logo: '/paystack/Paystack_idIi-h8rZ0_7.png',
-//     fallback: 'PS',
-//   },
-//   {
-//     id: 'flutterwave',
-//     name: 'Flutterwave',
-//     logo: '/flutterwave/Flutterwave_id3uOuItwN_13.png',
-//     fallback: 'FW',
-//   },
-// ];
+const QUICK_AMOUNTS = [500, 1000, 2000, 5000, 10000];
 
-// Validation schema
 const FormSchema = z.object({
-  selectedOption: z.string().nonempty({ message: 'You must select a payment method.' }),
+  selectedOption: z.string().min(1, { message: 'Please select a payment method.' }),
   channel: z.string().optional(),
-  amount: z.number().min(100, { message: 'Amount must be greater than 100.' }),
+  amount: z
+    .number({ error: 'Please enter a valid deposit amount.' })
+    .min(100, { message: 'Minimum deposit is ₦100.' }),
 });
 
 interface DepositFormProps {
   user: User;
+  onAmountChange?: (amount: number) => void;
 }
 
-export const DepositForm = ({ user }: DepositFormProps) => {
-
+export const DepositForm = ({ user, onAmountChange }: DepositFormProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const [depositData, setDepositData] = useState<DepositResponse | null>(null);
@@ -67,15 +68,27 @@ export const DepositForm = ({ user }: DepositFormProps) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      selectedOption: '',
+      selectedOption: 'cards-paystack',
       channel: 'Paystack',
-      amount: 0,
+      amount: 1000,
     },
   });
 
+  const watchedAmount = form.watch('amount');
+
+  const handleAmountUpdate = (val: number) => {
+    const safeVal = Number.isNaN(val) ? 0 : Math.max(0, val);
+    form.setValue('amount', safeVal, { shouldValidate: true });
+    onAmountChange?.(safeVal);
+  };
+
   const handleFormReset = () => {
-    form.reset(); // You can call it here easily
-    // Or you can pass this function down as a prop if you prefer
+    form.reset({
+      selectedOption: 'cards-paystack',
+      channel: 'Paystack',
+      amount: 1000,
+    });
+    onAmountChange?.(1000);
   };
 
   async function onSubmit(values: z.infer<typeof FormSchema>) {
@@ -84,11 +97,11 @@ export const DepositForm = ({ user }: DepositFormProps) => {
       const { amount, selectedOption, channel } = values;
 
       if (selectedOption === 'transfer') {
-        navigate({
+        await navigate({
           to: '/deposit/sarepay-transfer',
           search: {
-            amount
-          }
+            amount,
+          },
         });
       } else {
         const customerId = user.customerId;
@@ -99,9 +112,9 @@ export const DepositForm = ({ user }: DepositFormProps) => {
         }
       }
     } catch (error: any) {
-      toast.error(error.message || "Account validation failed")
+      toast.error(error.message || 'Account validation failed');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
@@ -109,52 +122,62 @@ export const DepositForm = ({ user }: DepositFormProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-full sm:max-w-xl space-y-6"
+        className="w-full space-y-6 rounded-3xl border border-slate-200/80 bg-white p-6 sm:p-8 shadow-sm"
       >
         {/* Payment Method */}
         <FormField
           control={form.control}
           name="selectedOption"
           render={({ field }) => (
-            <FormItem className="space-y-4">
-              <FormLabel className="text-base font-bold text-slate-700">Select Payment Method</FormLabel>
+            <FormItem className="space-y-3">
+              <FormLabel className="text-base font-extrabold text-[#0A4B7F]">
+                1. Choose Payment Method
+              </FormLabel>
               <FormControl>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {paymentMethods.map((method) => {
                     const isActive = field.value === method.id;
+                    const Icon = method.icon;
                     return (
-                      <div
+                      <button
+                        type="button"
                         key={method.id}
                         onClick={() => field.onChange(method.id)}
                         className={cn(
-                          "relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 cursor-pointer transition-all duration-300 group",
-                          isActive 
-                            ? "bg-pink-50 border-pink-500 shadow-md shadow-pink-500/10 scale-[1.02]" 
-                            : "bg-white border-slate-100 hover:border-pink-200 hover:bg-slate-50/50"
+                          'relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 cursor-pointer transition-all duration-200 group text-center',
+                          isActive
+                            ? 'bg-pink-50/70 border-[#FF005C] shadow-md shadow-pink-500/10'
+                            : 'bg-white border-slate-200 hover:border-pink-200 hover:bg-slate-50/60',
                         )}
                       >
-                        <div className={cn(
-                          "w-10 h-10 rounded-xl mb-3 flex items-center justify-center transition-colors",
-                          isActive ? "bg-pink-500 text-white" : "bg-slate-100 text-slate-400 group-hover:bg-pink-100 group-hover:text-pink-400"
-                        )}>
-                          {/* Placeholder Icon - would be better with real icons per method */}
-                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+                        <div
+                          className={cn(
+                            'w-11 h-11 rounded-xl mb-2.5 flex items-center justify-center transition-colors',
+                            isActive
+                              ? 'bg-[#FF005C] text-white'
+                              : 'bg-slate-100 text-slate-500 group-hover:bg-pink-100 group-hover:text-[#FF005C]',
+                          )}
+                        >
+                          <Icon className="w-5 h-5" />
                         </div>
-                        <span className={cn(
-                          "text-xs font-bold text-center leading-tight transition-colors",
-                          isActive ? "text-pink-600" : "text-slate-500 group-hover:text-slate-700"
-                        )}>
+                        <span
+                          className={cn(
+                            'text-xs sm:text-sm font-bold leading-tight',
+                            isActive ? 'text-[#FF005C]' : 'text-slate-800',
+                          )}
+                        >
                           {method.label}
                         </span>
-                        
+                        <span className="mt-0.5 text-[11px] text-slate-500">
+                          {method.subtitle}
+                        </span>
+
                         {isActive && (
-                          <div className="absolute top-2 right-2">
-                            <div className="bg-pink-500 rounded-full p-0.5">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                            </div>
+                          <div className="absolute top-2.5 right-2.5 flex h-5 w-5 items-center justify-center rounded-full bg-[#FF005C] text-white">
+                            <Check className="w-3 h-3 stroke-[3]" />
                           </div>
                         )}
-                      </div>
+                      </button>
                     );
                   })}
                 </div>
@@ -164,53 +187,60 @@ export const DepositForm = ({ user }: DepositFormProps) => {
           )}
         />
 
-        {/* Payment Channel Select */}
-        {/*<FormField*/}
-        {/*  control={form.control}*/}
-        {/*  name="channel"*/}
-        {/*  render={({ field }) => (*/}
-        {/*    <FormItem>*/}
-        {/*      <FormLabel>Payment Channel</FormLabel>*/}
-        {/*      <Select onValueChange={field.onChange} value={field.value}>*/}
-        {/*        <FormControl>*/}
-        {/*          <SelectTrigger className="w-full">*/}
-        {/*            <SelectValue placeholder="Select a payment channel" />*/}
-        {/*          </SelectTrigger>*/}
-        {/*        </FormControl>*/}
-        {/*        <SelectContent>*/}
-        {/*          <SelectGroup>*/}
-        {/*            <SelectLabel className="text-xs py-1 font-normal text-muted-foreground ps-2">*/}
-        {/*              Available Channels*/}
-        {/*            </SelectLabel>*/}
-        {/*            {channels.map((channel) => (*/}
-        {/*              <SelectItem key={channel.id} value={channel.id}>*/}
-        {/*                <span className="flex items-center gap-2">*/}
-        {/*                  <Avatar className="size-6">*/}
-        {/*                    <AvatarImage src={channel.logo} alt={channel.name} />*/}
-        {/*                    <AvatarFallback>{channel.fallback}</AvatarFallback>*/}
-        {/*                  </Avatar>*/}
-        {/*                  <span>{channel.name}</span>*/}
-        {/*                </span>*/}
-        {/*              </SelectItem>*/}
-        {/*            ))}*/}
-        {/*          </SelectGroup>*/}
-        {/*        </SelectContent>*/}
-        {/*      </Select>*/}
-        {/*      <FormMessage />*/}
-        {/*    </FormItem>*/}
-        {/*  )}*/}
-        {/*/>*/}
-
-        {/* Amount Input */}
+        {/* Amount Input + Quick Chips */}
         <FormField
           control={form.control}
           name="amount"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Amount</FormLabel>
+            <FormItem className="space-y-3">
+              <div className="flex items-center justify-between">
+                <FormLabel className="text-base font-extrabold text-[#0A4B7F]">
+                  2. Enter Amount (NGN)
+                </FormLabel>
+                <span className="text-xs text-slate-500 font-medium">Min: ₦100</span>
+              </div>
+
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                {QUICK_AMOUNTS.map((val) => {
+                  const active = watchedAmount === val;
+                  return (
+                    <button
+                      key={val}
+                      type="button"
+                      onClick={() => handleAmountUpdate(val)}
+                      className={cn(
+                        'rounded-xl py-2 text-xs font-bold border transition-all cursor-pointer tabular-nums',
+                        active
+                          ? 'bg-[#0A4B7F] text-white border-[#0A4B7F] shadow-sm'
+                          : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100',
+                      )}
+                    >
+                      ₦{val.toLocaleString()}
+                    </button>
+                  );
+                })}
+              </div>
+
               <FormControl>
-                <Input type="number" placeholder="Enter amount" {...field} value={field.value == 0 ? '' : field.value}
-                  onChange={(e) => field.onChange(e.target.valueAsNumber)} />
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-base font-extrabold text-slate-400">
+                    ₦
+                  </span>
+                  <Input
+                    type="number"
+                    inputMode="numeric"
+                    min={100}
+                    placeholder="Enter deposit amount"
+                    value={Number.isFinite(field.value) && field.value > 0 ? field.value : ''}
+                    onChange={(e) => {
+                      const val = e.target.valueAsNumber;
+                      const safeVal = Number.isNaN(val) ? 0 : Math.max(0, val);
+                      field.onChange(safeVal);
+                      onAmountChange?.(safeVal);
+                    }}
+                    className="pl-9 h-12 rounded-xl border-2 border-slate-200 focus:border-[#0185B6] text-lg font-extrabold text-[#0A4B7F] tabular-nums"
+                  />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -221,16 +251,32 @@ export const DepositForm = ({ user }: DepositFormProps) => {
         <Button
           type="submit"
           disabled={loading}
-          className="w-full bg-[#FF005C] text-white hover:bg-[#e60052]"
+          size="lg"
+          className="w-full h-12 rounded-full bg-[#FF005C] text-white hover:bg-[#e60052] font-extrabold text-sm sm:text-base shadow-lg shadow-rose-500/20 cursor-pointer"
         >
-          {loading && <Spinner />}
-          {loading ? 'Submitting...' : 'Deposit Now'}
+          {loading ? (
+            <>
+              <Spinner className="mr-2" /> Starting deposit...
+            </>
+          ) : (
+            <>
+              <Lock className="w-4 h-4 mr-2" />
+              Deposit {Number.isFinite(watchedAmount) && watchedAmount >= 100 ? formatCurrency(watchedAmount) : 'Now'}
+            </>
+          )}
         </Button>
+
         {/* Confirmation Modal */}
         {depositData && (
-          <ConfirmationModal open={open} handleFormReset={handleFormReset} setOpen={setOpen} user={user} data={depositData} />
+          <ConfirmationModal
+            open={open}
+            handleFormReset={handleFormReset}
+            setOpen={setOpen}
+            user={user}
+            data={depositData}
+          />
         )}
       </form>
     </Form>
   );
-}
+};

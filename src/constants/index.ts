@@ -1,4 +1,5 @@
 import {
+	ArrowDownToLine,
 	ArrowRightLeft,
 	Circle,
 	CreditCard,
@@ -6,8 +7,8 @@ import {
 	Handshake,
 	LockIcon,
 	Ticket,
-	User,
 	UserCog,
+	Users,
 	Wallet,
 } from 'lucide-react';
 
@@ -42,7 +43,7 @@ export const ProfileSettingsOne = [
 	{
 		label: 'Deposit',
 		route: '/deposit',
-		icon: User,
+		icon: ArrowDownToLine,
 	},
 	{
 		label: 'Transactions',
@@ -73,7 +74,7 @@ export const ProfileSettingsOne = [
 
 export const ProfileSettingsTwo = [
 	{
-		label: 'Favourites Ball',
+		label: 'Favourite Balls',
 		route: '/favourite-balls',
 		icon: Circle,
 	},
@@ -95,7 +96,7 @@ export const ProfileSettingsTwo = [
 	{
 		label: 'Referral Program',
 		route: '/settings/referral',
-		icon: Gift,
+		icon: Users,
 	},
 ];
 

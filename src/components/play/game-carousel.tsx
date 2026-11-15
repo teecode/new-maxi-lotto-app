@@ -90,7 +90,11 @@ const GameCarousel: React.FC<PropType> = (props) => {
             const isActive = selectedGame?.gameID === game.gameID
 
             return (
-              <div className="embla__slide" style={{ "--slide-size": "100%" } as React.CSSProperties} key={game.gameID}>
+              <div
+                className="embla__slide"
+                style={{ "--slide-size": "100%", "--slide-size-sm": "50%", "--slide-size-lg": "33.333%" } as React.CSSProperties}
+                key={game.gameID}
+              >
                 <div
                   onClick={() => !isClosed && handleSelectedGame(game)}
                   className={cn(

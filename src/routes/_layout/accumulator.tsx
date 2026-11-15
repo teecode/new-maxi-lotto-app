@@ -9,11 +9,17 @@ import useAuthStore from "@/store/authStore"
 import {useBetStore} from "@/store/bet-store"
 import type {BetList, BetType, Game} from "@/types/game"
 import type {EmblaOptionsType} from 'embla-carousel'
-import {Gift, InfoIcon, ShoppingBasketIcon, Trash2Icon} from "lucide-react"
+import {Gift, InfoIcon, PlusCircle, ShoppingBasketIcon, Trash2Icon, Wallet} from "lucide-react"
 import {useCallback, useEffect, useMemo, useState} from "react"
 import {toast} from "sonner"
 import GameCarousel from '@/components/play/game-carousel'
-import {cn} from "@/lib/utils"
+import {BookedTicketDialog} from '@/components/play/booked-ticket-dialog'
+import {MiniDepositWidget} from '@/components/deposit/mini-deposit-widget'
+import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from '@/components/ui/dialog'
+import {Skeleton} from '@/components/ui/skeleton'
+import {cn, formatCurrency} from "@/lib/utils"
+import {sortGamesForPlay} from "@/lib/sort-games"
+import {isGameClosed} from "@/lib/game-time"
 import PageHeader from "@/components/layouts/page-header.tsx";
 import { ContentSections } from '@/components/content/content-sections'
 import { ACCUMULATOR_SECTIONS } from '@/content/accumulator'
@@ -50,6 +56,8 @@ const MARKET_DESCRIPTIONS: Record<string, string> = {
 function AccumulatorPage() {
   const [stakeAmount, setStakeAmount] = useState<number>(100)
   const [winningType, setWinningType] = useState<number>(1) // 1: Normal, 2: Machine
+  const [activeCategory, setActiveCategory] = useState<string>("ALL")
+  const [depositOpen, setDepositOpen] = useState<boolean>(false)
 
   // Use bet store for selected game to ensure carousel highlighting works
   const {selectedGame, setSelectedGame} = useBetStore()
@@ -62,10 +70,19 @@ function AccumulatorPage() {
     selectionName: string
   }[]>([])
 
-  const {data: betTypes} = useGetBetTypes(2) // Fetch Accumulator BetTypes (GameType 2)
+  const {data: betTypes, isLoading: betTypesLoading} = useGetBetTypes(2) // Fetch Accumulator BetTypes (GameType 2)
   const {data: blockingRules} = useGetBlockingRules()
-  const {minimalUser: user, syncUser} = useAuthStore(state => state)
-  const {data: games} = useFetchDailyGames()
+  const {isAuthenticated, minimalUser: user, syncUser} = useAuthStore(state => state)
+  const {data: games, isLoading: gamesLoading} = useFetchDailyGames()
+
+  const sortedGames = useMemo(() => (games ? sortGamesForPlay(games) : []), [games])
+
+  useEffect(() => {
+    if (!selectedGame && sortedGames.length > 0) {
+      const firstOpen = sortedGames.find((g) => !isGameClosed(g.endDateTime))
+      if (firstOpen) setSelectedGame(firstOpen)
+    }
+  }, [selectedGame, sortedGames, setSelectedGame])
 
   // DYNAMIC GROUPING
   const groupedMarkets = useMemo(() => {
@@ -252,19 +269,83 @@ function AccumulatorPage() {
             </div>
           )}
           {/* Game Selection */}
-          {games && (
-            <GameCarousel handleSelectedGame={handleSelectedGame} games={games} options={OPTIONS}/>
-          )}
+          {gamesLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+              {Array.from({length: 3}).map((_, i) => (
+                <Skeleton key={i} className="h-32 w-full rounded-2xl bg-slate-200" />
+              ))}
+            </div>
+          ) : sortedGames.length > 0 ? (
+            <GameCarousel handleSelectedGame={handleSelectedGame} games={sortedGames} options={OPTIONS}/>
+          ) : null}
           <Separator className="my-6"/>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
             {/* LEFT: Markets */}
-            <div className="lg:col-span-2 space-y-6">
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-[#0A4B7F]">Accumulator Markets</h2>
-                <Badge variant="secondary" className="text-xs">Sports Mode</Badge>
+            <div className="lg:col-span-2 space-y-5">
+              <div className="flex flex-wrap justify-between items-center gap-3">
+                <div className="flex items-center gap-2.5">
+                  <h2 className="text-2xl font-extrabold text-[#0A4B7F]">Accumulator Markets</h2>
+                  <Badge variant="secondary" className="text-xs">Combo Mode</Badge>
+                </div>
+
+                {isAuthenticated && user && (
+                  <Dialog open={depositOpen} onOpenChange={setDepositOpen}>
+                    <div className="inline-flex items-center gap-2 rounded-full bg-white border border-slate-200 px-3.5 py-1.5 text-xs font-bold text-[#0A4B7F] shadow-sm">
+                      <Wallet className="w-3.5 h-3.5 text-[#0185B6]" />
+                      <span className="tabular-nums">{formatCurrency(user.walletBalance ?? 0)}</span>
+                      <DialogTrigger asChild>
+                        <button
+                          type="button"
+                          className="inline-flex items-center gap-1 rounded-full bg-[#FFF100] text-[#0A4B7F] px-2.5 py-0.5 text-[11px] font-black hover:bg-[#ffe84a] transition-colors cursor-pointer"
+                        >
+                          <PlusCircle className="w-3 h-3" /> Top Up
+                        </button>
+                      </DialogTrigger>
+                    </div>
+                    <DialogContent className="sm:max-w-md p-0 border-0 bg-transparent shadow-none">
+                      <DialogHeader className="sr-only">
+                        <DialogTitle>Quick Wallet Deposit</DialogTitle>
+                      </DialogHeader>
+                      <MiniDepositWidget user={user} onSuccess={() => setDepositOpen(false)} />
+                    </DialogContent>
+                  </Dialog>
+                )}
               </div>
+
+              {/* Market Category Filter Pills */}
+              {selectedGame && groupedMarkets.length > 1 && (
+                <div className="flex gap-2 overflow-x-auto pb-1">
+                  <button
+                    type="button"
+                    onClick={() => setActiveCategory("ALL")}
+                    className={cn(
+                      "rounded-full px-3.5 py-1.5 text-xs font-bold whitespace-nowrap transition-all cursor-pointer border",
+                      activeCategory === "ALL"
+                        ? "bg-[#0A4B7F] text-white border-[#0A4B7F] shadow-sm"
+                        : "bg-white text-slate-600 border-slate-200 hover:border-[#0A4B7F]/40"
+                    )}
+                  >
+                    All Markets ({groupedMarkets.length})
+                  </button>
+                  {groupedMarkets.map((g) => (
+                    <button
+                      key={g.title}
+                      type="button"
+                      onClick={() => setActiveCategory(g.title)}
+                      className={cn(
+                        "rounded-full px-3.5 py-1.5 text-xs font-bold whitespace-nowrap transition-all cursor-pointer border",
+                        activeCategory === g.title
+                          ? "bg-[#0A4B7F] text-white border-[#0A4B7F] shadow-sm"
+                          : "bg-white text-slate-600 border-slate-200 hover:border-[#0A4B7F]/40"
+                      )}
+                    >
+                      {g.title}
+                    </button>
+                  ))}
+                </div>
+              )}
 
               {!selectedGame && (
                 <div className="p-8 text-center bg-white rounded-xl shadow-sm border border-gray-200">
@@ -272,7 +353,18 @@ function AccumulatorPage() {
                 </div>
               )}
 
-              {selectedGame && groupedMarkets.map(group => (
+              {selectedGame && betTypesLoading && (
+                <div className="space-y-4">
+                  {Array.from({length: 3}).map((_, i) => (
+                    <Skeleton key={i} className="h-40 w-full rounded-xl bg-slate-200" />
+                  ))}
+                </div>
+              )}
+
+              {selectedGame &&
+                groupedMarkets
+                  .filter((group) => activeCategory === "ALL" || group.title === activeCategory)
+                  .map(group => (
                 <div key={group.title} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                   <div className="bg-[#0A4B7F] px-4 py-3 flex items-center justify-between">
                     <h3 className="text-white font-semibold">{group.title}</h3>
@@ -312,20 +404,24 @@ function AccumulatorPage() {
                           <Button
                             key={bt.betTypeID}
                             disabled={isDisabled}
-                            variant={isSelected ? "primary" : "outline"} // Changed default back to primary
+                            title={isDisabled ? "Conflicts with an existing selection in this market group" : undefined}
+                            variant={isSelected ? "primary" : "outline"}
                             className={cn(
-                              "h-auto py-2 px-3 text-xs sm:text-sm whitespace-normal text-center min-h-[3rem]",
+                              "h-auto py-2.5 px-3 text-xs sm:text-sm whitespace-normal text-center min-h-[3.25rem]",
                               isSelected ? "bg-[#FFF100] text-[#0A4B7F] hover:bg-[#FFF100]/90 font-bold border-[#FFF100]" :
                                 "hover:bg-[#0A4B7F]/5 border-gray-200 text-gray-700",
-                              isDisabled && "opacity-50 cursor-not-allowed bg-gray-100 text-gray-400 hover:bg-gray-100 border-gray-100"
+                              isDisabled && "opacity-45 cursor-not-allowed bg-gray-100 text-gray-400 hover:bg-gray-100 border-gray-100"
                             )}
                             onClick={() => toggleLeg(bt)}
                           >
                             <div className="flex flex-col items-center gap-1">
                               <span>{bt.description || bt.code.replace(/_/g, " ")}</span>
-                              <span className="text-[10px] bg-gray-100 px-1.5 rounded-full text-gray-600 font-mono">
-                                    {bt.winFactor.toFixed(2)}
-                                  </span>
+                              <span className={cn(
+                                "text-[10px] px-1.5 rounded-full font-mono tabular-nums",
+                                isSelected ? "bg-[#0A4B7F]/10 text-[#0A4B7F]" : "bg-gray-100 text-gray-600"
+                              )}>
+                                {isDisabled ? "Blocked" : `${bt.winFactor.toFixed(2)}×`}
+                              </span>
                             </div>
                           </Button>
                         )
@@ -337,8 +433,8 @@ function AccumulatorPage() {
             </div>
 
             {/* RIGHT: Slip */}
-            <div className="lg:col-span-1">
-              <div className="sticky top-4">
+            <div className="lg:col-span-1" id="accumulatorSlipSection">
+              <div className="sticky top-24">
                 <div className="bg-white rounded-xl shadow-lg border border-[#0A4B7F]/20 overflow-hidden">
                   <div className="bg-[#0A4B7F] text-white p-4 flex flex-col gap-2">
                     <div className="flex justify-between items-center">
@@ -426,27 +522,44 @@ function AccumulatorPage() {
                   <div className="p-4 bg-gray-50 space-y-4">
                     <div className="flex justify-between items-center text-sm">
                       <span className="text-gray-600">Total Odds:</span>
-                      <span className="font-bold text-lg text-[#0A4B7F]">{totalOdds.toFixed(2)}</span>
+                      <span className="font-bold text-lg text-[#0A4B7F] tabular-nums">{totalOdds.toFixed(2)}×</span>
                     </div>
 
                     <div className="space-y-2">
                       <label className="text-xs font-medium text-gray-500">Stake Amount (NGN)</label>
+                      <div className="grid grid-cols-5 gap-1.5">
+                        {[50, 100, 200, 500, 1000].map((val) => (
+                          <button
+                            key={val}
+                            type="button"
+                            onClick={() => setStakeAmount(val)}
+                            className={cn(
+                              "rounded-lg py-1.5 text-[11px] font-bold border transition-all cursor-pointer tabular-nums",
+                              stakeAmount === val
+                                ? "bg-[#0A4B7F] text-white border-[#0A4B7F] shadow-sm"
+                                : "bg-white text-slate-700 border-slate-200 hover:bg-slate-100"
+                            )}
+                          >
+                            ₦{val}
+                          </button>
+                        ))}
+                      </div>
                       <input
                         type="number"
                         inputMode="numeric"
                         pattern="[0-9]*"
-                        value={stakeAmount}
+                        value={stakeAmount === 0 ? '' : stakeAmount}
                         onChange={(e) => {
                           const value = Number(e.target.value)
                           // Prevent negative values
-                          if (value < 0) {
+                          if (value < 0 || Number.isNaN(value)) {
                             setStakeAmount(0)
                           } else {
                             setStakeAmount(value)
                           }
                         }}
                         className={cn(
-                          "w-full p-2 border rounded focus:ring-1 outline-none font-bold",
+                          "w-full p-2.5 bg-white border rounded-xl focus:ring-1 outline-none font-bold tabular-nums",
                           (stakeAmount < MIN_STAKE)
                             ? "border-red-500 text-red-600 focus:border-red-500 focus:ring-red-500"
                             : "border-gray-300 text-[#0A4B7F] focus:border-[#0A4B7F] focus:ring-[#0A4B7F]"
@@ -455,25 +568,22 @@ function AccumulatorPage() {
                       />
                       {(stakeAmount < MIN_STAKE) && (
                         <p className="text-xs text-red-500">
-                          Minimum stake is NGN {MIN_STAKE}
+                          Minimum stake is ₦{MIN_STAKE}
                         </p>
                       )}
                     </div>
 
-                    <div className="flex justify-between items-center p-3 bg-teal-50 rounded border border-teal-100">
-                      <span className="text-sm text-teal-700">Potential Win:</span>
+                    <div className="flex justify-between items-center p-3 bg-teal-50 rounded-xl border border-teal-100">
+                      <span className="text-sm text-teal-700 font-semibold">Potential Win:</span>
                       <span
-                        className={cn("font-bold text-lg", potentialWin > MAX_POTENTIAL_WIN ? "text-red-600" : "text-teal-700")}>
-                                NGN {potentialWin.toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                      })}
-                            </span>
+                        className={cn("font-bold text-lg tabular-nums", potentialWin > MAX_POTENTIAL_WIN ? "text-red-600" : "text-teal-700")}>
+                        {formatCurrency(potentialWin)}
+                      </span>
                     </div>
 
                     {potentialWin > MAX_POTENTIAL_WIN && (
                       <p className="text-center text-xs text-red-500 bg-red-50 p-1 rounded">
-                        Maximum potential winning cannot exceed NGN {MAX_POTENTIAL_WIN.toLocaleString()}
+                        Maximum potential winning cannot exceed {formatCurrency(MAX_POTENTIAL_WIN)}
                       </p>
                     )}
 
@@ -531,30 +641,29 @@ function AccumulatorPage() {
             </div>
 
           </div>
-          {bookedTicketId && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-              <div className="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl border border-gray-100 text-center animate-in zoom-in-95 duration-200">
-                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <span className="text-4xl">🎟️</span>
+          <BookedTicketDialog ticketId={bookedTicketId} onClose={() => setBookedTicketId(null)} />
+
+          {/* Mobile Sticky Combo Summary Bar */}
+          {accumulatorLegs.length > 0 && (
+            <div className="fixed bottom-16 left-3 right-3 z-30 lg:hidden">
+              <div className="flex items-center justify-between gap-3 rounded-2xl bg-[#0A4B7F] text-white px-4 py-3 shadow-2xl border border-white/20 backdrop-blur-md">
+                <div>
+                  <p className="text-[11px] text-cyan-200 font-semibold">
+                    {accumulatorLegs.length} {accumulatorLegs.length === 1 ? 'Leg' : 'Legs'} · {totalOdds.toFixed(2)}× Odds
+                  </p>
+                  <p className="text-sm font-black text-[#FFF100] tabular-nums">
+                    Win {formatCurrency(potentialWin)}
+                  </p>
                 </div>
-                <h3 className="text-2xl font-bold text-[#0A4B7F] mb-2">Ticket Booked Successfully!</h3>
-                <p className="text-gray-600 mb-6 text-sm">
-                  Your booking ID is:
-                </p>
-                <div className="bg-gradient-to-r from-[#0185B6]/10 to-[#01B1A8]/10 border-2 border-dashed border-[#0185B6] rounded-2xl p-4 mb-6">
-                  <span className="text-3xl font-extrabold tracking-widest text-[#0A4B7F] select-all">
-                    {bookedTicketId}
-                  </span>
-                </div>
-                <p className="text-gray-700 font-medium mb-8 text-sm leading-relaxed">
-                  Proceed to any <strong>MaxiLotto Shop</strong> near you to place your bet.
-                </p>
                 <Button
                   type="button"
-                  onClick={() => setBookedTicketId(null)}
-                  className="w-full bg-gradient-to-r from-[#0185B6] to-[#01B1A8] text-white rounded-xl py-4 font-bold hover:opacity-90 shadow-md transition-all"
+                  size="sm"
+                  onClick={() =>
+                    document.getElementById("accumulatorSlipSection")?.scrollIntoView({ behavior: "smooth", block: "start" })
+                  }
+                  className="rounded-full bg-[#FFF100] text-[#0A4B7F] hover:bg-[#ffe84a] text-xs font-black px-4"
                 >
-                  Done
+                  Review Slip
                 </Button>
               </div>
             </div>

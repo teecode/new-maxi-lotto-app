@@ -21,4 +21,5 @@ export interface UserInfoCardProps {
 	avatar: string;
 	email: string;
 	rank: string;
+	isVerified?: boolean;
 }

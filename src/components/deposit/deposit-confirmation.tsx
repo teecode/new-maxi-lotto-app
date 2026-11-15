@@ -82,11 +82,11 @@ export function ConfirmationModal({open, setOpen, data, user, handleFormReset}: 
   return (
 
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent className="sm:mx-auto max-w-[95%] sm:max-w-xl mx-auto bg-background p-4 rounded">
+      <AlertDialogContent className="sm:mx-auto max-w-[95%] sm:max-w-xl mx-auto bg-background p-6 rounded-2xl">
 
         {/* 🎯 Changed DialogHeader to AlertDialogHeader and AlertDialogTitle */}
         <AlertDialogHeader className="text-left">
-          <AlertDialogTitle className="font-semibold text-lg">Confirm Deposit Details</AlertDialogTitle>
+          <AlertDialogTitle className="font-bold text-lg text-[#0A4B7F]">Confirm Deposit Details</AlertDialogTitle>
           <AlertDialogDescription>
             Please review the details below before proceeding to the payment gateway.
           </AlertDialogDescription>
@@ -96,7 +96,7 @@ export function ConfirmationModal({open, setOpen, data, user, handleFormReset}: 
         <div className="grid gap-4 py-4 text-sm">
           <div className="flex items-center justify-between gap-2">
             <p className="">Amount to pay:</p>
-            <span className="font-bold text-lg text-primary-900">{formatCurrency(data.amount)}</span>
+            <span className="font-bold text-lg text-primary-900 tabular-nums">{formatCurrency(data.amount)}</span>
           </div>
           <Separator/>
           <div className="flex items-center justify-between gap-2">

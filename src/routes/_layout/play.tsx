@@ -16,20 +16,27 @@ import {useBetStore} from "@/store/bet-store.ts"
 import type {BetType, Game} from "@/types/game"
 import {zodResolver} from "@hookform/resolvers/zod"
 import type {EmblaOptionsType} from 'embla-carousel'
-import {Trash2Icon} from "lucide-react"
+import {Trash2Icon, Wallet, PlusCircle, Info} from "lucide-react"
 import {useEffect, useMemo, useState} from "react"
 import {useForm} from "react-hook-form"
 import {toast} from "sonner"
 import {z} from "zod"
 import {Separator} from "@/components/ui/separator"
+import {Skeleton} from "@/components/ui/skeleton"
+import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog"
 import {useFetchFavouriteBalls} from "@/hooks/useUserProfile"
 import BetSlip from '@/components/play/bet-slip'
+import {BookedTicketDialog} from '@/components/play/booked-ticket-dialog'
 import {FavouriteBallDialog} from '@/components/play/favourite-ball-dialog'
 import GameCarousel from '@/components/play/game-carousel'
 import VoucherPicker from '@/components/play/voucher-picker'
+import {MiniDepositWidget} from '@/components/deposit/mini-deposit-widget'
 import {useRuleNames} from '@/components/bonus/voucher-card'
 import {useMyVouchers, useRefreshBonuses} from '@/hooks/useBonusPromotions'
 import {checkVoucher, naira, ticketTypeFits} from '@/lib/bonus-words'
+import {sortGamesForPlay} from '@/lib/sort-games'
+import {isGameClosed} from '@/lib/game-time'
+import {cn, formatCurrency} from '@/lib/utils'
 import {Gift} from 'lucide-react'
 
 const FormSchema = z.object({
@@ -51,13 +58,24 @@ function RouteComponent() {
   const [isMainBall, setIsMainBall] = useState<boolean>(true)
   const [selectedBetType, setSelectedBetType] = useState<BetType | null>(null)
   const [openDialog, setOpenDialog] = useState<boolean>(false)
+  const [depositOpen, setDepositOpen] = useState<boolean>(false)
 
   const {betsList, selectedGame, addBet, removeBet, clearBets, setSelectedGame} = useBetStore()
-  const {minimalUser: user, syncUser} = useAuthStore(state => state)
+  const {isAuthenticated, minimalUser: user, syncUser} = useAuthStore(state => state)
 
   const {data: betTypes} = useGetBetTypes()
-  const {data: games} = useFetchDailyGames()
+  const {data: games, isLoading: gamesLoading} = useFetchDailyGames()
   const {data: favoriteBalls} = useFetchFavouriteBalls(user)
+
+  const sortedGames = useMemo(() => (games ? sortGamesForPlay(games) : []), [games])
+
+  // Auto-select the soonest open draw if none is chosen yet
+  useEffect(() => {
+    if (!selectedGame && sortedGames.length > 0) {
+      const firstOpen = sortedGames.find((g) => !isGameClosed(g.endDateTime))
+      if (firstOpen) setSelectedGame(firstOpen)
+    }
+  }, [selectedGame, sortedGames, setSelectedGame])
 
   // Free tickets: the one asked for in the address is chosen once the list arrives
   const search = Route.useSearch()
@@ -368,81 +386,83 @@ function RouteComponent() {
             </div>
           )}
           {/* Game Carousel */}
-          {games && (
+          {gamesLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+              {Array.from({length: 3}).map((_, i) => (
+                <Skeleton key={i} className="h-32 w-full rounded-2xl bg-white/20" />
+              ))}
+            </div>
+          ) : sortedGames.length > 0 ? (
             <GameCarousel
               handleSelectedGame={handleSelectedGame}
-              games={(() => {
-                const now = new Date()
-                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-                const tomorrow = new Date(today)
-                tomorrow.setDate(tomorrow.getDate() + 1)
-                const dayAfterTomorrow = new Date(tomorrow)
-                dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 1)
-
-                // Categorize games
-                const todayActive = games.filter(g => {
-                  const gameDate = new Date(g.endDateTime)
-                  const gameDateOnly = new Date(gameDate.getFullYear(), gameDate.getMonth(), gameDate.getDate())
-                  return gameDateOnly.getTime() === today.getTime() && gameDate > now
-                }).sort((a, b) => new Date(a.endDateTime).getTime() - new Date(b.endDateTime).getTime())
-
-                const todayInactive = games.filter(g => {
-                  const gameDate = new Date(g.endDateTime)
-                  const gameDateOnly = new Date(gameDate.getFullYear(), gameDate.getMonth(), gameDate.getDate())
-                  return gameDateOnly.getTime() === today.getTime() && gameDate <= now
-                }).sort((a, b) => new Date(b.endDateTime).getTime() - new Date(a.endDateTime).getTime())
-
-                const tomorrowGames = games.filter(g => {
-                  const gameDate = new Date(g.endDateTime)
-                  const gameDateOnly = new Date(gameDate.getFullYear(), gameDate.getMonth(), gameDate.getDate())
-                  return gameDateOnly.getTime() === tomorrow.getTime()
-                }).sort((a, b) => new Date(a.endDateTime).getTime() - new Date(b.endDateTime).getTime())
-
-                const laterGames = games.filter(g => {
-                  const gameDate = new Date(g.endDateTime)
-                  const gameDateOnly = new Date(gameDate.getFullYear(), gameDate.getMonth(), gameDate.getDate())
-                  return gameDateOnly >= dayAfterTomorrow
-                }).sort((a, b) => new Date(a.endDateTime).getTime() - new Date(b.endDateTime).getTime())
-
-                return [...todayActive, ...todayInactive, ...tomorrowGames, ...laterGames]
-              })()}
+              games={sortedGames}
               options={OPTIONS}
             />
-          )}
-          <Separator className="my-3"/>
+          ) : null}
+          <Separator className="my-4 opacity-30"/>
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(() => {
             })}>
-              {/* Header */}
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-                <h1 className="text-2xl md:text-3xl font-bold text-white flex items-center gap-2">
-                  <span className="w-1 h-8 bg-[#FFF100] rounded-full"></span>
-                  Play
-                </h1>
+              {/* Header + Wallet + Bet Type Selector */}
+              <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-5">
+                <div className="flex flex-wrap items-center gap-3">
+                  <h1 className="text-2xl md:text-3xl font-bold text-white flex items-center gap-2">
+                    <span className="w-1 h-8 bg-[#FFF100] rounded-full"></span>
+                    Play 5/90
+                  </h1>
+                  {isAuthenticated && user && (
+                    <Dialog open={depositOpen} onOpenChange={setDepositOpen}>
+                      <div className="inline-flex items-center gap-2 rounded-full bg-white/15 border border-white/25 px-3.5 py-1.5 text-xs font-bold text-white backdrop-blur-sm">
+                        <Wallet className="w-3.5 h-3.5 text-[#FFF100]" />
+                        <span className="tabular-nums">{formatCurrency(user.walletBalance ?? 0)}</span>
+                        <DialogTrigger asChild>
+                          <button
+                            type="button"
+                            className="inline-flex items-center gap-1 rounded-full bg-[#FFF100] text-[#0A4B7F] px-2.5 py-0.5 text-[11px] font-black hover:bg-[#ffe84a] transition-colors cursor-pointer"
+                          >
+                            <PlusCircle className="w-3 h-3" /> Top Up
+                          </button>
+                        </DialogTrigger>
+                      </div>
+                      <DialogContent className="sm:max-w-md p-0 border-0 bg-transparent shadow-none">
+                        <DialogHeader className="sr-only">
+                          <DialogTitle>Quick Wallet Deposit</DialogTitle>
+                        </DialogHeader>
+                        <MiniDepositWidget user={user} onSuccess={() => setDepositOpen(false)} />
+                      </DialogContent>
+                    </Dialog>
+                  )}
+                </div>
+
                 <FormField
                   control={form.control}
                   name="betType"
                   render={({field}) => (
-                    <FormItem id="betTypeSelect" className="flex-shrink-0">
+                    <FormItem id="betTypeSelect" className="w-full sm:w-auto flex-shrink-0">
                       <Select
                         onValueChange={field.onChange}
                         value={field.value}
                         disabled={!selectedGame}
                       >
                         <FormControl>
-                          <SelectTrigger className="min-w-[240px] md:min-w-[280px] bg-white border-2 border-white rounded-xl px-4 md:px-6 py-4 md:py-6 text-[#0A4B7F] font-bold text-sm md:text-lg shadow-lg hover:shadow-xl transition-all">
+                          <SelectTrigger className="w-full sm:min-w-[280px] bg-white border-2 border-white rounded-xl px-4 md:px-6 py-4 md:py-5 text-[#0A4B7F] font-bold text-sm md:text-base shadow-lg hover:shadow-xl transition-all">
                             <SelectValue placeholder={selectedGame ? "🎯 Select Bet Type" : "🎮 Select Game First"}/>
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent className="bg-white rounded-xl border-2 border-gray-100">
+                        <SelectContent className="bg-white rounded-xl border-2 border-gray-100 max-h-80">
                           {betTypes?.map((betType) => (
                             <SelectItem
                               key={betType.betTypeID}
                               value={String(betType.betTypeID)}
-                              className="font-bold text-sm md:text-base text-[#0A4B7F] hover:bg-[#0185B6]/10 cursor-pointer py-3 md:py-4"
+                              className="font-bold text-sm text-[#0A4B7F] hover:bg-[#0185B6]/10 cursor-pointer py-2.5"
                             >
-                              {betType.code}
+                              <div className="flex items-center justify-between gap-4 w-full">
+                                <span>{betType.code}</span>
+                                <span className="text-xs font-semibold text-teal-600 tabular-nums">
+                                  {betType.winFactor}×
+                                </span>
+                              </div>
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -452,6 +472,57 @@ function RouteComponent() {
                   )}
                 />
               </div>
+
+              {/* Popular Bet Type Quick Chips + Selected Bet Rule Banner */}
+              {betTypes && betTypes.length > 0 && selectedGame && (
+                <div className="mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs font-bold text-white/80 uppercase tracking-wider mr-1">
+                      Popular:
+                    </span>
+                    {betTypes
+                      .filter((bt) =>
+                        ["2 DIRECT", "PERM 2", "3 DIRECT", "BANKER", "1 DIRECT"].some(
+                          (code) => bt.code.toUpperCase().includes(code),
+                        ),
+                      )
+                      .slice(0, 5)
+                      .map((bt) => {
+                        const active = selectedBetType?.betTypeID === bt.betTypeID
+                        return (
+                          <button
+                            key={bt.betTypeID}
+                            type="button"
+                            onClick={() => form.setValue("betType", String(bt.betTypeID), { shouldValidate: true })}
+                            className={cn(
+                              "rounded-full px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer border",
+                              active
+                                ? "bg-[#FFF100] text-[#0A4B7F] border-[#FFF100] shadow-md"
+                                : "bg-white/15 text-white border-white/25 hover:bg-white/25",
+                            )}
+                          >
+                            {bt.code} <span className="opacity-75">({bt.winFactor}×)</span>
+                          </button>
+                        )
+                      })}
+                  </div>
+
+                  {selectedBetType && (
+                    <div className="inline-flex items-center gap-2 rounded-xl bg-black/20 border border-white/15 px-3.5 py-2 text-xs text-white/95 backdrop-blur-sm">
+                      <Info className="w-3.5 h-3.5 text-[#FFF100] shrink-0" />
+                      <span>
+                        <strong>{selectedBetType.napDescription || selectedBetType.code}:</strong>{" "}
+                        Pick{" "}
+                        {selectedBetType.minimumNumberOfBalls === selectedBetType.maximumNumberOfBalls
+                          ? `${selectedBetType.minimumNumberOfBalls}`
+                          : `${selectedBetType.minimumNumberOfBalls}–${selectedBetType.maximumNumberOfBalls}`}{" "}
+                        ball{selectedBetType.maximumNumberOfBalls > 1 ? "s" : ""} · Pays{" "}
+                        <strong className="text-[#FFF100]">{selectedBetType.winFactor}×</strong>
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Main/Against Ball Toggle - Only show for AGS */}
               {selectedBetType?.nap === 'AGS' && (
@@ -548,10 +619,10 @@ function RouteComponent() {
                 </div>
               </div>
 
-              {/* Desktop: 75/25 Split, Mobile: Stacked */}
-              <div className="flex flex-col lg:flex-row gap-6">
-                {/* Left Column: Ball Grid (75% on desktop) */}
-                <div className="flex-1 lg:w-3/4">
+              {/* Desktop: 8/4 Grid (Sticky Slip), Mobile: Stacked */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                {/* Left Column: Ball Grid */}
+                <div className="lg:col-span-8">
                   {/* Selection Counter */}
                   <div className="bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-3 mx-auto w-fit">
                   <span className="text-white font-bold flex items-center gap-2 text-sm">
@@ -588,8 +659,8 @@ function RouteComponent() {
                   </div>
                 </div>
 
-                {/* Right Column: Bet Slip + My Games (25% on desktop, stacked) */}
-                <div className="flex-shrink-0 lg:w-1/4 flex flex-col gap-6" id="betSlipSection">
+                {/* Right Column: Sticky Bet Slip + My Games */}
+                <div className="lg:col-span-4 lg:sticky lg:top-24 flex flex-col gap-6" id="betSlipSection">
                   {/* Bet Slip */}
                   <BetSlip
                     selectedBetType={selectedBetType!}
@@ -612,7 +683,7 @@ function RouteComponent() {
 
                   {/* My Games - Inside right column on desktop, below betslip on mobile */}
                   {betsList.length > 0 && (
-                    <div className="bg-white rounded-2xl shadow-lg w-full overflow-hidden border border-gray-100">
+                    <div id="gamesListSection" className="bg-white rounded-2xl shadow-lg w-full overflow-hidden border border-gray-100">
 
                       {/* Modern Header with Gradient */}
                       <div className="relative bg-gradient-to-r from-[#01B1A8] to-[#0185B6] px-4 py-4">
@@ -806,31 +877,42 @@ function RouteComponent() {
             />
           )}
 
-          {bookedTicketId && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-              <div className="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl border border-gray-100 text-center animate-in zoom-in-95 duration-200">
-                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <span className="text-4xl">🎟️</span>
+          <BookedTicketDialog ticketId={bookedTicketId} onClose={() => setBookedTicketId(null)} />
+
+          {/* Mobile Sticky Checkout Bar */}
+          {betsList.length > 0 && (
+            <div className="fixed bottom-16 left-3 right-3 z-30 lg:hidden">
+              <div className="flex items-center justify-between gap-3 rounded-2xl bg-[#0A4B7F] text-white px-4 py-3 shadow-2xl border border-white/20 backdrop-blur-md">
+                <div>
+                  <p className="text-[11px] text-cyan-200 font-semibold">
+                    {betsList.length} {betsList.length === 1 ? 'Bet' : 'Bets'} in Slip
+                  </p>
+                  <p className="text-base font-black text-[#FFF100] tabular-nums">
+                    ₦{betsList.reduce((sum, bet) => sum + bet.stake, 0).toLocaleString()}
+                  </p>
                 </div>
-                <h3 className="text-2xl font-bold text-[#0A4B7F] mb-2">Ticket Booked Successfully!</h3>
-                <p className="text-gray-600 mb-6 text-sm">
-                  Your booking ID is:
-                </p>
-                <div className="bg-gradient-to-r from-[#0185B6]/10 to-[#01B1A8]/10 border-2 border-dashed border-[#0185B6] rounded-2xl p-4 mb-6">
-                  <span className="text-3xl font-extrabold tracking-widest text-[#0A4B7F] select-all">
-                    {bookedTicketId}
-                  </span>
+                <div className="flex items-center gap-2">
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() =>
+                      document.getElementById("gamesListSection")?.scrollIntoView({ behavior: "smooth", block: "center" })
+                    }
+                    className="rounded-full border-white/30 bg-white/10 text-white text-xs font-bold"
+                  >
+                    Review
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={handlePlaceBet}
+                    disabled={loading || bookingLoading || (!!voucher && !voucherCheck?.ok)}
+                    className="rounded-full bg-[#FFF100] text-[#0A4B7F] hover:bg-[#ffe84a] text-xs font-black px-4"
+                  >
+                    {loading ? 'Placing...' : 'Place Bet'}
+                  </Button>
                 </div>
-                <p className="text-gray-700 font-medium mb-8 text-sm leading-relaxed">
-                  Proceed to any <strong>MaxiLotto Shop</strong> near you to place your bet.
-                </p>
-                <Button
-                  type="button"
-                  onClick={() => setBookedTicketId(null)}
-                  className="w-full bg-gradient-to-r from-[#0185B6] to-[#01B1A8] text-white rounded-xl py-4 font-bold hover:opacity-90 shadow-md transition-all"
-                >
-                  Done
-                </Button>
               </div>
             </div>
           )}

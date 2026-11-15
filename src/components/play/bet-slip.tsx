@@ -302,13 +302,31 @@ const BetSlip = ({
               </div>
             )}
 
+            {/* Selection Progress */}
+            <div className="flex items-center justify-between text-xs px-1">
+              <span className="font-semibold text-slate-600">
+                {selectedBetType.code === 'BANKER'
+                  ? selectedBalls.length === 1
+                    ? '1 / 1 Banker ready'
+                    : 'Pick 1 Banker ball'
+                  : selectedBalls.length < selectedBetType.minimumNumberOfBalls
+                    ? `Pick ${selectedBetType.minimumNumberOfBalls - selectedBalls.length} more ball${selectedBetType.minimumNumberOfBalls - selectedBalls.length > 1 ? 's' : ''}`
+                    : `${selectedBalls.length} ball${selectedBalls.length > 1 ? 's' : ''} ready`}
+              </span>
+              <span className="font-bold text-[#0185B6] tabular-nums">
+                {selectedBetType.winFactor}× win factor
+              </span>
+            </div>
+
             {/* Calculation Summary */}
             <div className="bg-gray-50 rounded-xl p-3 space-y-2 text-sm">
-              <div className="flex justify-between items-center font-semibold text-gray-700">
-                <span>{numberOfLines} lines × ₦{stake || 0}</span>
+              <div className="flex justify-between items-center font-semibold text-gray-700 tabular-nums">
+                <span>
+                  {numberOfLines} {numberOfLines === 1 ? 'line' : 'lines'} × ₦{stake || 0}
+                </span>
                 <span className="text-[#0A4B7F]">= ₦{(numberOfLines * stake).toLocaleString()}</span>
               </div>
-              <div className="flex justify-between items-center pt-2 border-t border-gray-200">
+              <div className="flex justify-between items-center pt-2 border-t border-gray-200 tabular-nums">
                 <span className="text-green-700 font-bold">Possible Winning:</span>
                 <span className="text-green-600 font-bold text-lg">₦{maxWinning.toLocaleString()}</span>
               </div>
@@ -352,7 +370,41 @@ const BetSlip = ({
 
         {/* Input Field for Stake */}
         <div className="space-y-2">
-          <label className="text-xs font-semibold text-gray-600">Stake Per Line</label>
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-semibold text-gray-600">Stake Per Line</label>
+            {stake > 0 && (
+              <button
+                type="button"
+                onClick={() => setStake(0)}
+                className="text-[11px] font-semibold text-slate-400 hover:text-slate-600 cursor-pointer"
+              >
+                Clear
+              </button>
+            )}
+          </div>
+          <div className="grid grid-cols-5 gap-1.5">
+            {[50, 100, 200, 500, 1000].map((quickAmount) => (
+              <button
+                key={quickAmount}
+                type="button"
+                onClick={() => {
+                  if (selectedBetType && quickAmount > selectedBetType.maximumStake) {
+                    setStake(selectedBetType.maximumStake)
+                  } else {
+                    setStake(quickAmount)
+                  }
+                }}
+                className={cn(
+                  "rounded-lg py-1.5 text-[11px] font-bold border transition-all cursor-pointer tabular-nums",
+                  stake === quickAmount
+                    ? "bg-[#0A4B7F] text-white border-[#0A4B7F] shadow-sm"
+                    : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                )}
+              >
+                ₦{quickAmount}
+              </button>
+            ))}
+          </div>
           <Input
             id="stake"
             placeholder="Enter amount"
@@ -361,9 +413,9 @@ const BetSlip = ({
             pattern="[0-9]*"
             value={stake === 0 ? '' : stake}
             onChange={handleStakeChange}
-            className="border-2 border-[#0185B6]/30 focus:border-[#0185B6] rounded-xl px-4 py-3 text-center font-bold text-lg"
+            className="border-2 border-[#0185B6]/30 focus:border-[#0185B6] rounded-xl px-4 py-3 text-center font-bold text-lg tabular-nums"
           />
-          <div className="flex justify-between text-xs text-gray-500">
+          <div className="flex justify-between text-xs text-gray-500 tabular-nums">
             <span>Min total: ₦{selectedBetType?.minimumStake}</span>
             <span>Max total: ₦{selectedBetType?.maximumStake}</span>
           </div>
