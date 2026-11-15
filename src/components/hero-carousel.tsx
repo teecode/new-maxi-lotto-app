@@ -3,229 +3,280 @@ import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { ChevronLeft, ChevronRight, ShieldCheck, Sparkles, Wallet, Zap } from "lucide-react";
+import { cn, formatCurrency } from "@/lib/utils";
 import { PROMO } from "@/content/promotions";
+import useAuthStore from "@/store/authStore";
+import QuickPlayWidget from "@/components/landing/quick-play-widget";
 
 interface SlideData {
   id: number;
-  title: React.ReactNode;
+  eyebrow: string;
+  headline: React.ReactNode;
   description: string;
   image: string;
   ctaText: string;
   ctaLink: string;
+  secondaryText: string;
+  secondaryLink: string;
 }
 
 const slides: SlideData[] = [
   {
     id: 1,
-    title: (
+    eyebrow: "Nigeria's Premier 5/90 Online Lotto",
+    headline: (
       <>
-        Big Wins Start with
-        <br />
-        <span className="bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">
+        Big Wins Start with{" "}
+        <span className="bg-gradient-to-r from-[#43f7c8] via-cyan-300 to-[#FFF100] bg-clip-text text-transparent">
           One Game
         </span>
       </>
     ),
-    description: "Play your favorite lottery games and win big prizes every day.",
+    description:
+      "Play Direct (2 Sure), Perm, Banker and Double Chance on official daily draws — with instant automated payouts straight to your bank.",
     image: "/new-bg.jpg",
-    ctaText: "Play Now",
+    ctaText: "Play 5/90 Now",
     ctaLink: "/play",
-  },
-  {
-    id: 15,
-    title: (
-      <>
-        Transform your <span className="bg-gradient-to-r from-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">Sports Shop</span>
-        <br />into a Lotto Hub 🎰
-      </>
-    ),
-    description: "Offer MaxiLotto to your customers using our new PC-friendly Web POS. Earn massive commissions on every ticket sold.",
-    image: "/retail_pos_banner.jpg",
-    ctaText: "Become a Partner",
-    ctaLink: "/become-an-agent",
+    secondaryText: "View Results",
+    secondaryLink: "/results",
   },
   {
     id: 2,
-    title: "Double Your Luck! 🎁",
-    description: `Get a massive ${PROMO.firstDepositBonus} bonus on your very first deposit. More funds, more chances to win big!`,
+    eyebrow: "Welcome Deposit Offer",
+    headline: (
+      <>
+        Double Your Luck:{" "}
+        <span className="bg-gradient-to-r from-[#FFF100] to-amber-300 bg-clip-text text-transparent">
+          {PROMO.firstDepositBonus} First Bonus
+        </span>
+      </>
+    ),
+    description: `Get a ${PROMO.firstDepositBonus} bonus on your first deposit and ${PROMO.laterDepositBonus} on subsequent deposits while the offer runs.`,
     image: "/slide-2.png",
     ctaText: "Claim Bonus",
     ctaLink: "/promotions",
+    secondaryText: "Deposit Now",
+    secondaryLink: "/deposit",
   },
   {
     id: 3,
-    title: "Keep the Wins Rolling 🔄",
-    description: `Enjoy a ${PROMO.laterDepositBonus} bonus on every subsequent deposit you make. The rewards never stop!`,
-    image: "/slide-3.png",
-    ctaText: "Deposit Now",
-    ctaLink: "/wallet",
+    eyebrow: "Lightning Auto-Payouts",
+    headline: (
+      <>
+        Win Today,{" "}
+        <span className="bg-gradient-to-r from-cyan-300 to-teal-300 bg-clip-text text-transparent">
+          Spend Today
+        </span>
+      </>
+    ),
+    description:
+      "No waiting in queues or chasing paper slips. Winning tickets settle straight into your wallet seconds after draw validation.",
+    image: "/slide-4.png",
+    ctaText: "Play Today's Draws",
+    ctaLink: "/games",
+    secondaryText: "How Payouts Work",
+    secondaryLink: "/withdrawal-policy",
   },
   {
     id: 4,
-    title: "GBAM! Lightning Fast Payouts ⚡",
-    description: "Fastest auto payout, your money hits your account in seconds. Win today, spend today!",
-    image: "/slide-4.png",
-    ctaText: "Play Now",
-    ctaLink: "/play",
-  },
-  {
-    id: 5,
-    title: "Multiply Your Wins 🎯",
-    description: "Boost Your Odds: Play Accumulators on your lotto and watch your potential winnings skyrocket!",
+    eyebrow: "Maxi Special Combo",
+    headline: (
+      <>
+        Multiply Your{" "}
+        <span className="bg-gradient-to-r from-rose-300 to-[#FFF100] bg-clip-text text-transparent">
+          Winning Odds
+        </span>
+      </>
+    ),
+    description:
+      "Combine multiple predictions in a single draw with Lotto Accumulators and watch your potential return skyrocket.",
     image: "/slide-5.png",
     ctaText: "Play Accumulator",
     ctaLink: "/accumulator",
-  },
-  {
-    id: 6,
-    title: "Become a Gaming Legend 👑",
-    description: "Rise through the ranks, claim your bragging rights, and become the ultimate MaxiLotto champion!",
-    image: "/slide-6.png",
-    ctaText: "Start Playing",
-    ctaLink: "/play",
-  },
-  {
-    id: 7,
-    title: (
-      <>
-        Become a{" "}
-        <span className="bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
-          Maxilotto Agent
-        </span>{" "}
-        🤝
-      </>
-    ),
-    description: "Earn attractive commission on every ticket sold. Join our growing network of agents across Nigeria. Terms and conditions apply.",
-    image: "/slide-7.jpg",
-    ctaText: "Apply Now",
-    ctaLink: "/become-an-agent",
+    secondaryText: "How to Play",
+    secondaryLink: "/how-to-play",
   },
 ];
 
 export default function HeroCarousel() {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [Autoplay({ delay: 6000, stopOnInteraction: false })]);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
+    Autoplay({ delay: 6500, stopOnInteraction: true }),
+  ]);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const { isAuthenticated, minimalUser } = useAuthStore();
 
   const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev();
+    emblaApi?.scrollPrev();
   }, [emblaApi]);
 
   const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext();
+    emblaApi?.scrollNext();
   }, [emblaApi]);
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setSelectedIndex(emblaApi.selectedScrollSnap());
-  }, [emblaApi, setSelectedIndex]);
+  }, [emblaApi]);
 
   useEffect(() => {
     if (!emblaApi) return;
     onSelect();
     emblaApi.on("select", onSelect);
     emblaApi.on("reInit", onSelect);
+    return () => {
+      emblaApi.off("select", onSelect);
+      emblaApi.off("reInit", onSelect);
+    };
   }, [emblaApi, onSelect]);
 
+  const activeSlide = slides[selectedIndex] ?? slides[0];
+
   return (
-    <section className="relative w-full h-screen min-h-[600px] overflow-hidden bg-[#0f172a]">
-      <div className="overflow-hidden h-full w-full" ref={emblaRef}>
-        <div className="flex h-full w-full touch-pan-y">
+    <section className="relative w-full overflow-hidden bg-[#091527] pt-24 pb-12 sm:pt-28 sm:pb-16 lg:min-h-[660px] flex items-center">
+      {/* Background Slides Carousel */}
+      <div className="absolute inset-0 overflow-hidden" ref={emblaRef} aria-hidden>
+        <div className="flex h-full w-full">
           {slides.map((slide, index) => (
             <div key={slide.id} className="relative flex-[0_0_100%] h-full w-full min-w-0">
-              {/* Background Image */}
-              <div
-                className="absolute inset-0 bg-cover bg-center transition-transform duration-1000"
-                style={{
-                  backgroundImage: `url('${slide.image}')`,
-                  transform: selectedIndex === index ? "scale(1.05)" : "scale(1)",
-                }}
+              <img
+                src={slide.image}
+                alt=""
+                fetchPriority={index === 0 ? "high" : "low"}
+                decoding={index === 0 ? "sync" : "async"}
+                className={cn(
+                  "h-full w-full object-cover object-center transition-transform duration-1000",
+                  selectedIndex === index ? "scale-105" : "scale-100",
+                )}
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0f172a]/90 via-[#0f172a]/60 to-transparent" />
-
-              {/* Content */}
-              <div className="container relative z-10 h-full flex items-center">
-                <div className="flex flex-col gap-4 sm:gap-6 max-w-3xl pt-20">
-                  <AnimatePresence mode="wait">
-                    {selectedIndex === index && (
-                      <motion.div
-                        key={`content-${slide.id}`}
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -30 }}
-                        transition={{ duration: 0.8, ease: "easeOut" }}
-                        className="flex flex-col gap-4 sm:gap-6"
-                      >
-                        <h2 className="text-4xl sm:text-[4.2rem] font-semibold text-background tracking-[-1.92px] leading-tight decoration-skip-ink drop-shadow-lg">
-                          {slide.title}
-                        </h2>
-
-                        <p className="text-xl text-background font-medium leading-relaxed max-w-lg drop-shadow-md">
-                          {slide.description}
-                        </p>
-                        <Button
-                          asChild
-                          className="w-fit px-8 h-12 mt-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold text-base rounded-3xl shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 hover:scale-[1.01] active:scale-[0.99] transition-all duration-300"
-                          size={"lg"}
-                        >
-                          <Link to={slide.ctaLink as any} className="text-background">
-                            {slide.ctaText}
-                          </Link>
-                        </Button>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Navigation Arrows */}
-      <div className="absolute inset-y-0 right-4 md:right-10 flex items-center z-20 pointer-events-none">
-        <div className="flex flex-col gap-4 pointer-events-auto">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={scrollPrev}
-            className="rounded-full w-12 h-12 bg-white/10 hover:bg-white/20 border-white/20 text-white backdrop-blur-sm transition-all shadow-lg hidden sm:flex"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={scrollNext}
-            className="rounded-full w-12 h-12 bg-white/10 hover:bg-white/20 border-white/20 text-white backdrop-blur-sm transition-all shadow-lg hidden sm:flex"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </Button>
-        </div>
-      </div>
+      {/* Rich Dark Navy Gradient Overlay for guaranteed contrast */}
+      <div
+        className="absolute inset-0 bg-gradient-to-r from-[#071121]/95 via-[#091527]/85 to-[#091527]/75"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full bg-cyan-500/20 blur-3xl"
+        aria-hidden
+      />
 
-      {/* The page's one <h1>, outside the slides so it does not rotate away */}
-      <h1 className="absolute bottom-16 inset-x-0 z-20 px-4 text-center text-[11px] sm:text-xs font-semibold uppercase tracking-[0.25em] text-white/70 pointer-events-none">
-        MaxiLotto · Play 5/90 lotto online in Nigeria
-      </h1>
-
-      {/* Dots */}
-      <div className="absolute bottom-10 left-0 right-0 z-20 flex justify-center gap-3">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => emblaApi?.scrollTo(index)}
-            className={cn(
-              "h-2 rounded-full transition-all duration-300",
-              selectedIndex === index
-                ? "w-8 bg-gradient-to-r from-cyan-400 to-teal-400"
-                : "w-2 bg-white/40 hover:bg-white/60"
+      {/* Foreground Split Content */}
+      <div className="container relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          {/* Left Column: Primary Value Proposition */}
+          <div className="lg:col-span-7 space-y-5 sm:space-y-6">
+            {/* Authenticated Welcome Strip */}
+            {isAuthenticated && minimalUser ? (
+              <div className="inline-flex flex-wrap items-center gap-2.5 rounded-full border border-emerald-400/30 bg-emerald-500/15 px-4 py-1.5 text-xs font-semibold text-emerald-200 backdrop-blur-md">
+                <span>
+                  Welcome back,{" "}
+                  <strong className="text-white">@{minimalUser.username}</strong>
+                </span>
+                <span className="text-white/40">•</span>
+                <span className="tabular-nums text-[#FFF100] font-bold">
+                  {formatCurrency(minimalUser.walletBalance ?? 0)}
+                </span>
+                <Link
+                  to="/deposit"
+                  className="ml-1 inline-flex items-center gap-1 rounded-full bg-white text-[#0A4B7F] px-2.5 py-0.5 text-[11px] font-extrabold hover:bg-[#FFF100] transition-colors"
+                >
+                  <Wallet className="w-3 h-3" /> Fund
+                </Link>
+              </div>
+            ) : (
+              <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-cyan-300 backdrop-blur-md">
+                <Sparkles className="w-3.5 h-3.5 text-[#FFF100]" />
+                {activeSlide.eyebrow}
+              </div>
             )}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
+
+            {/* Permanent semantic H1 */}
+            <h1 className="text-3xl sm:text-5xl xl:text-[3.65rem] font-black text-white tracking-tight leading-[1.08] drop-shadow-md">
+              {activeSlide.headline}
+            </h1>
+
+            <p className="text-base sm:text-lg text-slate-200 leading-relaxed max-w-xl">
+              {activeSlide.description}
+            </p>
+
+            {/* Primary & Secondary CTAs */}
+            <div className="flex flex-wrap items-center gap-3.5 pt-1">
+              <Button
+                asChild
+                size="lg"
+                className="h-12 px-8 rounded-full bg-gradient-to-r from-[#ff005c] to-rose-500 hover:from-rose-500 hover:to-[#ff005c] text-white font-extrabold text-sm sm:text-base shadow-lg shadow-rose-500/30 transition-all hover:scale-[1.02]"
+              >
+                <Link to={activeSlide.ctaLink as any}>{activeSlide.ctaText}</Link>
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="h-12 px-7 rounded-full border-white/25 bg-white/10 hover:bg-white/20 text-white font-bold text-sm sm:text-base backdrop-blur-md"
+              >
+                <Link to={activeSlide.secondaryLink as any}>
+                  {activeSlide.secondaryText}
+                </Link>
+              </Button>
+            </div>
+
+            {/* Trust Micro-Badges + Slide Controls */}
+            <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-white/10">
+              <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-300">
+                <span className="inline-flex items-center gap-1.5">
+                  <Zap className="w-4 h-4 text-[#43f7c8]" /> Instant Payouts
+                </span>
+                <span className="inline-flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-cyan-300" /> Paystack · Sarepay · 18+
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={scrollPrev}
+                  aria-label="Previous highlight"
+                  className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <div className="flex items-center gap-1.5 px-1">
+                  {slides.map((s, idx) => (
+                    <button
+                      key={s.id}
+                      type="button"
+                      onClick={() => emblaApi?.scrollTo(idx)}
+                      aria-label={`Show hero highlight ${idx + 1}`}
+                      className={cn(
+                        "h-2 rounded-full transition-all duration-300 cursor-pointer",
+                        selectedIndex === idx
+                          ? "w-6 bg-gradient-to-r from-cyan-400 to-[#43f7c8]"
+                          : "w-2 bg-white/35 hover:bg-white/60",
+                      )}
+                    />
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  onClick={scrollNext}
+                  aria-label="Next highlight"
+                  className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Interactive Quick-Play Widget */}
+          <div className="lg:col-span-5">
+            <QuickPlayWidget />
+          </div>
+        </div>
       </div>
     </section>
   );

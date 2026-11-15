@@ -29,11 +29,14 @@ export default function Countdown({ targetDate }: CountDownProps): JSX.Element {
     return () => clearInterval(timer);
   }, [targetDate]);
 
-  if (!timeLeft) return <span>Game Closed!</span>;
+  if (!timeLeft) return <span className="tabular-nums">Game Closed!</span>;
+
+  const pad = (n: number) => String(n).padStart(2, "0");
 
   return (
-    <span>
-       {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s
+    <span className="tabular-nums">
+      {timeLeft.days > 0 ? `${timeLeft.days}d ` : ""}
+      {pad(timeLeft.hours)}h {pad(timeLeft.minutes)}m {pad(timeLeft.seconds)}s
     </span>
   );
 }

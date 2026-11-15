@@ -156,3 +156,15 @@ export const maskUsername = (username?: string): string => {
 };
 
 export const maskUsernameIfPhoneNumber = maskUsername;
+
+/** Returns YYYY-MM-DD in Nigeria time (Africa/Lagos, UTC+1) to avoid UTC midnight drift. */
+export const getLagosDateKey = (input: Date | string = new Date()): string => {
+	const date = typeof input === 'string' ? new Date(input) : input;
+	if (Number.isNaN(date.getTime())) return '';
+	return new Intl.DateTimeFormat('en-CA', {
+		timeZone: 'Africa/Lagos',
+		year: 'numeric',
+		month: '2-digit',
+		day: '2-digit',
+	}).format(date);
+};

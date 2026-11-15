@@ -10,13 +10,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {makeFirstLetterUppercase} from '@/lib/utils'
+import {cn, formatCurrency, makeFirstLetterUppercase} from '@/lib/utils'
 import {logout} from '@/services/AuthService'
 import useAuthStore from '@/store/authStore'
 import {Link} from '@tanstack/react-router';
 import {Image} from '@unpic/react';
-import {ChevronDown, Gift, Lock, LogOut, User, Users} from 'lucide-react'
-import {useEffect} from 'react'
+import {ChevronDown, Gift, Lock, LogOut, Plus, User, Users} from 'lucide-react'
+import {useEffect, useState} from 'react'
 import MobileNav from './mobile-nav-drawer';
 import NotificationBell from '@/components/notification-bell';
 import type {navGroupProps} from "@/types";
@@ -64,6 +64,14 @@ const navGroups: Array<navGroupProps> = [
 const Navbar = () => {
 
   const {isAuthenticated, minimalUser: user, syncUser} = useAuthStore();
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, {passive: true});
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -84,10 +92,17 @@ const Navbar = () => {
   }
 
   return (
-    <header className="absolute w-full">
+    <header
+      className={cn(
+        "fixed top-0 left-0 right-0 z-40 w-full transition-all duration-300",
+        isScrolled
+          ? "bg-[#091527]/92 backdrop-blur-md border-b border-white/10 shadow-lg shadow-black/20"
+          : "bg-gradient-to-b from-[#091527]/65 to-transparent"
+      )}
+    >
 
       <nav
-        className="h-[70px] relative w-full px-4 md:px-8 lg:px-16 flex items-center justify-between z-20  text-gray-700 shadow-[0px_4px_25px_0px_#0000000D] transition-all">
+        className="h-[70px] relative w-full px-4 md:px-8 lg:px-16 flex items-center justify-between z-20 text-gray-700 transition-all">
         <div className="flex items-center gap-1.5 sm:gap-3">
           {/* Hamburger Icon (Mobile) */}
           <div className="lg:hidden">
@@ -148,12 +163,25 @@ const Navbar = () => {
           {/* register and login button */}
           {isAuthenticated ? (
             <>
+              <Button
+                asChild
+                size="sm"
+                className="hidden sm:inline-flex h-8 rounded-full bg-[#FFF100] hover:bg-[#ffe84a] text-[#0A4B7F] font-bold text-xs px-3.5 shadow-sm"
+              >
+                <Link to="/deposit" className="flex items-center gap-1">
+                  <Plus className="w-3.5 h-3.5" />
+                  Deposit
+                </Link>
+              </Button>
+
               <NotificationBell/>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <div
-                    className="flex items-center relative rounded-full p-0.5 gap-1.5 border border-border shadow-sm shadow-black/5">
+                  <button
+                    type="button"
+                    className="flex items-center relative rounded-full p-0.5 pr-2.5 gap-1.5 border border-white/20 bg-white/10 hover:bg-white/15 backdrop-blur-sm shadow-sm transition-colors cursor-pointer"
+                  >
                     <div className="flex -space-x-1">
                       <Avatar className="size-7">
                         <AvatarImage src="/avatars.png" alt="@reui"
@@ -161,14 +189,10 @@ const Navbar = () => {
                         <AvatarFallback>{makeFirstLetterUppercase(user?.username)}</AvatarFallback>
                       </Avatar>
                     </div>
-                    <p className="text-xs text-muted-foreground me-1.5">
-                      <span
-                        className="font-semibold text-background">NGN {user?.walletBalance ?? 0}</span>
-                    </p>
-                    {/* {isFetching && (
-                      <Spinner className="size-4 absolute right-1 -top-2 text-primary-900" />
-                    )} */}
-                  </div>
+                    <span className="text-xs font-semibold text-white tabular-nums">
+                      {formatCurrency(user?.walletBalance ?? 0)}
+                    </span>
+                  </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-48 font-poppins" align="end" forceMount>
                   {/* Account Section */}

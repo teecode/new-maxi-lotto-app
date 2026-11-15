@@ -10,7 +10,7 @@ type Result = {
   [key: string]: number;
 };
 
-// Snooker-inspired ball colors
+// Snooker-inspired ball colors for Winning Numbers
 const ballColors = [
   "linear-gradient(145deg, #E53935 60%, #B71C1C 100%)",   // Red
   "linear-gradient(145deg, #1E88E5 60%, #0D47A1 100%)",   // Blue
@@ -35,78 +35,78 @@ const LatestDrawCard = ({
     .map((key) => result[key]);
 
   return (
-    <div className={`relative rounded-2xl p-6 shadow-xl border border-white/10 overflow-hidden ${className}`}
+    <div className={`relative rounded-2xl p-6 shadow-xl border border-white/15 overflow-hidden ${className ?? ""}`}
       style={{
-        background: "linear-gradient(135deg, #0A1628 0%, #1A2A4A 50%, #0D1F3C 100%)"
+        background: "linear-gradient(135deg, #0A1628 0%, #15284A 50%, #0D1F3C 100%)"
       }}
     >
       {/* Subtle glow accent */}
-      <div className="absolute -top-20 -right-20 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl" />
-      <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/8 rounded-full blur-2xl" />
+      <div className="absolute -top-20 -right-20 w-40 h-40 bg-cyan-500/15 rounded-full blur-3xl" />
+      <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl" />
 
       {/* Header section */}
-      <div className="relative z-10 flex items-center gap-3 mb-5">
-        <div className="w-11 h-11 rounded-full flex items-center justify-center text-white text-xs font-bold tracking-tight shrink-0"
-          style={{
-            background: "radial-gradient(50% 50% at 50% 50%, #00D49C 38.46%, #006E51 100%)"
-          }}
-        >
-          {item.gameCode}
+      <div className="relative z-10 flex items-center justify-between gap-3 mb-5">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-11 h-11 rounded-full flex items-center justify-center text-white text-xs font-bold tracking-tight shrink-0 shadow-md"
+            style={{
+              background: "radial-gradient(50% 50% at 50% 50%, #00D49C 38.46%, #006E51 100%)"
+            }}
+          >
+            {item.gameCode}
+          </div>
+          <div className="flex flex-col min-w-0">
+            <h3 className="font-bold text-base text-white truncate">{item.gameName}</h3>
+            <span className="text-cyan-300/80 text-xs font-medium">
+              {formattedDate(item.endDateTime)}
+            </span>
+          </div>
         </div>
-        <div className="flex flex-col min-w-0">
-          <h3 className="font-bold text-base text-white truncate">{item.gameName}</h3>
-          <span className="text-cyan-300/70 text-xs font-medium">
-            {formattedDate(item.endDateTime)}
-          </span>
-        </div>
+        <span className="shrink-0 rounded-full bg-emerald-400/15 border border-emerald-400/30 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-300">
+          Official
+        </span>
       </div>
 
       {/* Numbers Section */}
       <div className="relative z-10 space-y-4">
         {/* Winning Numbers */}
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           <div className="flex items-center gap-2">
             <div className="w-1 h-4 rounded-full bg-gradient-to-b from-cyan-400 to-blue-500" />
-            <h4 className="text-cyan-300/90 font-semibold text-sm uppercase tracking-wider">Winning Numbers</h4>
+            <h4 className="text-cyan-300 font-semibold text-xs uppercase tracking-wider">Winning Numbers</h4>
           </div>
 
           <div className="flex gap-2.5 flex-wrap">
             {winningBalls.map((ball, idx) => (
               <div
                 key={`winning-${idx}`}
-                className="relative flex items-center justify-center size-9 rounded-full text-white font-bold text-sm shadow-lg"
+                className="relative flex items-center justify-center size-9 rounded-full text-white font-bold text-sm shadow-lg tabular-nums"
                 style={{
                   background: ballColors[idx % ballColors.length],
                 }}
               >
                 {/* Glossy shine - snooker ball effect */}
                 <div className="absolute top-1 left-1.5 w-3 h-3 bg-white/40 rounded-full blur-[2px]" />
-                <span className="relative z-10">{ball}</span>
+                <span className="relative z-10">{String(ball).padStart(2, "0")}</span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Machine Numbers */}
+        {/* Machine Numbers — distinct dark metallic ring style so players never confuse them with Winning Numbers */}
         {machineBalls && machineBalls.length > 0 && machineBalls.some(b => b > 0) && (
-          <div className="space-y-3">
+          <div className="space-y-2.5 pt-2 border-t border-white/10">
             <div className="flex items-center gap-2">
               <div className="w-1 h-4 rounded-full bg-gradient-to-b from-purple-400 to-pink-500" />
-              <h4 className="text-purple-300/90 font-semibold text-sm uppercase tracking-wider">Machine Numbers</h4>
+              <h4 className="text-purple-300/90 font-semibold text-xs uppercase tracking-wider">Machine Numbers</h4>
             </div>
 
             <div className="flex gap-2.5 flex-wrap">
               {machineBalls.map((ball, idx) => (
                 <div
                   key={`machine-${idx}`}
-                  className="relative flex items-center justify-center size-9 rounded-full text-white font-bold text-sm shadow-lg opacity-90"
-                  style={{
-                    background: ballColors[idx % ballColors.length],
-                  }}
+                  className="relative flex items-center justify-center size-9 rounded-full text-slate-100 font-bold text-sm shadow-inner border border-purple-300/35 bg-white/10 tabular-nums"
                 >
-                  {/* Glossy shine - snooker ball effect */}
-                  <div className="absolute top-1 left-1.5 w-3 h-3 bg-white/40 rounded-full blur-[2px]" />
-                  <span className="relative z-10">{ball}</span>
+                  <span className="relative z-10">{String(ball).padStart(2, "0")}</span>
                 </div>
               ))}
             </div>
